@@ -5,7 +5,7 @@ cache:
 python:
   - 2.7
 install:
-  - python bootstrap.py
+  - python bootstrap-buildout.py.py
   - bin/buildout -N
 script:
   - bin/py.test -v
