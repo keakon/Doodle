@@ -4,8 +4,10 @@ cache:
   pip: true
 python:
   - 2.7
+services:
+  - redis-server
 install:
-  - ln -s doodle/config/test_sample.py test.py
+  - ln -s doodle/config/test_sample.py doodle/config/test.py
   - python bootstrap-buildout.py
   - bin/buildout -N
 script:
