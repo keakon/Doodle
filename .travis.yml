@@ -3,14 +3,13 @@ sudo: false
 cache:
   pip: true
   directories:
-    - $HOME/bin
     - $HOME/buildout-cache
 python:
   - 2.7
 services:
   - redis-server
 before_install:
-  - mkdir -p $HOME/buildout-cache/{eggs,downloads}
+  - mkdir -p $HOME/buildout-cache/{bin,eggs,downloads}
 install:
   - mv doodle/config/test_sample.py doodle/config/test.py
   - test -f bin/buildout || python bootstrap-buildout.py
