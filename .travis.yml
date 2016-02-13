@@ -2,6 +2,8 @@ language: python
 sudo: false
 cache:
   pip: true
+  directories:
+    - $HOME/eggs
 python:
   - 2.7
 services:
@@ -11,4 +13,4 @@ install:
   - python bootstrap-buildout.py
   - bin/buildout
 script:
-  - bin/test doodle/tests
+  - bin/test tests
