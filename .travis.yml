@@ -3,14 +3,18 @@ sudo: false
 cache:
   pip: true
   directories:
-    - $HOME/eggs
+    - $HOME/buildout-cache
 python:
   - 2.7
 services:
   - redis-server
+before_install:
+  - mkdir -p $HOME/buildout-cache/{eggs,downloads}
+  - virtualenv .
+  - bin/pip install --upgrade pip setuptools zc.buildout
 install:
   - mv doodle/config/test_sample.py doodle/config/test.py
   - python bootstrap-buildout.py
-  - bin/buildout
+  - bin/buildout -N -t 20 -c travis.cfg
 script:
-  - bin/py.test
+  - bin/py.test -v
