@@ -7,8 +7,8 @@ python:
 services:
   - redis-server
 install:
-  - ln -s doodle/config/test_sample.py doodle/config/test.py
+  - mv doodle/config/test_sample.py doodle/config/test.py
   - python bootstrap-buildout.py
-  - bin/buildout -N
+  - bin/buildout
 script:
   - bin/py.test -v
