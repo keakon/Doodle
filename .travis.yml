@@ -17,4 +17,4 @@ install:
   - python bootstrap-buildout.py
   - bin/buildout -N -t 20 -c travis.cfg
 script:
-  - bin/py.test -v
+  - bin/py.test -v doodle/tests
