@@ -1,0 +1,12 @@
+<?py include('admin/header.html') ?>
+	<nav id="nav2">
+		<a href="#{{CONFIG.BLOG_ADMIN_RELATIVE_PATH}}category/new" class="current">创建分类</a>
+		<a href="#{{CONFIG.BLOG_ADMIN_RELATIVE_PATH}}category/delete">删除分类</a>
+		<a href="#{{CONFIG.BLOG_ADMIN_RELATIVE_PATH}}category/move">移动分类</a>
+	</nav>
+	<div class="info"></div>
+	<form method="post" action="">
+		<div><label for="path">分类路径（以 : 为分隔符）</label> <div class="input-field"><input type="text" id="path" name="path"/></div></div>
+		<div><input type="submit" value="添加"/></div>
+	</form>
+<?py include('admin/footer.html') ?>

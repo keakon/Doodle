@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"
+	xml:lang="#{{CONFIG.LANGUAGE}}"
+	xml:base="#{{CONFIG.BLOG_HOME_FULL_URL}}">
+	<title>${{CONFIG.BLOG_TITLE}}</title>
+	<id>#{{CONFIG.BLOG_FEED_URL}}</id>
+	<subtitle>${{CONFIG.BLOG_DESCRIPTION}}</subtitle>
+	<link href="#{{CONFIG.BLOG_HOME_FULL_URL}}" rel="alternate" type="text/html"/>
+	<link href="#{{CONFIG.BLOG_FEED_URL}}" rel="self"/>
+	<updated>#{last_updated}</updated>
+	<author>
+		<name>${{CONFIG.BLOG_AUTHOR}}</name>
+	</author>
+<?py
+from doodle.common.time_format import iso_time_format, timestamp_to_datetime
+
+for article in articles:
+?>
+	<entry>
+		<link href="#{{CONFIG.BLOG_HOME_FULL_URL}}#{article.quoted_url()}"/>
+		<id>#{{CONFIG.BLOG_HOME_FULL_URL}}article/#{article.id}</id>
+		<title>${article.title}</title>
+		<content type="html">
+			${article.html_content() if CONFIG.OUTPUT_FULLTEXT_FOR_FEED else article.html_summary()}
+		</content>
+		<author>
+			<name>${{CONFIG.BLOG_AUTHOR}}</name>
+		</author>
+		<updated>#{iso_time_format(timestamp_to_datetime(article.mod_time))}</updated>
+	</entry>
+<?py #endfor ?>
+</feed>

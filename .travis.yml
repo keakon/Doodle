@@ -1,0 +1,11 @@
+language: python
+sudo: false
+cache:
+  pip: true
+python:
+  - 2.7
+install:
+  - python bootstrap.py
+  - bin/buildout -N
+script:
+  - bin/py.test -v

@@ -1,0 +1,12 @@
+<?py include('admin/header.html') ?>
+	<nav id="nav2">
+		<a href="#{{CONFIG.BLOG_ADMIN_RELATIVE_PATH}}tag/new" class="current">创建标签</a>
+		<a href="#{{CONFIG.BLOG_ADMIN_RELATIVE_PATH}}tag/delete">删除标签</a>
+		<a href="#{{CONFIG.BLOG_ADMIN_RELATIVE_PATH}}tag/move">移动标签</a>
+	</nav>
+	<div class="info"></div>
+	<form method="post" action="">
+		<div><label for="name">标签名</label> <div class="input-field"><input type="text" id="name" name="name"/></div></div>
+		<div><input type="submit" value="添加"/></div>
+	</form>
+<?py include('admin/footer.html') ?>

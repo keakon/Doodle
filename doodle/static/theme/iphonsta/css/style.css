@@ -1,0 +1,275 @@
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, font, img, ins, kbd, q, s, samp,
+small, strike, strong, tt, var,
+b, u, i, center,
+dl, dt, dd,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td {
+	margin: 0;
+	padding: 0;
+	outline: 0;
+	vertical-align: baseline;
+	background: transparent;
+	border:0;
+}
+
+blockquote, q {
+	quotes: none;
+}
+
+input, textarea {
+	padding: 0;
+	margin: 0;
+}
+
+/* remember to define focus styles! */
+
+:focus {
+	outline: 0;
+}
+
+/* remember to highlight inserts somehow! */
+
+ins {
+	text-decoration: none;
+}
+
+del {
+	text-decoration: line-through;
+}
+
+/* tables still need 'cellspacing="0"' in the markup */
+
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+body {
+	background-color: #000 !important;
+	color:#FFF;
+	font: 16px/1.5 Verdana, Arial;
+	-webkit-text-size-adjust: none;
+}
+img {
+	max-width:100%;
+}
+#out {
+	min-height:100%;
+	position:relative;
+	background-color:#1a1a1a;
+	overflow: hidden;
+	word-wrap: break-word;
+}
+#inner {
+	padding-bottom:54px;
+}
+
+pre, code {
+	font: 12px "Droid Sans Mono", "DejaVu Sans Mono", "Lucida Console", "Courier New", monospace;
+	word-wrap: break-word;
+	white-space: pre-wrap;
+}
+pre {
+	padding:2px;
+	box-shadow: 0 0 8px #46B40A inset;
+	color: #000;
+	background: #94DA3A;
+}
+/*########### header ##########*/
+
+#hd {
+	position:relative;
+	background-color:#000;
+	text-align:center;
+	padding:5px 0;
+}
+#hd h1 {
+	height: 48px;
+}
+#hd h2 {
+	padding:10px 0;
+}
+#hd h2 a {
+	color:#fff;
+	text-decoration:none;
+}
+#lg a {
+	text-decoration:none;
+}
+#lg a:hover {
+	color:#fff;
+}
+a, #cts a:hover {
+	color:#46b40a;
+}
+
+/*########### inner ##########*/
+
+a.art {
+	color:#FFF !important;
+	display: block;
+	text-decoration:none;
+	padding:7px 10px;
+	background-color:#1a1a1a;
+	border-bottom:solid 1px #444;
+	overflow:hidden;
+	line-height:1.2;
+}
+a.art:hover, a.art:active {
+	background-color:#46b40a;
+}
+h1 a.art, h2 a.art {
+	font-size:24px;
+	color:#FFF !important;
+	font-weight:normal;
+}
+a.art .info {
+	font-size:13px;
+	color:#ccc;
+	padding:5px;
+}
+a.art p span {
+	color:#d5d5d5;
+}
+.art {
+	padding:7px 10px 26px;
+}
+.art.first {
+	border-top:none;
+}
+.art p {
+	margin-bottom:26px;
+	line-height:1.2;
+}
+.art a, .commentlist a, .login a {
+	color:#46b40a !important;
+}
+.art ul, .art ol {
+	margin-bottom:26px;
+}
+.postmetadata {
+	padding:10px 0 0;
+}
+
+/*########### comments ##########*/
+
+.comments {
+	height:60px;
+	background:#000;
+	border-top:1px solid #444;
+}
+#cmnts {
+	line-height:60px;
+	text-align:center;
+}
+.commentlist {
+	word-wrap:break-word;
+	list-style:none;
+	margin:0;
+	padding:0;
+}
+.comment {
+	padding:10px;
+	border-top:1px solid #444;
+}
+.comment-info {
+	padding:0 0 10px;
+}
+#comment {
+	border:0;
+	border-radius:8px;
+	padding:10px 1%;
+	width:98%;
+	margin-bottom:10px;
+	font-size:16px;
+}
+.outbl {
+	padding:10px;
+	margin-bottom:10px;
+	border-radius:8px;
+}
+.outbl.sbm {
+	background-color:#46b40a;
+}
+.submit {
+	margin-top:10px;
+}
+#submit {
+	width:100%;
+	border:0;
+	background:none;
+	color:#FFF;
+	font-weight:bold;
+	cursor:pointer;
+	font-size:16px;
+}
+#respond {
+	border-top:1px solid #444;
+	padding:7px 10px;
+}
+
+#uit p {
+	padding:5px;
+}
+
+/*########### navigation ##########*/
+
+.wp-pagenavi {
+	text-align:center;
+	height:60px;
+	line-height:60px;
+	padding:0 10px;
+	font-size:16px;
+	font-weight:bold;
+	border-bottom:1px solid #444;
+	background-color:#1a1a1a;
+}
+.wp-pagenavi a {
+	color:#FFF;
+	text-decoration:none !important;
+	line-height:60px;
+	padding:15px 5px;
+	margin:0 5px;
+}
+.current {
+	line-height:25px;
+	padding:5px 10px;
+	background-color:#46b40a;
+	margin:0 5px;
+	border-radius:8px;
+}
+a.nextpage {
+	text-decoration: none;
+	padding:5px 10px;
+	background-color:#46b40a;
+	margin:0 5px;
+	border-radius:8px;
+	font-size:24px;
+}
+a.nextpage:hover {
+	color:#46b40a;
+	background-color:#fff;
+}
+
+/*########### footer ##########*/
+
+#ftr {
+	height:40px;
+	line-height:40px;
+	font-size:13px;
+	padding:7px 0;
+	position:absolute;
+	bottom:0;
+	width:100%;
+	background-color:#000;
+}
+#ftr .cp {
+	padding-left:10px;
+}
+#ftr .md {
+	float:right;
+	padding-right:10px;
+}

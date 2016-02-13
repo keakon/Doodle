@@ -1,0 +1,208 @@
+html, body, address, blockquote, div, dl, form, h1, h2, h3, h4, h5, h6, ol, p, pre, table, ul,
+dd, dt, li, tbody, td, tfoot, th, thead, tr, button, del, ins, map, object,
+a, abbr, acronym, b, bdo, big, br, cite, code, dfn, em, i, img, kbd, q, samp, small, span,
+strong, tt, var, legend, fieldset,
+article, aside, audio, canvas, caption, details, figcaption, figure, footer,
+header, hgroup, iframe, label, mark, menu, nav, section, summary, time, video {
+margin:0;
+padding:0;
+border:0;
+outline:0;
+font-size:100%;
+vertical-align:baseline;
+background:transparent;
+}
+header, footer, nav, section, article {display:block;}
+body {
+font : 0.9em Verdana, Arial;
+color : #333;
+margin : 0;
+padding : 0;
+min-width: 998px;
+}
+#nav li, #nav2 li{
+display: inline-block;
+}
+#nav ul li a {
+color : #2583ad;
+text-decoration : none;
+}
+header h1 a {
+text-decoration : none;
+color : #555;
+}
+#credits a:hover {
+color : #a3c800;
+text-decoration : none;
+}
+header {
+background : #e4f2fd;
+border-bottom : 1px solid #c6d9e9;
+padding : 10px 0;
+display: block;
+}
+hgroup {
+margin : auto 15px;
+}
+header h1 {
+font : normal 2em Georgia, "Times New Roman", Times, "微软雅黑";
+color : #555;
+display: inline-block;
+margin : 0;
+padding : 0;
+}
+header h2 {
+float : right;
+display: inline-block;
+color : #d54e21;
+font : normal 1.4em Georgia, "Times New Roman", Times, "微软雅黑";
+margin : 0;
+padding : 9px 0 0;
+}
+#nav {
+border-bottom : 1px solid #dadada;
+display : block;
+margin : 0 0 15px;
+padding : 0;
+height: 28px;
+}
+#nav ul {
+list-style : none;
+margin : 10px 15px;
+padding : 0;
+}
+#nav ul li {
+font-size : 1em;
+font-weight : 700;
+color : #2583ad;
+margin : 0;
+padding : 0 20px 0 0;
+}
+#container {
+min-height : 300px;
+height : auto !important;
+margin : 20px 15px;
+}
+footer {
+background : #464646;
+margin : 0;
+padding : 10px;
+}
+#credits a {
+color : #dadada;
+}
+#credits {
+font-size : 0.8em;
+color : #ccc;
+height : 29px;
+padding : 5px;
+}
+#credits span {
+line-height : 26px;
+}
+#credits .theme-spec {
+float: right;
+}
+textarea, input, select {
+font : 14px Verdana, Arial, Helvetica, "微软雅黑";
+margin : 1px;
+padding : 3px;
+}
+div.grid {
+border : 1px solid #dadada;
+line-height : 2em;
+margin : 10px 0;
+padding : 10px;
+background-color:infobackground;
+}
+h3 {
+display : block;
+font-size : 1.17em;
+font-weight : 700;
+margin : 1em 0;
+}
+#nav2{
+border-bottom:1px solid #DADADA;
+margin:0 15px;
+padding:0 0 6px;
+}
+#nav2 a {
+color : #2583ad;
+text-decoration : none;
+padding-right : 10px;
+}
+header h1 a:hover {
+color : #d54e21;
+text-decoration : none;
+}
+form>div>label {
+background-color: #EAF3FA;
+display: block;
+font-size: 14px;
+font-weight: 700;
+margin: 0;
+padding: 7px;
+}
+form>div {
+margin: 20px 35px;
+}
+.input-field {
+border : #ccc solid 1px;
+padding : 1px 5px;
+min-height: 20px;
+}
+.input-field>input[type="text"], .input-field>input[type="password"] {
+width: 99%;
+border: none;
+}
+textarea#content {width:99%}
+#left-count {float: right; margin-right: 10px;}
+.neg {color: #D40D12;}
+.switcher {list-style-type: none;}
+.switcher li {display:inline;}
+.notice {
+padding: 20px 50px;
+}
+.notice li {
+margin-left: 2em;
+}
+.info, .msg {
+background-color : #fffeeb;
+border : solid #ccc;
+border-width : 1px 0;
+color : #555;
+font-size : 12px;
+text-align : center;
+margin : 5px 15px;
+padding : 5px 0;
+}
+.info {
+display:none;
+}
+.new-info, #nav .current a, #nav2 a.current, #nav .new-version a {
+color : #d54e21;
+}
+.search-table {
+border-collapse : collapse;
+width : 100%;
+border : 1px solid #ccc;
+margin : 10px 0;
+}
+.search-table a {
+text-decoration : none;
+color : #2583ad;
+}
+.search-table td, .search-table th {
+border : 1px solid #ccc;
+font-size : 12px;
+vertical-align : text-top;
+padding : 7px 15px 9px 10px;
+text-align : center;
+}
+.search-table thead {
+background-color : #464646;
+color : #d7d7d7;
+}
+.search-table tr:nth-child(even) {
+background-color : #eaf3fa;
+}

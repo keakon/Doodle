@@ -1,0 +1,18 @@
+<section id="sidebar">
+	<section id="google-search" class="widget">
+		<h4>不给力？试试Google搜索↓</h4>
+		<div id="cse"></div>
+		<script src="//www.google.com/jsapi"></script>
+		<script>
+		google.load('search', '1', {language : '#{{CONFIG.LANGUAGE}}'});
+		google.setOnLoadCallback(function() {
+			var customSearchControl = new google.search.CustomSearchControl('#{{CONFIG.GOOGLE_CSE_ID}}');
+			customSearchControl.setResultSetSize(google.search.Search.FILTERED_CSE_RESULTSET);
+			var options = new google.search.DrawOptions();
+			options.setAutoComplete(true);
+			customSearchControl.draw('cse', options);
+			customSearchControl.execute('#{keywords.replace("\\", r"\\").replace("'", r"\'")}');
+		}, true);
+		</script>
+	</section>
+</section>

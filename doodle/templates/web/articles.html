@@ -1,0 +1,30 @@
+<?py
+from doodle.common.time_format import convert_to_local_time, timestamp_to_datetime
+from doodle.common.url import quoted_string
+
+category_template = '<a href="' + CONFIG.BLOG_HOME_RELATIVE_PATH + 'category/%s">%s</a>'
+for article in articles:
+	dt = convert_to_local_time(timestamp_to_datetime(article.pub_time))
+	category_name = article.category_name()
+	if category_name:
+		category_name = escape(category_name)
+		category_link = category_template % (quoted_string(category_name), category_name)
+	else:
+		category_link = '无'
+	#endif
+
+	tags = article.tags
+	if tags:
+		tag_template = '<a href="' + CONFIG.BLOG_HOME_RELATIVE_PATH + 'tag/%s">%s</a>'
+		tags_link = ', '.join([tag_template % (quoted_string(escape(tag)), escape(tag)) for tag in tags])
+	else:
+		tags_link = '无'
+	#endif
+?>
+	<article class="post">
+		<h2 class="post-title"><a href="#{{CONFIG.BLOG_HOME_RELATIVE_PATH}}#{article.quoted_url()}">${article.title}</a></h2>
+		<p class="post-date"><span class="year">#{dt.year}</span> <span class="month">#{dt.month}</span> <span class="day">#{dt.day}</span> <span class="time">#{dt.strftime('%I:%M %p')}</span> <span class="postcomment">#{replies_dict.get(article.id) or 0} 条评论</span> <span>#{hit_counts.get(article.id) or 0} 次查看</span></p>
+		<p class="post-data"><span class="postcategory">分类：#{category_link}</span> <span>标签：#{tags_link}</span></p>
+		<section class="article-content">#{article.html_summary()}</section>
+	</article>
+<?py #endfor ?>

@@ -1,0 +1,57 @@
+<?py
+from tenjin.html import checked, selected
+
+from doodle.common.content_format import ContentFormatFlag
+from doodle.common.time_format import formatted_time_for_edit, timestamp_to_datetime
+
+include('admin/header.html')
+?>
+	<nav id="nav2">
+		<a href="#{{CONFIG.BLOG_ADMIN_RELATIVE_PATH}}article/new">撰写新文章</a>
+		<a href="javascript:;" class="current">编辑文章</a>
+		<a href="#{{CONFIG.BLOG_ADMIN_RELATIVE_PATH}}article/unpublished" target="_blank">未发布的文章</a>
+	</nav>
+	<div class="info"></div>
+	<form method="post" action="">
+		<div><label for="title">标题</label> <div class="input-field"><input type="text" id="title" name="title" value="${article.title}"/></div></div>
+		<div><label for="url">固定链接（格式一般为“YYYY/MM/DD/标题”，留空则自动生成）</label> <div class="input-field"><input type="text" id="url" name="url" value="${article.url}"/></div></div>
+		<div><label for="content">内容</label>
+			<div class="input-field">
+			<ul class="switcher">
+				<li class="bbcode"><a href="#">BBCode</a></li>
+				<li class="html"><a href="#">HTML</a></li>
+				<li class="remove"><a href="#">纯文本</a></li>
+			</ul>
+			<textarea id="content" name="content" rows="8" cols="120">${article.content}</textarea>
+			</div>
+		</div>
+		<div><label for="category">分类</label>
+			<div class="input-field">
+			<select id="category" name="category">
+				<option value="">无分类</option>
+<?py for category_name, category_path in categories: ?>
+				<option value="${category_name}"#{selected(article.category == category_name)}>${category_path}</option>
+<?py #endfor ?>
+			</select>
+			</div>
+		</div>
+		<div><label>标签</label>
+			<div class="input-field">
+<?py for index, tag in enumerate(tags): ?>
+			<input type="checkbox" name="tags" id="tag#{index}" value="${tag}"#{checked(tag in article.tags)}/><label for="tag#{index}">${tag}</label>
+<?py #endfor ?>
+			</div>
+		</div>
+		<div><label for="keywords">搜索关键字（以“,”分隔）</label> <div class="input-field"><input type="text" id="keywords" name="keywords" value="${article.keywords}"/></div></div>
+		<div><label>格式</label>
+			<div class="input-field">
+				<input type="checkbox" id="bbcode" name="bbcode"#{checked(article.format & ContentFormatFlag.BBCODE)}/><label for="bbcode">BBCode</label>
+				<input type="checkbox" id="html" name="html"#{checked(article.format & ContentFormatFlag.HTML)}/><label for="html">HTML</label>
+			</div>
+		</div>
+		<div><label for="public">发布状态</label> <div class="input-field"><input type="checkbox" id="public" name="public"#{checked(article.public)}/><label for="public">发布</label></div></div>
+		<div><label for="pub_time">发布时间（格式为“YYYY-MM-DD HH:MM:SS”，留空则使用当前时间）</label> <div class="input-field"><input type="text" id="pub_time" name="pub_time" value="#{formatted_time_for_edit(timestamp_to_datetime(article.pub_time))}"/></div></div>
+		<div><label for="mod_time">最后修改时间（格式同上，留空则使用当前时间）</label> <div class="input-field"><input type="text" id="mod_time" name="mod_time" value="#{formatted_time_for_edit(timestamp_to_datetime(article.mod_time))}"/></div></div>
+		<div><input type="submit" value="保存"/></div>
+	</form>
+<?py include('admin/footer.html') ?>

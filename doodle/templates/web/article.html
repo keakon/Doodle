@@ -1,0 +1,97 @@
+<?py
+from doodle.common.time_format import convert_to_local_time, timestamp_to_datetime
+from doodle.common.url import quoted_string
+
+include('web/header.html')
+
+article_id = article.id
+dt = convert_to_local_time(timestamp_to_datetime(article.pub_time))
+category_name = article.category_name()
+if category_name:
+	category_name = escape(category_name)
+	category_template = '<a href="' + CONFIG.BLOG_HOME_RELATIVE_PATH + 'category/%s">%s</a>'
+	category_link = category_template % (quoted_string(category_name), category_name)
+else:
+	category_link = '无'
+#endif
+
+tags = article.tags
+if tags:
+	tag_template = '<a href="' + CONFIG.BLOG_HOME_RELATIVE_PATH + 'tag/%s">%s</a>'
+	tags_link = ', '.join([tag_template % (quoted_string(escape(tag)), escape(tag)) for tag in tags])
+else:
+	tags_link = '无'
+#endif
+?>
+<section id="content">
+	<section class="post">
+		<article>
+			<h2 class="post-title"><a href="#{{CONFIG.BLOG_HOME_RELATIVE_PATH}}#{article.quoted_url()}">${article.title}</a></h2>
+			<div class="post-date"><span class="year">#{dt.year}</span> <span class="month">#{dt.month}</span> <span class="day">#{dt.day}</span> <span class="time">#{dt.strftime('%I:%M %p')}</span> <span class="postcomment">#{hits}次查看</span></div>
+			<p class="post-data">
+			<span class="postcategory">分类：#{category_link}</span> <span>标签：#{tags_link}</span>
+<?py if self.is_admin(): ?>
+			<span id="post-operation"><a href="#{{CONFIG.BLOG_ADMIN_RELATIVE_PATH}}article/#{article_id}/edit">[编辑]</a></span>
+<?py #endif ?>
+			</p>
+			<section class="article-content">
+				#{article.html_content()}
+			</section>
+		</article>
+<?py if previous_article or next_article: ?>
+		<p class="post-nav">
+<?py 	if previous_article: ?>
+			<span class="previous"><a href="#{{CONFIG.BLOG_HOME_RELATIVE_PATH}}#{previous_article.quoted_url()}" title="${previous_article.title}" rel="prev"><span>«</span> <span>${previous_article.title}</span></a></span>
+<?py
+	#endif
+	if next_article:
+?>
+			<span class="next"><a href="#{{CONFIG.BLOG_HOME_RELATIVE_PATH}}#{next_article.quoted_url()}" title="${next_article.title}" rel="next"><span>${next_article.title}</span> <span>»</span></a></span>
+<?py 	#endif ?>
+		</p>
+<?py #endif ?>
+		<section id="comments_section">
+			<h4 id="comments">#{replies}条评论 <a href="#respond">你不来一发么↓</a>
+<?py if replies: ?>
+				<span id="comment-order-asc" class="selected">顺序排列</span> <span id="comment-order-desc">倒序排列</span>
+<?py #endif ?>
+			</h4>
+		</section>
+		<section id="commentlist">
+			<ol class="commentlist"></ol>
+<?py if replies: ?>
+			<p id="more-hint">向下滚动可载入更多评论，或者点这里<a href="javascript:;">禁止自动加载</a>。</p>
+			<noscript>
+				<div class="comment-nav">
+					<span class="next"><a href="#{{CONFIG.BLOG_HOME_RELATIVE_PATH}}comment/#{article_id}/">查看评论</a></span>
+				</div>
+			</noscript>
+<?py #endif ?>
+		</section>
+		<section id="respond">
+			<h4>想说点什么呢？</h4>
+<?py
+user = self.current_user
+if user:
+?>
+			<form action="#{{CONFIG.BLOG_HOME_RELATIVE_PATH}}comment/#{article_id}" method="post" id="commentform">
+				<p>您当前登录的用户为：${user.name}，您可<a href="#{{CONFIG.BLOG_HOME_RELATIVE_PATH}}logout">登出</a>以更换用户，或<a href="#{{CONFIG.BLOG_HOME_RELATIVE_PATH}}profile">修改用户资料</a>。</p>
+				<p><textarea name="comment" id="comment" cols="58" rows="10" tabindex="1"></textarea></p>
+				<p><input name="bbcode" type="checkbox" id="bbcode" tabindex="2" checked="checked"/> <label for="bbcode">启用BBCode</label></p>
+				<p><small>小提示：回复某条回帖时，可以点击其右侧的“回复”按钮，这样该帖的作者会收到邮件通知。</small></p>
+				<p><input name="submit" type="submit" id="submit" tabindex="3" value="来一发"/></p>
+			</form>
+<?py else: ?>
+			<p>您需要<a href="#{{CONFIG.LOGIN_URL}}">登录</a>您的Google账号才能进行评论。</p>
+<?py #endif ?>
+		</section>
+	</section>
+</section>
+<script>
+var article_id = '#{article_id}';
+var home_path = '#{{CONFIG.BLOG_HOME_RELATIVE_PATH}}';
+</script>
+<?py
+include('web/sidebar.html')
+include('web/footer.html')
+?>

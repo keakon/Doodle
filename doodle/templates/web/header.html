@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="#{{CONFIG.LANGUAGE}}">
+<head>
+<title>${title}</title>
+<script>
+if (top !== self) top.location = self.location;
+<?PY if CONFIG.GOOGLE_ANALYTICS_ID: ?>
+var _gaq = [['_setAccount', '#{{CONFIG.GOOGLE_ANALYTICS_ID}}'], ['_trackPageview'], ['_trackPageLoadTime']];
+var _gaq_start = new Date();
+<?PY else: ?>
+var _gaq = [];
+<?PY #endif ?>
+</script>
+	<meta name="viewport" content="width=800"/>
+	<link href="#{{CONFIG.BLOG_HOME_RELATIVE_PATH}}feed" rel="alternate" title="${{CONFIG.BLOG_TITLE}} - ATOM供稿" type="application/atom+xml"/>
+	<link href="#{{CONFIG.BLOG_HOME_RELATIVE_PATH}}comment-feed" rel="alternate" title="${{CONFIG.BLOG_TITLE}} - 评论供稿" type="application/atom+xml"/>
+	<link rel="stylesheet" href="#{{CONFIG.BLOG_HOME_RELATIVE_PATH}}static/theme/null/css/style.css"/>
+<?py
+if page == 'article':
+	if self.is_spider():
+		from doodle.common.content_format import strip_html
+?>
+	<meta name="description" content="${strip_html(article.html_summary(), 200)}"/>
+	<link rel="canonical" href="#{{CONFIG.BLOG_HOME_RELATIVE_PATH}}#{article.quoted_url()}"/>
+<?py 	#endif ?>
+	<link rel="stylesheet" href="#{{CONFIG.BLOG_HOME_RELATIVE_PATH}}static/css/solarized-dark.css"/>
+	<link rel="stylesheet" href="#{{CONFIG.BLOG_HOME_RELATIVE_PATH}}static/markitup/skins/simple/style.css"/>
+	<link rel="stylesheet" href="#{{CONFIG.BLOG_HOME_RELATIVE_PATH}}static/markitup/sets/bbcode/style.css"/>
+<?py elif page == 'comments': ?>
+	<meta name="robots" content="nofollow"/>
+<?py #endif ?>
+</head>
+<body>
+<div id="wrapper">
+<div id="header-wrapper">
+<header id="header">
+	<h1 id="logo"><a href="#{{CONFIG.BLOG_HOME_RELATIVE_PATH}}">${{CONFIG.BLOG_TITLE}}</a></h1>
+	<p class="description">${{CONFIG.BLOG_SUB_TITLE}}</p>
+	<p class="socialmedia">
+<?PY
+for social_media in CONFIG.SOCIAL_MEDIAS:
+	rel = social_media.get('rel', '')
+	if rel:
+?>
+		<a href="#{{social_media['url']}}" title="${{social_media['title']}}" rel="#{{rel}}"><img src="#{{CONFIG.BLOG_HOME_RELATIVE_PATH}}static/theme/null/img/socialmedia/#{{social_media['icon']}}.png" alt="${{social_media['title']}}" height="24" width="24"/>${{social_media['text']}}</a>
+<?PY 	else: ?>
+		<a href="#{{social_media['url']}}" title="${{social_media['title']}}"><img src="#{{CONFIG.BLOG_HOME_RELATIVE_PATH}}static/theme/null/img/socialmedia/#{{social_media['icon']}}.png" alt="${{social_media['title']}}" height="24" width="24"/>${{social_media['text']}}</a>
+<?PY
+ 	#endif
+#endfor
+?>
+		<a href="/feed" title="订阅一下又不会怀孕的说" rel="nofollow"><img src="#{{CONFIG.BLOG_HOME_RELATIVE_PATH}}static/theme/null/img/socialmedia/atom.png" alt="订阅一下又不会怀孕的说" height="24" width="24"/>订阅</a>
+	</p>
+	<nav>
+		<ul id="nav">
+<?PY
+from itertools import izip
+
+from doodle.common.content_format import tagattr
+
+next_levels = [nav_link['level'] for nav_link in CONFIG.NAV_LINKS[1:]] + [1]
+for nav_link, next_level in izip(CONFIG.NAV_LINKS, next_levels):
+	current_level = nav_link['level']
+	if current_level == next_level:
+		rel = nav_link.get('rel', '')
+?>
+			<li><a href="#{{nav_link['url']}}"#{{tagattr('rel', rel, rel)}}>${{nav_link['text']}}</a></li>
+<?PY 	elif current_level < next_level: ?>
+			<li><a href="#{{nav_link['url']}}"#{{tagattr('rel', rel, rel)}}>${{nav_link['text']}}</a><ul>
+<?PY 	else: ?>
+			<li><a href="#{{nav_link['url']}}"#{{tagattr('rel', rel, rel)}}>${{nav_link['text']}}</a></li>#{{'</ul></li>' * (current_level - next_level)}}
+<?PY
+	#endif
+#endfor
+?>
+<?py if self.current_user_id: ?>
+			<li><a href="#{{CONFIG.BLOG_HOME_RELATIVE_PATH}}logout">登出</a></li>
+<?py else: ?>
+			<li><a href="#{{CONFIG.LOGIN_URL}}">登录</a></li>
+<?py #endif ?>
+<?py if self.is_admin(): ?>
+			<li><a href="#{{CONFIG.BLOG_ADMIN_RELATIVE_PATH}}">管理博客</a></li>
+<?py #endif ?>
+		</ul>
+	</nav>
+	<form method="get" id="searchform" action="#{{CONFIG.BLOG_HOME_RELATIVE_PATH}}search">
+		<input type="text" placeholder="找找有啥好东东…" value="${keywords if 'keywords' in _context else ''}" name="keywords" id="keywords" x-webkit-speech x-webkit-grammar="builtin:search" onwebkitspeechchange="this.parentNode.submit()"/>
+		<input type="submit" value="搜索" id="searchsubmit"/>
+	</form>
+</header>
+</div>
+<div id="body">

@@ -1,0 +1,88 @@
+<?py
+from tenjin.helpers import cache_as
+
+for _ in cache_as('sidebar', CONFIG.SIDEBAR_BAR_CACHE_TIME):
+?>
+<section id="sidebar">
+<?py
+	from math import log
+	from itertools import izip
+
+	from doodle.common.time_format import time_from_now
+	from doodle.common.url import quoted_string
+	from doodle.core.models.category import Category
+	from doodle.core.models.comment import Comment
+	from doodle.core.models.tag import Tag
+
+	is_https = self.is_https()
+	latest_comments, article_dict, user_dict = Comment.get_latest_comments()
+	if latest_comments:
+?>
+	<section id="latest-comments" class="widget">
+		<h4>最新评论</h4>
+		<ul>
+<?py
+		for comment in latest_comments:
+			article = article_dict.get(comment.article_id)
+			if article:
+				user = user_dict.get(comment.user_id)
+				if user:
+?>
+			<li><img src="#{user.get_avatar(is_https)}?s=30&amp;d=monsterid" class="avatar" height="30" width="30" alt="${user.name}"/><span class="comment-header"><strong>${user.name}</strong> <small>(${time_from_now(comment.time)})</small></span><p class="comment-quote"><a href="#{{CONFIG.BLOG_HOME_RELATIVE_PATH}}#{article.quoted_url()}">#{comment.striped_html_content()}</a></p></li>
+<?py
+				#endif
+			#endif
+		#endfor
+?>
+		</ul>
+	</section>
+<?py
+	#endif
+
+	categories = Category.get_all_names_with_paths()
+	if categories:
+?>
+	<section id="categories" class="widget">
+		<h4>分类</h4>
+		<ul>
+<?py
+		next_levels = [len(category_path.split(':')) for category_name, category_path in categories[1:]] + [1]
+		for (category_name, category_path), next_level in izip(categories, next_levels):
+			category_name = escape(category_name)
+			link = '<a href="%scategory/%s">%s</a>' % (CONFIG.BLOG_HOME_RELATIVE_PATH, quoted_string(category_name), category_name)
+			current_level = len(category_path.split(':'))
+			if current_level == next_level:
+?>
+			<li>#{link}</li>
+<?py 			elif current_level < next_level: ?>
+			<li>#{link}<ul>
+<?py 			else: ?>
+			<li>#{link}</li>#{'</ul></li>' * (current_level - next_level)}
+<?py
+			#endif
+		#endfor
+?>
+		</ul>
+	</section>
+<?py
+	#endif
+
+	tag_counts = Tag.get_counts()
+	if tag_counts:
+?>
+	<section id="tags" class="widget">
+		<h4>标签</h4>
+<?py
+		for tag, count in tag_counts.iteritems():
+			if count > 0:
+				tag_name = escape(tag)
+?>
+			<a href="#{{CONFIG.BLOG_HOME_RELATIVE_PATH}}tag/#{quoted_string(tag_name)}" style="font-size:#{int(3 * log(max(count + 1, 1))) + 12}px">#{tag_name}</a>
+<?py
+			#endif
+		#endfor
+?>
+	</section>
+<?py 	#endif ?>
+</section>
+<?py #endfor ?>

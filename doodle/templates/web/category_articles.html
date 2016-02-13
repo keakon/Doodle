@@ -1,0 +1,37 @@
+<?py
+from doodle.common.content_format import tagattr
+from doodle.common.url import quoted_string
+
+not_ajax = not self.is_xhr()
+if not_ajax:
+	include('web/header.html')
+#endif
+?>
+<section id="content"#{tagattr('class', not articles, 'block')}>
+<?py
+if articles:
+	include('web/articles.html')
+	if next_cursor:
+?>
+	<p class="post-nav"><span class="previous"><a href="#{{CONFIG.BLOG_HOME_RELATIVE_PATH}}category/#{quoted_string(category_name)}?cursor=#{next_cursor}">« 看看还有什么好玩意</a></span></p>
+<?py
+	#endif
+elif not_ajax:
+	if cursor:
+?>
+	<h2>囧，已经到最后一页了…</h2>
+	<p>去看看其他的页面吧。</p>
+<?py 	else: ?>
+	<h2>囧，这家伙太懒了，啥也没写…</h2>
+	<p>下次再来看看吧。</p>
+<?py
+	#endif
+#endif
+?>
+</section>
+<?py
+if not_ajax:
+	include('web/sidebar.html')
+	include('web/footer.html')
+#endif
+?>
