@@ -10,8 +10,6 @@ services:
   - redis-server
 before_install:
   - mkdir -p $HOME/buildout-cache/{eggs,downloads}
-  - virtualenv .
-  - bin/pip install --upgrade pip setuptools zc.buildout
 install:
   - mv doodle/config/test_sample.py doodle/config/test.py
   - python bootstrap-buildout.py
