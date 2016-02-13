@@ -11,4 +11,4 @@ install:
   - python bootstrap-buildout.py
   - bin/buildout
 script:
-  - bin/test
+  - bin/test tests
