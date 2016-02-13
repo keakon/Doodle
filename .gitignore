@@ -1,8 +1,9 @@
 .*
 *.py[co]
-*.rdb
 !.gitignore
 !.travis.yml
+*.rdb
+pip-selfcheck.json
 conf/*.conf
 !conf/*_sample.conf
 doodle/config/development.py
@@ -12,5 +13,7 @@ bin/
 data/
 develop-eggs/
 eggs/
+include/
+lib/
 parts/
 *.egg-info/
