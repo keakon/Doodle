@@ -7,11 +7,10 @@ python:
 services:
   - redis-server
 before_install:
-  - mkdir -p $HOME/buildout-cache/{eggs,downloads}
   - virtualenv .
   - bin/pip install --upgrade pip setuptools zc.buildout
 install:
   - mv doodle/config/test_sample.py doodle/config/test.py
-  - bin/buildout -N -t 20 -c travis.cfg
+  - bin/buildout -N
 script:
   - bin/py.test -v doodle/tests
