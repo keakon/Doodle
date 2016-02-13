@@ -12,7 +12,7 @@ before_install:
   - mkdir -p $HOME/buildout-cache/{bin,eggs,downloads}
 install:
   - mv doodle/config/test_sample.py doodle/config/test.py
-  - test -f buildout-cache/bin/buildout || python bootstrap-buildout.py -c travis.cfg
-  - buildout-cache/bin/buildout -N -c travis.cfg
+  - test -f $HOME/buildout-cache/bin/buildout || python bootstrap-buildout.py -c travis.cfg
+  - $HOME/buildout-cache/bin/buildout -N -c travis.cfg
 script:
-  - buildout-cache/bin/py.test -v doodle/tests
+  - $HOME/buildout-cache/bin/py.test -v doodle/tests
