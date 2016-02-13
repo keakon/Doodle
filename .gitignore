@@ -16,4 +16,5 @@ eggs/
 include/
 lib/
 parts/
+private/
 *.egg-info/
