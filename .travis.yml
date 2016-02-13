@@ -2,15 +2,17 @@ language: python
 sudo: false
 cache:
   pip: true
+  directories:
+    - $HOME/buildout-cache
 python:
   - 2.7
 services:
   - redis-server
 before_install:
-  - virtualenv .
-  - bin/pip install --upgrade pip setuptools zc.buildout
+  - mkdir -p $HOME/buildout-cache/{eggs,downloads}
 install:
   - mv doodle/config/test_sample.py doodle/config/test.py
-  - bin/buildout -N
+  - python bootstrap-buildout.py
+  - bin/buildout -N -t 20 -c travis.cfg
 script:
   - bin/py.test -v doodle/tests
