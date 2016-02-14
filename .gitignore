@@ -12,9 +12,8 @@ doodle/config/test.py
 bin/
 data/
 develop-eggs/
+downloads/
 eggs/
-include/
-lib/
 parts/
 private/
 *.egg-info/

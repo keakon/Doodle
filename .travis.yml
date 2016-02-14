@@ -12,7 +12,7 @@ services:
   - redis-server
 install:
   - mv doodle/config/test_sample.py doodle/config/test.py
-  - test -f bin/buildout || python bootstrap-buildout.py -c travis.cfg
-  - bin/buildout -N -c travis.cfg
+  - test -f bin/buildout || python bootstrap-buildout.py
+  - bin/buildout -N
 script:
   - bin/py.test -v doodle/tests
