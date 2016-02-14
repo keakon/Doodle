@@ -3,16 +3,16 @@ sudo: false
 cache:
   pip: true
   directories:
-    - $HOME/buildout-cache
+    - bin
+    - eggs
+    - downloads
 python:
   - 2.7
 services:
   - redis-server
-before_install:
-  - mkdir -p $HOME/buildout-cache/{bin,eggs,downloads}
 install:
   - mv doodle/config/test_sample.py doodle/config/test.py
-  - test -f $HOME/buildout-cache/bin/buildout || python bootstrap-buildout.py -c travis.cfg
-  - $HOME/buildout-cache/bin/buildout -N -c travis.cfg
+  - test -f bin/buildout || python bootstrap-buildout.py -c travis.cfg
+  - bin/buildout -N -c travis.cfg
 script:
-  - $HOME/buildout-cache/bin/py.test -v doodle/tests
+  - bin/py.test -v doodle/tests
