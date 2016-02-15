@@ -11,7 +11,7 @@ setup(
     packages=['doodle'],
     install_requires=[
         'setuptools',
-        'tornado',
+        'tornado>=4.3',
         'redis',
         'hiredis',
         'pycurl',
