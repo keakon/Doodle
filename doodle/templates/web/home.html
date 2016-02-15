@@ -1,7 +1,8 @@
 <?py
 from doodle.common.content_format import tagattr
 
-if not self.is_content_only:
+output_full_html = not self.is_content_only
+if output_full_html:
 	include('web/header.html')
 #endif
 ?>
@@ -14,8 +15,8 @@ if articles:
 	<p class="post-nav"><span class="previous"><a href="#{{CONFIG.BLOG_HOME_RELATIVE_PATH}}?cursor=#{next_cursor}">« 看看还有什么好玩意</a></span></p>
 <?py
 	#endif
-elif not_ajax:
-	if cursor:
+elif output_full_html:
+	if self.cursor:
 ?>
 	<h2>囧，已经到最后一页了…</h2>
 	<p>去看看其他的页面吧。</p>
@@ -28,7 +29,7 @@ elif not_ajax:
 ?>
 </section>
 <?py
-if not self.is_content_only:
+if output_full_html:
 	include('web/sidebar.html')
 	include('web/footer.html')
 #endif

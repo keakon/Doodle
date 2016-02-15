@@ -11,12 +11,10 @@ from ..base_handler import ArticlesHandler
 
 class TagArticlesHandler(ArticlesHandler):
     def get(self, tag_name):
-        cursor = self.cursor()
-
         if not Tag.exists(tag_name):
             raise HTTPError(404)
 
-        articles, next_cursor = TagArticle.get_articles(tag_name, cursor)
+        articles, next_cursor = TagArticle.get_articles(tag_name, self.cursor)
         if articles:
             article_ids = [article.id for article in articles]
             hit_counts = ArticleHitCount.get_by_ids(article_ids)
@@ -28,7 +26,6 @@ class TagArticlesHandler(ArticlesHandler):
         self.render('web/tag_articles.html', {
             'title': u'标签《%s》' % tag_name,
             'page': 'tag_articles',
-            'cursor': cursor,
             'next_cursor': next_cursor,
             'tag_name': tag_name,
             'articles': articles,

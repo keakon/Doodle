@@ -9,8 +9,7 @@ from ..base_handler import ArticlesHandler
 
 class HomeHandler(ArticlesHandler):
     def get(self):
-        cursor = self.cursor
-        articles, next_cursor = Article.get_articles_for_homepage(cursor)
+        articles, next_cursor = Article.get_articles_for_homepage(self.cursor)
         if articles:
             article_ids = [article.id for article in articles]
             hit_counts = ArticleHitCount.get_by_ids(article_ids)
@@ -24,6 +23,5 @@ class HomeHandler(ArticlesHandler):
             'articles': articles,
             'hit_counts': hit_counts,
             'replies_dict': replies_dict,
-            'cursor': cursor,
             'next_cursor': next_cursor
         })
