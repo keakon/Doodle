@@ -17,4 +17,4 @@ install:
 script:
   - bin/py.test -v doodle/tests
 before_cache:
-  - rm -f $HOME/.cache/pip/log/debug.log
+  - rm -rf $HOME/.cache/pip/log/
