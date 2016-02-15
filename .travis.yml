@@ -3,6 +3,7 @@ sudo: false
 cache:
   pip: true
   directories:
+    - $HOME/.cache/pip
     - bin
     - eggs
     - downloads
@@ -12,7 +13,7 @@ services:
   - redis-server
 install:
   - mv doodle/config/test_sample.py doodle/config/test.py
-  - pip install zc.buildout
+  - pip install --upgrade setuptools zc.buildout --cache-dir $HOME/.cache/pip
   - buildout -N
 script:
   - bin/py.test -v doodle/tests
