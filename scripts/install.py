@@ -13,7 +13,7 @@ def force_symlink(source, link_name):
         os.symlink(source, link_name)
     except OSError as e:
         if e.errno == errno.EEXIST:
-            os.remove(link_name)
+            os.unlink(link_name)
             os.symlink(source, link_name)
         else:
             raise
@@ -52,8 +52,15 @@ def create_dirs():
     log_dir = os.path.join(HERE, '..', 'logs')
     mkdir(log_dir)
 
+    data_dir = os.path.join(HERE, '..', 'data')
+    mkdir(data_dir)
+
+    dropbox_redis_dir = os.path.expanduser('~/Dropbox/doodle/redis')
     redis_dir = os.path.join(HERE, '..', 'data', 'redis')
-    mkdir(redis_dir, recursive=True)
+    if os.path.isdir(dropbox_redis_dir):
+        force_symlink(dropbox_redis_dir, redis_dir)
+    else:
+        mkdir(redis_dir)
 
 
 def install():
