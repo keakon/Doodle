@@ -5,6 +5,7 @@ from tornado.web import HTTPError
 from doodle.core.models.article import ArticleHitCount
 from doodle.core.models.category import Category, CategoryArticles
 from doodle.core.models.comment import ArticleComments
+from doodle.config import CONFIG
 
 from ..base_handler import UserHandler
 
@@ -15,6 +16,9 @@ class CategoryArticlesHandler(UserHandler):
 
         if not Category.exists(category_name):
             raise HTTPError(404)
+
+        if cursor:
+            self.set_cache(CONFIG.DEFAULT_CACHE_TIME, is_public=False if self.current_user else None)
 
         articles, next_cursor = CategoryArticles.get_articles(category_name, cursor)
         if articles:
@@ -37,4 +41,5 @@ class CategoryArticlesHandler(UserHandler):
         })
 
     def compute_etag(self):
-        return
+        if self.get_cursor() and self.is_xhr():
+            return super(CategoryArticlesHandler, self).compute_etag()

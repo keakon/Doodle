@@ -10,6 +10,9 @@ from ..base_handler import UserHandler
 class HomeHandler(UserHandler):
     def get(self):
         cursor = self.get_cursor()
+        if cursor:
+            self.set_cache(CONFIG.DEFAULT_CACHE_TIME, is_public=False if self.current_user else None)
+
         articles, next_cursor = Article.get_articles_for_homepage(cursor)
         if articles:
             article_ids = [article.id for article in articles]
@@ -29,4 +32,5 @@ class HomeHandler(UserHandler):
         })
 
     def compute_etag(self):
-        return
+        if self.get_cursor() and self.is_xhr():
+            return super(HomeHandler, self).compute_etag()

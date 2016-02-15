@@ -242,6 +242,9 @@ class BaseHandler(RequestHandler):
         return browser, platform, os, os_version, vendor
 
     def get_cursor(self):
+        if hasattr(self, '_cursor'):
+            return self._cursor
+
         cursor = self.get_argument('cursor', None)
         if cursor:
             try:
@@ -253,6 +256,7 @@ class BaseHandler(RequestHandler):
                 raise HTTPError(404)
         else:
             cursor = None
+        self._cursor = cursor
         return cursor
 
     def write_json(self, value, ensure_ascii=False):
