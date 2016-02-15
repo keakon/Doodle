@@ -3,7 +3,8 @@
 !.gitignore
 !.travis.yml
 *.rdb
-pip-selfcheck.json
+bootstrap.py
+ez_setup.py
 conf/*.conf
 !conf/*_sample.conf
 doodle/config/development.py

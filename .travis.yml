@@ -11,7 +11,10 @@ services:
   - redis-server
 install:
   - mv doodle/config/test_sample.py doodle/config/test.py
-  - test -f bin/buildout || python bootstrap-buildout.py
+  - |
+    if [ ! -f bin/buildout ]; then
+      wget https://bootstrap.pypa.io/bootstrap-buildout.py -O bootstrap.py && python bootstrap.py --setuptools-to-dir downloads
+    fi
   - bin/buildout -N
 script:
   - bin/py.test -v doodle/tests
