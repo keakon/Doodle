@@ -13,7 +13,7 @@ install:
   - mv doodle/config/test_sample.py doodle/config/test.py
   - |
     if [ ! -f bin/buildout ]; then
-      wget -q https://bootstrap.pypa.io/bootstrap-buildout.py && python bootstrap-buildout.py --setuptools-to-dir downloads
+      wget https://bootstrap.pypa.io/bootstrap-buildout.py && python bootstrap-buildout.py
     fi
   - bin/buildout -N
 script:

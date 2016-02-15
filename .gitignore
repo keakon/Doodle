@@ -3,7 +3,7 @@
 !.gitignore
 !.travis.yml
 *.rdb
-bootstrap.py
+bootstrap-buildout.py
 ez_setup.py
 conf/*.conf
 !conf/*_sample.conf
