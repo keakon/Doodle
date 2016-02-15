@@ -12,7 +12,7 @@ services:
   - redis-server
 install:
   - mv doodle/config/test_sample.py doodle/config/test.py
-  - pip install zc.buildout --cache-dir $HOME/.cache/pip -q
+  - pip install zc.buildout --cache-dir $HOME/.cache/pip --log /dev/null
   - buildout -N
 script:
   - bin/py.test -v doodle/tests
