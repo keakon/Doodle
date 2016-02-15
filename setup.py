@@ -10,7 +10,6 @@ setup(
     description="Doodle",
     packages=['doodle'],
     install_requires=[
-        'setuptools',
         'tornado>=4.3',
         'redis',
         'hiredis',

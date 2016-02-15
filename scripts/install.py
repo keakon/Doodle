@@ -22,7 +22,7 @@ def force_symlink(source, link_name):
 def link_config():
     private_dir = os.path.join(HERE, '..', 'private')
     if not os.path.isdir(private_dir):
-        print 'Cannot find private dir, you can link your config files manually.'
+        print('Cannot find private dir, you can link your config files manually.')
         return
 
     conf_dir = os.path.abspath(os.path.join(HERE, '..', 'conf'))

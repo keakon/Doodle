@@ -170,7 +170,7 @@ class Article(PublicModel):
 
     @classmethod
     def get_articles_for_homepage(cls, cursor=None, limit=CONFIG.ARTICLES_PER_PAGE):
-        article_ids_with_time = PublicArticlePublishTime.get_article_ids(cursor, limit)
+        article_ids_with_time = PublicArticlePublishTime.get_article_ids(cursor, limit=limit)
         if article_ids_with_time:
             return cls.get_articles_and_next_cursor(article_ids_with_time, limit=limit)
         return [], None
@@ -188,8 +188,11 @@ class Article(PublicModel):
         return time_class.get_count()
 
     @classmethod
-    def get_articles_for_feed(cls, page_size=CONFIG.ARTICLES_FOR_FEED):
-        article_ids = ArticleUpdateTime.get_article_ids_for_page(1, page_size)
+    def get_articles_for_feed(cls, limit=CONFIG.ARTICLES_FOR_FEED):
+        if CONFIG.SORT_FEED_BY_UPDATE_TIME:
+            article_ids = ArticleUpdateTime.get_article_ids_for_page(1, limit)
+        else:
+            article_ids = PublicArticlePublishTime.get_article_ids(None, with_time=False, limit=limit)
         if article_ids:
             return cls.get_by_ids(article_ids, public_only=True)
         return []
@@ -276,11 +279,11 @@ class ArticleTime(JSONModel):
         return cls.redis_client.zrevrangebyscore(cls.KEY, '+inf', 0, start_index, page_size)
 
     @classmethod
-    def get_article_ids(cls, cursor=None, limit=CONFIG.ARTICLES_PER_PAGE):
+    def get_article_ids(cls, cursor=None, with_time=True, limit=CONFIG.ARTICLES_PER_PAGE):
         if cursor is None:
-            return cls.redis_client.zrevrange(cls.KEY, 0, limit - 1, withscores=True, score_cast_func=int)
+            return cls.redis_client.zrevrange(cls.KEY, 0, limit - 1, withscores=with_time, score_cast_func=int)
         else:
-            return cls.redis_client.zrevrangebyscore(cls.KEY, '(%d' % cursor, 0, 0, limit, withscores=True, score_cast_func=int)
+            return cls.redis_client.zrevrangebyscore(cls.KEY, '(%d' % cursor, 0, 0, limit, withscores=with_time, score_cast_func=int)
 
     @classmethod
     def get_previous_article_id(cls, publish_time):

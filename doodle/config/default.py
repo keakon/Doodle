@@ -31,12 +31,13 @@ class Config(object):
     # blog config
     BLOG_TITLE = u''  # 博客标题
     BLOG_SUB_TITLE = u''  # 博客副标题
-    BLOG_DESCRIPTION = u''  # 用于FEED的博客描述
+    BLOG_DESCRIPTION = u''  # 用于 feed 的博客描述
     BLOG_AUTHOR = u''  # 博客作者
     LANGUAGE = 'zh-CN'  # 博客文章采用的主要语言
     MAJOR_DOMAIN = 'localhost'  # 主要域名
 
     OUTPUT_FULLTEXT_FOR_FEED = True  # Feed 中是否全文输出
+    SORT_FEED_BY_UPDATE_TIME = False  # True: 按发布时间输出 feed，False: 按更新时间输出 feed
 
     ADMIN_USER_ID = 1  # 管理员 ID
 
