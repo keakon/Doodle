@@ -10,11 +10,15 @@ python:
   - 2.7
 services:
   - redis-server
+addons:
+  apt:
+    packages:
+      - redis-server
 install:
   - mv doodle/config/test_sample.py doodle/config/test.py
   - pip install zc.buildout --cache-dir $HOME/.cache/pip
   - buildout -N
-before_cache:
-  - rm -f $HOME/.cache/pip/log/debug.log
 script:
   - bin/py.test -v doodle/tests
+before_cache:
+  - rm -f $HOME/.cache/pip/log/debug.log
