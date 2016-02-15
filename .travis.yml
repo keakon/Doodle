@@ -1,8 +1,8 @@
 language: python
 sudo: false
 cache:
-  pip: true
   directories:
+    - $HOME/.cache/pip
     - bin
     - eggs
     - downloads
@@ -12,7 +12,7 @@ services:
   - redis-server
 install:
   - mv doodle/config/test_sample.py doodle/config/test.py
-  - pip install --upgrade setuptools zc.buildout --cache-dir $HOME/.cache/pip
+  - pip install zc.buildout --cache-dir $HOME/.cache/pip
   - buildout -N
 script:
   - bin/py.test -v doodle/tests
