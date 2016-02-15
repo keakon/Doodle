@@ -23,7 +23,7 @@ $(function() {
 	}
 
 	function load() {
-		$loading.load(next_url + ' #content', function() {
+		$loading.load(next_url + '&section=content #content', function() {
 			$next_url = $loading.find('.post-nav>.previous>a');
 			set_next_url();
 			$next_url.parent().after($no_more);

@@ -9,7 +9,7 @@ class Property(object):
         if obj is None:
             return self
         if self.fget is None:
-            raise AttributeError, 'unreadable attribute'
+            raise AttributeError('unreadable attribute')
         return self.fget(obj)
 
 
@@ -19,6 +19,6 @@ class CachedProperty(Property):
             return self
         fget = self.fget
         if fget is None:
-            raise AttributeError, 'unreadable attribute'
+            raise AttributeError('unreadable attribute')
         obj.__dict__[fget.__name__] = prop = fget(obj)
         return prop

@@ -4,15 +4,12 @@ from doodle.config import CONFIG
 from doodle.core.models.article import Article, ArticleHitCount
 from doodle.core.models.comment import ArticleComments
 
-from ..base_handler import UserHandler
+from ..base_handler import ArticlesHandler
 
 
-class HomeHandler(UserHandler):
+class HomeHandler(ArticlesHandler):
     def get(self):
-        cursor = self.get_cursor()
-        if cursor:
-            self.set_cache(CONFIG.DEFAULT_CACHE_TIME, is_public=False if self.current_user else None)
-
+        cursor = self.cursor
         articles, next_cursor = Article.get_articles_for_homepage(cursor)
         if articles:
             article_ids = [article.id for article in articles]
@@ -30,7 +27,3 @@ class HomeHandler(UserHandler):
             'cursor': cursor,
             'next_cursor': next_cursor
         })
-
-    def compute_etag(self):
-        if self.get_cursor() and self.is_xhr():
-            return super(HomeHandler, self).compute_etag()

@@ -2,8 +2,7 @@
 from doodle.common.content_format import tagattr
 from doodle.common.url import quoted_string
 
-not_ajax = not self.is_xhr()
-if not_ajax:
+if not self.is_content_only:
 	include('web/header.html')
 #endif
 ?>
@@ -30,7 +29,7 @@ elif not_ajax:
 ?>
 </section>
 <?py
-if not_ajax:
+if not self.is_content_only:
 	include('web/sidebar.html')
 	include('web/footer.html')
 #endif

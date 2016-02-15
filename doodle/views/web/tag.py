@@ -5,20 +5,16 @@ from tornado.web import HTTPError
 from doodle.core.models.article import ArticleHitCount
 from doodle.core.models.tag import Tag, TagArticle
 from doodle.core.models.comment import ArticleComments
-from doodle.config import CONFIG
 
-from ..base_handler import UserHandler
+from ..base_handler import ArticlesHandler
 
 
-class TagArticlesHandler(UserHandler):
+class TagArticlesHandler(ArticlesHandler):
     def get(self, tag_name):
-        cursor = self.get_cursor()
+        cursor = self.cursor()
 
         if not Tag.exists(tag_name):
             raise HTTPError(404)
-
-        if cursor:
-            self.set_cache(CONFIG.DEFAULT_CACHE_TIME, is_public=False if self.current_user else None)
 
         articles, next_cursor = TagArticle.get_articles(tag_name, cursor)
         if articles:
@@ -39,7 +35,3 @@ class TagArticlesHandler(UserHandler):
             'hit_counts': hit_counts,
             'replies_dict': replies_dict
         })
-
-    def compute_etag(self):
-        if self.get_cursor() and self.is_xhr():
-            return super(TagArticlesHandler, self).compute_etag()

@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-import logging
 import re
 from urllib import urlencode
 from urlparse import urlsplit
@@ -241,10 +240,9 @@ class BaseHandler(RequestHandler):
                     vendor = 'Samsung'
         return browser, platform, os, os_version, vendor
 
-    def get_cursor(self):
-        if hasattr(self, '_cursor'):
-            return self._cursor
-
+    @CachedProperty
+    def cursor(self):
+        print('cursor')
         cursor = self.get_argument('cursor', None)
         if cursor:
             try:
@@ -256,7 +254,6 @@ class BaseHandler(RequestHandler):
                 raise HTTPError(404)
         else:
             cursor = None
-        self._cursor = cursor
         return cursor
 
     def write_json(self, value, ensure_ascii=False):
@@ -306,6 +303,21 @@ class UserHandler(BaseHandler):
             if referer and urlsplit(referer).netloc == self.request.host:
                 next_url = referer
         return next_url
+
+
+class ArticlesHandler(UserHandler):
+    def prepare(self):
+        if self.cursor:
+            self.set_cache(CONFIG.DEFAULT_CACHE_TIME, is_public=False if self.current_user else None)
+
+    @CachedProperty
+    def is_content_only(self):
+        print('content')
+        return self.get_argument('section', None) == 'content'
+
+    def compute_etag(self):
+        if self.is_content_only:
+            return super(ArticlesHandler, self).compute_etag()
 
 
 class AdminHandler(UserHandler):
