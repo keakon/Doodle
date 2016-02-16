@@ -25,6 +25,7 @@ from tornado.log import access_log
 
 def log_request(handler):
     try:
+        request = handler.request
         location_info = referer_info = user_agent_info = ''
         status_code = handler.get_status()
         if status_code < 400:
@@ -35,7 +36,6 @@ def log_request(handler):
                     location_info = '\n\tLocation: ' + location
         elif status_code < 500:
             log_method = access_log.warning
-            request = handler.request
             headers = request.headers
             referer = headers.get('Referer')
             if referer:
