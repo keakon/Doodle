@@ -308,11 +308,14 @@ class UserHandler(BaseHandler):
 class ArticlesHandler(UserHandler):
     def prepare(self):
         if self.cursor:
-            self.set_cache(CONFIG.DEFAULT_CACHE_TIME, is_public=False if self.current_user else None)
+            self.set_cache(CONFIG.DEFAULT_CACHE_TIME, is_public=True)  # 一般不会在过去的时间增加文章，所以基本不会变化
+            if not self.is_content_only:
+                # 因为 header 内容与用户相关，所以需要区分 Cookie
+                # 由于 Google analytics 会设置 cookies， 所以也可以设为 private
+                self.add_header('Vary', 'Cookie')
 
     @CachedProperty
     def is_content_only(self):
-        print('content')
         return self.get_argument('section', None) == 'content'
 
     def compute_etag(self):
