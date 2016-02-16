@@ -7,8 +7,7 @@ for article in articles:
 	dt = convert_to_local_time(timestamp_to_datetime(article.pub_time))
 	category_name = article.category_name()
 	if category_name:
-		category_name = escape(category_name)
-		category_link = category_template % (quoted_string(category_name), category_name)
+		category_link = category_template % (quoted_string(category_name), escape(category_name))
 	else:
 		category_link = '无'
 	#endif
@@ -16,7 +15,7 @@ for article in articles:
 	tags = article.tags
 	if tags:
 		tag_template = '<a href="' + CONFIG.BLOG_HOME_RELATIVE_PATH + 'tag/%s">%s</a>'
-		tags_link = ', '.join([tag_template % (quoted_string(escape(tag)), escape(tag)) for tag in tags])
+		tags_link = ', '.join([tag_template % (quoted_string(tag), escape(tag)) for tag in tags])
 	else:
 		tags_link = '无'
 	#endif
