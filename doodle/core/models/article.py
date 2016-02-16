@@ -30,7 +30,7 @@ class Article(PublicModel):
     mod_time = DateTimeProperty(auto_now=True)
 
     def quoted_url(self):
-        return escape(quoted_string(self.url), quote=True)
+        return quoted_string(self.url)
 
     def category_name(self):
         if self.category:
@@ -153,8 +153,8 @@ class Article(PublicModel):
             articles = Article.get_by_ids(article_ids, public_only=True)
             if articles:
                 if len(articles) == 1:
-                    return articles[0].url
-                urls = [article.url for article in articles]
+                    return articles[0].quoted_url()
+                urls = [article.quoted_url() for article in articles]
                 matched_urls = get_close_matches(url, urls, 1, 0)
                 return matched_urls[0]
 

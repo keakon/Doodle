@@ -13,4 +13,4 @@ else:
 
 
 def quoted_string(unicode, coding='utf-8'):
-    return quote(unicode.encode(coding), '_.-+/=~,;&:!*$()')
+    return quote(unicode.encode(coding), '_.-+/=~,;&:!*$()?#')
