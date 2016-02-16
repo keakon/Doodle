@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-import doodle.common.logger  # init logging
+from doodle.common.logger import log_request  # should be first statement to init logging
 
 import socket
 import sys
@@ -27,6 +27,7 @@ def get_application():
         template_path=CONFIG.TEMPLATE_PATH,
         static_path=CONFIG.STATIC_PATH,
         login_url=CONFIG.LOGIN_URL,
+        log_function=log_request,
         google_oauth={
             'key': CONFIG.GOOGLE_OAUTH2_CLIENT_ID,
             'secret': CONFIG.GOOGLE_OAUTH2_CLIENT_SECRET
