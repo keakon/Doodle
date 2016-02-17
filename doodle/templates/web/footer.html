@@ -3,7 +3,6 @@
 <?py if page not in ('404', '500', 'profile'): ?>
 	<p class="backtotop"><a href="#">▲Top</a></p>
 <?py #endif ?>
-	<p>响应时间：#{int(self.request.request_time() * 1000)} 毫秒 • 数据库时间：#{int(self._db_time * 1000)} 毫秒 • 数据库访问次数：#{self._db_count} 次 • 页面生成时间：${formatted_time(get_local_now())}</p>
 	<p class="credits">©<a href="#{{CONFIG.BLOG_HOME_RELATIVE_PATH}}">${{CONFIG.BLOG_TITLE}}</a><span>•</span>Powered by <a href="https://github.com/keakon/Doodle" rel="nofollow">Doodle</a><span>•</span>Designed by <a href="http://www.keakon.net/" rel="nofollow">keakon</a></p>
 </footer>
 </div>
@@ -13,15 +12,10 @@
 <script src="#{{CONFIG.BLOG_HOME_RELATIVE_PATH}}static/js/jquery-#{{CONFIG.JQUERY_VERSION}}.js"></script>
 <?py #endif ?>
 <?py if page in ('home', 'tag_articles', 'category_articles'): ?>
-<script src="#{{CONFIG.BLOG_HOME_RELATIVE_PATH}}static/theme/null/js/loadpage.js?1"></script>
+<script src="#{{CONFIG.BLOG_HOME_RELATIVE_PATH}}static/theme/null/js/loadpage.js?2"></script>
 <?py elif page == 'article': ?>
 <script src="#{{CONFIG.BLOG_HOME_RELATIVE_PATH}}static/js/highlight.js"></script>
-<?py 	if self.current_user: ?>
-<script src="#{{CONFIG.BLOG_HOME_RELATIVE_PATH}}static/markitup/jquery.markitup.js"></script>
-<script src="#{{CONFIG.BLOG_HOME_RELATIVE_PATH}}static/markitup/sets/bbcode/set.js"></script>
-<script src="#{{CONFIG.BLOG_HOME_RELATIVE_PATH}}static/theme/null/js/msgbox.js"></script>
-<?py 	#endif ?>
-<script src="#{{CONFIG.BLOG_HOME_RELATIVE_PATH}}static/theme/null/js/comment.js"></script>
+<script src="#{{CONFIG.BLOG_HOME_RELATIVE_PATH}}static/theme/null/js/comment.js?1"></script>
 <?py elif page == 'profile': ?>
 <script src="#{{CONFIG.BLOG_HOME_RELATIVE_PATH}}static/theme/null/js/msgbox.js"></script>
 <script src="#{{CONFIG.BLOG_HOME_RELATIVE_PATH}}static/theme/null/js/profile.js"></script>
@@ -29,14 +23,10 @@
 <?py if page not in ('404', '500', 'profile'): ?>
 <script src="#{{CONFIG.BLOG_HOME_RELATIVE_PATH}}static/js/scroll.js"></script>
 <?py #endif ?>
-<?PY if CONFIG.GOOGLE_ANALYTICS_ID: ?>
-<script src="#{'https://ssl' if self.is_https() else 'http://www'}.google-analytics.com/ga.js"></script>
 <script>
-_gaq.push(['_trackEvent', 'LoadTime', '${self.request.remote_ip}', '#{self.request.uri}', new Date() - _gaq_start]);
-<?py if self.current_user: ?>
-_gaq.push(['_setCustomVar', 1, 'user', '${self.current_user.name}']);
-<?py #endif ?>
+var page = '#{page}';
+var ga_id = '#{CONFIG.GOOGLE_ANALYTICS_ID}';
 </script>
-<?PY #endif ?>
+<script src="#{{CONFIG.BLOG_HOME_RELATIVE_PATH}}static/theme/null/js/append.js"></script>
 </body>
 </html>

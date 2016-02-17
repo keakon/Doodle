@@ -304,26 +304,6 @@ class UserHandler(BaseHandler):
         return next_url
 
 
-class ArticlesHandler(UserHandler):
-    def prepare(self):
-        super(ArticlesHandler, self).prepare()
-        if self.cursor:
-            self.set_cache(CONFIG.DEFAULT_CACHE_TIME, is_public=True)  # 一般不会在过去的时间增加文章，所以基本不会变化
-            if not self.is_content_only:
-                # 因为 header 内容与用户相关，所以需要区分 Cookie
-                # 由于 Google analytics 会设置 cookies，所以也可以设为 private
-                # todo: 改成都可以被缓存的，header 由 JavaScript 生成
-                self.add_header('Vary', 'Cookie')
-
-    @CachedProperty
-    def is_content_only(self):
-        return self.get_argument('section', None) == 'content'
-
-    def compute_etag(self):
-        if self.is_content_only:
-            return super(ArticlesHandler, self).compute_etag()
-
-
 class AdminHandler(UserHandler):
     def prepare(self):
         super(AdminHandler, self).prepare()

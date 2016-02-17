@@ -73,14 +73,6 @@ for nav_link, next_level in izip(CONFIG.NAV_LINKS, next_levels):
 	#endif
 #endfor
 ?>
-<?py if self.current_user_id: ?>
-			<li><a href="#{{CONFIG.BLOG_HOME_RELATIVE_PATH}}logout">登出</a></li>
-<?py else: ?>
-			<li><a href="#{{CONFIG.LOGIN_URL}}">登录</a></li>
-<?py #endif ?>
-<?py if self.is_admin(): ?>
-			<li><a href="#{{CONFIG.BLOG_ADMIN_RELATIVE_PATH}}">管理博客</a></li>
-<?py #endif ?>
 		</ul>
 	</nav>
 	<form method="get" id="searchform" action="#{{CONFIG.BLOG_HOME_RELATIVE_PATH}}search">

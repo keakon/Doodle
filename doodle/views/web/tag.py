@@ -2,14 +2,15 @@
 
 from tornado.web import HTTPError
 
+from doodle.config import CONFIG
 from doodle.core.models.article import ArticleHitCount
 from doodle.core.models.tag import Tag, TagArticle
 from doodle.core.models.comment import ArticleComments
 
-from ..base_handler import ArticlesHandler
+from ..base_handler import UserHandler
 
 
-class TagArticlesHandler(ArticlesHandler):
+class TagArticlesHandler(UserHandler):
     def get(self, tag_name):
         if not Tag.exists(tag_name):
             raise HTTPError(404)
@@ -23,6 +24,7 @@ class TagArticlesHandler(ArticlesHandler):
             hit_counts = replies_dict = {}
             next_cursor = None
 
+        self.set_cache(CONFIG.DEFAULT_CACHE_TIME, is_public=True)
         self.render('web/tag_articles.html', {
             'title': u'标签《%s》' % tag_name,
             'page': 'tag_articles',

@@ -134,9 +134,9 @@ article.post:hover .angle {
 	width: 10px;
 	height: 10px;
 	z-index: -1;
-	-moz-transform:rotate(45deg);
 	-webkit-transform:rotate(45deg);
-	-o-transform:rotate(45deg);
+	-ms-transform:rotate(45deg);
+	transform:rotate(45deg);
 	background: #fff;
 	box-shadow: 2px 2px 3px #aaa;
 }
@@ -188,13 +188,12 @@ article.post:hover .angle {
 	vertical-align: middle;
 	margin: 0 6px 5px 0;
 	-webkit-transition-duration: 1s;
-	-moz-transition-duration: 1s;
-	-o-transition-duration: 1s;
+	transition-duration: 1s;
 }
 #header .socialmedia a:hover img {
 	-webkit-transform: rotate(45deg);
-	-moz-transform: rotate(45deg);
-	-o-transform: rotate(45deg);
+	-ms-transform: rotate(45deg);
+	transform: rotate(45deg);
 }
 /* header end */
 
@@ -245,10 +244,6 @@ article.post:hover .angle {
 	-webkit-transition: opacity 0.3s 0.1s ease-out, visibility 0.3s 0.1s linear;
 	-moz-transition: opacity 0.3s 0.1s ease-out, visibility 0.3s 0.1s linear;
 	-o-transition: opacity 0.3s 0.1s ease-out, visibility 0.3s 0.1s linear;
-}
-#nav ul li {
-	margin: 0;
-	padding: 0;
 }
 #nav ul ul {
 	font-size: 1em;
@@ -510,9 +505,9 @@ article.post:hover .post-data {
 	width: 10px;
 	height: 10px;
 	z-index: -1;
-	-moz-transform:rotate(45deg);
 	-webkit-transform:rotate(45deg);
-	-o-transform:rotate(45deg);
+	-ms-transform:rotate(45deg);
+	transform:rotate(45deg);
 	background: #fff;
 	box-shadow: 2px 2px 3px #aaa;
 }
@@ -749,7 +744,7 @@ article.post:hover .post-data {
 	margin-left: 15px;
 	list-style: circle;
 }
-#sidebar ul li {
+#sidebar li {
 	margin: 10px 0;
 	padding: 0;
 }
@@ -787,16 +782,11 @@ article.post:hover .post-data {
 	float: left;
 	padding: 3px;
 	background: #fff;
-}
-
-#latest-comments .avatar {
 	box-shadow: 2px 2px 2px rgba(0,0,0,.6);
 }
 
 #latest-comments small {
 	font-style: italic;
-}
-#recent-tweets li {
 }
 #recent-tweets small {
 	font-style: italic;
@@ -812,7 +802,6 @@ article.post:hover .post-data {
 #footer {
 	font-size: .9em;
 	line-height: 1.4em;
-	min-width: 400px;
 	display: inline-block;
 }
 #footer a {
@@ -821,7 +810,6 @@ article.post:hover .post-data {
 #footer .credits {
 	font-size: .9em;
 	line-height: 1em;
-	margin-top: 10px;
 }
 #footer .credits span {
 	margin: 0 6px;
@@ -843,18 +831,18 @@ article.post:hover .post-data {
 
 /* other */
 #msgbox {
-position:absolute;
-display:none;
-padding:15px;
-background:#333;
-color:#eee;
-z-index:1000;
-box-shadow: 0 0 6px rgba(0,0,0,.3);
-border-radius: 5px;
+	position:absolute;
+	display:none;
+	padding:15px;
+	background:#333;
+	color:#eee;
+	z-index:1000;
+	box-shadow: 0 0 6px rgba(0,0,0,.3);
+	border-radius: 5px;
 }
 
 #msgbox:hover {
-box-shadow: 0 0 20px rgba(0,235,255,.8);
+	box-shadow: 0 0 20px rgba(0,235,255,.8);
 }
 
 #error-content {
@@ -868,7 +856,7 @@ box-shadow: 0 0 20px rgba(0,235,255,.8);
 	font-weight: bold;
 }
 
-.big, big, widget strong {
+.big, big {
 	font-size: 122%;
 	line-height: 135%;
 	color: #594f42;

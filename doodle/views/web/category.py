@@ -2,14 +2,15 @@
 
 from tornado.web import HTTPError
 
+from doodle.config import CONFIG
 from doodle.core.models.article import ArticleHitCount
 from doodle.core.models.category import Category, CategoryArticles
 from doodle.core.models.comment import ArticleComments
 
-from ..base_handler import ArticlesHandler
+from ..base_handler import UserHandler
 
 
-class CategoryArticlesHandler(ArticlesHandler):
+class CategoryArticlesHandler(UserHandler):
     def get(self, category_name):
         if not Category.exists(category_name):
             raise HTTPError(404)
@@ -23,6 +24,7 @@ class CategoryArticlesHandler(ArticlesHandler):
             hit_counts = replies_dict = {}
             next_cursor = None
 
+        self.set_cache(CONFIG.DEFAULT_CACHE_TIME, is_public=True)
         self.render('web/category_articles.html', {
             'title': u'分类《%s》' % category_name,
             'page': 'category_articles',

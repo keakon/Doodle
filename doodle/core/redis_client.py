@@ -40,7 +40,7 @@ def timer_redis_commends():
         class_.execute_command = redis_timer(class_.execute_command)
 
 
-timer_redis_commends()
+# timer_redis_commends()
 
 redis_main_client = redis.StrictRedis(**CONFIG.REDIS_MAIN_DB)
 redis_cache_client = redis.StrictRedis(**CONFIG.REDIS_CACHE_DB)

@@ -4,25 +4,18 @@ $(function() {
 	var loading = true;
 	var lastScrollTop = 0;
 	var $commentlist = $('#commentlist>ol');
-	var $comment = $('#comment');
 	var $temp = $('<ol/>');
 	var $comment_float_list = $('<ol class="commentlist comment-float-list"/>').appendTo(document.body).hide();
-	var $commentform = $('#commentform');
-	var allow_comment = $commentform.length;
+	var $comment, $commentform, allow_comment;
 	var page = 1;
 	var comment_order = true;
 	var $comment_order_asc = $('#comment-order-asc');
 	var $comment_order_desc = $('#comment-order-desc');
-	var is_admin = typeof(comment_delete_url) != 'undefined';
+	var is_admin = typeof(comment_delete_url) != 'undefined'; // todo: fix
 	var $del_comment_button = $('<span id="del-comment-button">确认删除</span>');
 	var comment_fetch_url = home_path + 'article/'+ article_id + '/comments/';
 	var $more_hint = $('#more-hint');
 	var $respond = $('#respond');
-	var $wap = $('a[href="/wap/?mobile=1"]');
-
-	if ($wap.length) {
-		$wap[0].href = '/wap' + location.pathname + '?mobile=1';
-	}
 
 	function generate_comment(comment) {
 		var html = '<li><p class="comment-author"><img src="';
@@ -137,31 +130,10 @@ $(function() {
 			},
 			'timeout': 10000
 		});
-		_gaq.push(['_trackEvent', 'Comment', 'Load', article_id]);
+		ga_id && ga('send', 'event', 'Comment', 'Load', null, article_id);
 	}
 
 	get_comment();
-
-	//$.getJSON(home_path + 'relative/' + article_id, function(json) {
-	//	var length = json ? json.length : 0;
-	//	if (length) {
-	//		var html = '<ul>';
-	//		for (var index = 0; index < length; ++index) {
-	//			var article = json[index];
-	//			html += '<li><a href="';
-	//			html += home_path;
-	//			html += article.url;
-	//			html += '">';
-	//			html += article.title;
-	//			html += '</a></li>';
-	//		}
-	//		html += '</ul>';
-	//		$('#relative-articles').append(html).slideDown(1000, function(){
-	//			$(this).find('li').animate({'padding-left': '2em'}, 1000);
-	//		});
-	//	}
-	//});
-	//_gaq.push(['_trackEvent', 'RelativeArticles', 'Load', article_id]);
 
 	function reply(comment_id, comment_user) {
 		if (!allow_comment) {return;}
@@ -177,55 +149,68 @@ $(function() {
 	hljs.configure({tabReplace: '    '});
 	$('pre>code').each(function(i, e) {hljs.highlightBlock(e)});
 
-	if ($comment.length) {
-		$comment.markItUp(BbcodeSettings);
-		var submitting = false;
-		var $bbcode = $commentform.find('#bbcode');
-		$commentform.submit(function() {
-			if (submitting) return false;
-			submitting = true;
-			var val = $.trim($comment.val());
-			if (!val) {
-				msgbbox('拜托，你也写点内容再发表吧');
-				submitting = false;
-				return false;
-			}
-			var data = {'comment': val};
-			if ($bbcode.attr('checked')) {
-				data['bbcode'] = 'on';
-			}
-			$.ajax({
-				'url': $commentform.attr('action'),
-				'data': data,
-				'dataType': 'json',
-				'type': 'POST',
-				'error': function(){
-					submitting = false;
-					msgbbox('抱歉，遇到不明状况，发送失败了');
-				},
-				'success': function(json){
-					if (json.status == 200) {
-						var comment = json.comment;
-						var $html = $(generate_comment(comment));
-						bind_events_for_comment($html, comment.id, comment.user_name);
-						$html.hide().appendTo($commentlist).slideDown(1000);
-						$comment.val('');
-						msgbbox('感谢您的回复，由于缓存原因，其他用户可能要几分钟后才能看到您的评论');
-					} else {
-						msgbbox(json.content);
-					}
-					submitting = false;
-				},
-				'timeout': 10000
-			});
-			_gaq.push(['_trackEvent', 'Comment', 'Reply', article_id]);
-			return false;
-		});
-	}
+	window.show_comment_form = function(user_name, action_url, logout_url, profile_url, login_url) {
+		if (login_url) {
+			$respond.append('<p>您需要<a href="' + login_url + '">登录</a>您的 Google 账号才能进行评论。</p>');
+		} else {
+			$respond.append('<form action="' + action_url + '" method="post" id="commentform">\
+				<p>您当前登录的用户为：' + user_name + '，您可<a href="' + '">修改用户资料</a>，或<a href="' + logout_url + '">登出</a>以更换用户。</p>\
+				<p><textarea name="comment" id="comment" cols="58" rows="10" tabindex="1"></textarea></p>\
+				<p><input name="bbcode" type="checkbox" id="bbcode" tabindex="2" checked="checked"/> <label for="bbcode">启用BBCode</label></p>\
+				<p><small>小提示：回复某条回帖时，可以点击其右侧的“回复”按钮，这样该帖的作者会收到邮件通知。</small></p>\
+				<p><input name="submit" type="submit" id="submit" tabindex="3" value="来一发"/></p>\
+			</form>');
 
-	if (allow_comment) {
-		$('#comments').find('a').click(function() {$comment.focus();});
-	}
+			allow_comment = true;
+			$comment = $('#comment');
+			$commentform = $('#commentform');
+			$comment.markItUp(BbcodeSettings);
+			$('#comments').find('a').click(function() {$comment.focus();});
+
+			var submitting = false;
+			var $bbcode = $commentform.find('#bbcode');
+			$commentform.submit(function() {
+				if (submitting) return false;
+				submitting = true;
+				var val = $.trim($comment.val());
+				if (!val) {
+					msgbbox('拜托，你也写点内容再发表吧');
+					submitting = false;
+					return false;
+				}
+				var data = {'comment': val};
+				if ($bbcode.attr('checked')) {
+					data['bbcode'] = 'on';
+				}
+				$.ajax({
+					'url': $commentform.attr('action'),
+					'data': data,
+					'dataType': 'json',
+					'type': 'POST',
+					'error': function(){
+						submitting = false;
+						msgbbox('抱歉，遇到不明状况，发送失败了');
+					},
+					'success': function(json){
+						if (json.status == 200) {
+							var comment = json.comment;
+							var $html = $(generate_comment(comment));
+							bind_events_for_comment($html, comment.id, comment.user_name);
+							$html.hide().appendTo($commentlist).slideDown(1000);
+							$comment.val('');
+							msgbbox('评论成功');
+						} else {
+							msgbbox(json.content);
+						}
+						submitting = false;
+					},
+					'timeout': 10000
+				});
+				ga_id && ga('send', 'event', 'Comment', 'Reply', null, article_id);
+				return false;
+			});
+		}
+	};
 
 	$comment_order_asc.click(function() {
 		$comment_order_asc.addClass('selected');
