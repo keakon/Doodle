@@ -6,6 +6,7 @@ from .base_handler import NotFoundHandler, StaticFileHandler
 from .admin.article import CreateArticleHandler, CreateArticleRedirectHandler, EditArticleHandler
 from .admin.category import CreateCategoryHandler
 from .admin.tag import CreateTagHandler
+from .web.append import PageAppendHandler
 from .web.article import ArticleHandler, ArticleIDHandler
 from .web.category import CategoryArticlesHandler
 from .web.comment import CreateCommentHandler, ArticleCommentsHandler
@@ -22,7 +23,7 @@ STATIC_PATH = CONFIG.STATIC_PATH
 
 handlers = [
     (BLOG_HOME_RELATIVE_PATH, HomeHandler),
-    # (BLOG_HOME_RELATIVE_PATH + r'(?:page/(\d+))?', HomeHandler),
+    (BLOG_HOME_RELATIVE_PATH + 'page-append', PageAppendHandler),
 	(BLOG_HOME_RELATIVE_PATH + r'((\d{4}/\d{2}/\d{2}/).+)', ArticleHandler),
     (BLOG_HOME_RELATIVE_PATH + r'article/(\d+)', ArticleIDHandler),
     (BLOG_HOME_RELATIVE_PATH + r'comment/(\d+)', CreateCommentHandler),

@@ -31,7 +31,7 @@ $(function() {
 			$loading.children().detach().children().hide().appendTo($content).slideDown(1000);
 			loading = false;
 		});
-		_gaq.push(['_trackEvent', 'Page', 'Load', next_url]);
+		ga_id && ga('send', 'event', 'Page', 'Load', null, next_url);
 	}
 
 	function load_more() {

@@ -2,6 +2,7 @@
 
 from tornado.web import HTTPError
 
+from doodle.config import CONFIG
 from doodle.core.models.article import Article, ArticleHitCount
 from doodle.core.models.keyword import KeywordArticle
 from doodle.core.models.comment import ArticleComments
@@ -23,6 +24,7 @@ class SearchHandler(UserHandler):
                 articles = []
                 hit_counts = replies_dict = {}
 
+            self.set_cache(CONFIG.DEFAULT_CACHE_TIME, is_public=True)
             self.render('web/search.html', {
                 'title': u'搜索《%s》' % keywords,
                 'page': 'search',
@@ -33,6 +35,3 @@ class SearchHandler(UserHandler):
             })
         else:
             raise HTTPError(400)
-
-    def compute_etag(self):
-        return

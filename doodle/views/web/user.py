@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+import time
+
 from tornado.auth import AuthError, GoogleOAuth2Mixin
 from tornado.gen import coroutine
 from tornado.web import HTTPError
@@ -46,6 +48,7 @@ class LoginHandler(UserHandler, GoogleOAuth2Mixin):
                             user.save(inserting=True)
 
                         self.set_secure_cookie('user_id', str(user.id))
+                        self.set_cookie('session_time', str(int(time.time())), expires_days=30)
                         next_url = self.get_argument('state', None)
                         self.redirect(next_url or '/')
                         return
@@ -69,6 +72,7 @@ class LogoutHandler(UserHandler):
     def get(self):
         if self.current_user_id:
             self.clear_cookie('user_id')
+            self.set_cookie('session_time', str(int(time.time())), expires_days=30)
         self.redirect(self.get_next_url() or '/')
 
 

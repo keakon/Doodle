@@ -1,8 +1,19 @@
 # -*- coding: utf-8 -*-
 
+import re
 from urllib import quote
 
 from doodle.config import CONFIG
+
+
+URL_PATTERN = re.compile(
+    r'''
+    (https?)://  # scheme
+    ([0-9a-zA-Z\-\.]+(?::\d{1,5})?)  # host
+    (/[\w\-\./!~\*\'\(\)%:@&=+\$,]*)?  # path
+    (\?[\w\-.!~\*\'\(\)%;/\?:@&=+,\$]+)?  # query
+    (\#[\w\-.!~\*\'\(\)%;/\?:@&=+,\$]+)?  # fragment
+    ''', re.X)
 
 
 if CONFIG.REPLACE_SPECIAL_CHARACTERS_FOR_URL:

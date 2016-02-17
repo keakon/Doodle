@@ -6,7 +6,7 @@ from doodle.config import CONFIG
 from doodle.core.models.article import Article, ArticleHitCount
 from doodle.core.models.comment import ArticleComments
 
-from ..base_handler import BaseHandler, UserHandler
+from ..base_handler import UserHandler
 
 
 class ArticleHandler(UserHandler):
@@ -30,6 +30,7 @@ class ArticleHandler(UserHandler):
             hit_count = ArticleHitCount.increase(article.id)
         replies = ArticleComments.get_comment_count_of_article(article.id)
 
+        self.set_cache(CONFIG.DEFAULT_CACHE_TIME, is_public=article.public)
         self.render('web/article.html', {
             'title': article.title,
             'page': 'article',
@@ -43,11 +44,8 @@ class ArticleHandler(UserHandler):
     def head(self, url, date):
         self.get(url, date, _from_head=True)
 
-    def compute_etag(self):
-        return
 
-
-class ArticleIDHandler(BaseHandler):
+class ArticleIDHandler(UserHandler):
     def get(self, article_id):
         article_id = int(article_id)
         if not article_id:
@@ -55,6 +53,8 @@ class ArticleIDHandler(BaseHandler):
 
         article = Article.get_by_id(article_id)
         if article:
+            if not (article.public or self.is_admin()):
+                raise HTTPError(404)
             self.redirect(CONFIG.BLOG_HOME_RELATIVE_PATH + article.url, permanent=True)
         else:
             raise HTTPError(404)
