@@ -149,68 +149,71 @@ $(function() {
 	hljs.configure({tabReplace: '    '});
 	$('pre>code').each(function(i, e) {hljs.highlightBlock(e)});
 
-	window.show_comment_form = function(user_name, action_url, logout_url, profile_url, login_url) {
-		if (login_url) {
-			$respond.append('<p>您需要<a href="' + login_url + '">登录</a>您的 Google 账号才能进行评论。</p>');
-		} else {
-			$respond.append('<form action="' + action_url + '" method="post" id="commentform">\
-				<p>您当前登录的用户为：' + user_name + '，您可<a href="' + '">修改用户资料</a>，或<a href="' + logout_url + '">登出</a>以更换用户。</p>\
-				<p><textarea name="comment" id="comment" cols="58" rows="10" tabindex="1"></textarea></p>\
-				<p><input name="bbcode" type="checkbox" id="bbcode" tabindex="2" checked="checked"/> <label for="bbcode">启用BBCode</label></p>\
-				<p><small>小提示：回复某条回帖时，可以点击其右侧的“回复”按钮，这样该帖的作者会收到邮件通知。</small></p>\
-				<p><input name="submit" type="submit" id="submit" tabindex="3" value="来一发"/></p>\
-			</form>');
+	$.extend({
+		'show_comment_form': function(user_name, action_url, logout_url, profile_url, login_url) {
+			if (login_url) {
+				$respond.append('<p>您需要<a href="' + login_url + '">登录</a>您的 Google 账号才能进行评论。</p>');
+			} else {
+				$respond.append(
+'<form action="' + action_url + '" method="post" id="commentform">\
+	<p>您当前登录的用户为：' + user_name + '，您可<a href="' + '">修改用户资料</a>，或<a href="' + logout_url + '">登出</a>以更换用户。</p>\
+	<p><textarea name="comment" id="comment" cols="58" rows="10" tabindex="1"></textarea></p>\
+	<p><input name="bbcode" type="checkbox" id="bbcode" tabindex="2" checked="checked"/> <label for="bbcode">启用BBCode</label></p>\
+	<p><small>小提示：回复某条回帖时，可以点击其右侧的“回复”按钮，这样该帖的作者会收到邮件通知。</small></p>\
+	<p><input name="submit" type="submit" id="submit" tabindex="3" value="来一发"/></p>\
+</form>');
 
-			allow_comment = true;
-			$comment = $('#comment');
-			$commentform = $('#commentform');
-			$comment.markItUp(BbcodeSettings);
-			$('#comments').find('a').click(function() {$comment.focus();});
+				allow_comment = true;
+				$comment = $('#comment');
+				$commentform = $('#commentform');
+				$comment.markItUp(BbcodeSettings);
+				$('#comments').find('a').click(function() {$comment.focus();});
 
-			var submitting = false;
-			var $bbcode = $commentform.find('#bbcode');
-			$commentform.submit(function() {
-				if (submitting) return false;
-				submitting = true;
-				var val = $.trim($comment.val());
-				if (!val) {
-					msgbbox('拜托，你也写点内容再发表吧');
-					submitting = false;
+				var submitting = false;
+				var $bbcode = $commentform.find('#bbcode');
+				$commentform.submit(function() {
+					if (submitting) return false;
+					submitting = true;
+					var val = $.trim($comment.val());
+					if (!val) {
+						$.msgbox('拜托，你也写点内容再发表吧');
+						submitting = false;
+						return false;
+					}
+					var data = {'comment': val};
+					if ($bbcode.attr('checked')) {
+						data['bbcode'] = 'on';
+					}
+					$.ajax({
+						'url': $commentform.attr('action'),
+						'data': data,
+						'dataType': 'json',
+						'type': 'POST',
+						'error': function(){
+							submitting = false;
+							$.msgbox('抱歉，遇到不明状况，发送失败了');
+						},
+						'success': function(json){
+							if (json.status == 200) {
+								var comment = json.comment;
+								var $html = $(generate_comment(comment));
+								bind_events_for_comment($html, comment.id, comment.user_name);
+								$html.hide().appendTo($commentlist).slideDown(1000);
+								$comment.val('');
+								$.msgbox('评论成功');
+							} else {
+								$.msgbox(json.content);
+							}
+							submitting = false;
+						},
+						'timeout': 10000
+					});
+					ga_id && ga('send', 'event', 'Comment', 'Reply', null, article_id);
 					return false;
-				}
-				var data = {'comment': val};
-				if ($bbcode.attr('checked')) {
-					data['bbcode'] = 'on';
-				}
-				$.ajax({
-					'url': $commentform.attr('action'),
-					'data': data,
-					'dataType': 'json',
-					'type': 'POST',
-					'error': function(){
-						submitting = false;
-						msgbbox('抱歉，遇到不明状况，发送失败了');
-					},
-					'success': function(json){
-						if (json.status == 200) {
-							var comment = json.comment;
-							var $html = $(generate_comment(comment));
-							bind_events_for_comment($html, comment.id, comment.user_name);
-							$html.hide().appendTo($commentlist).slideDown(1000);
-							$comment.val('');
-							msgbbox('评论成功');
-						} else {
-							msgbbox(json.content);
-						}
-						submitting = false;
-					},
-					'timeout': 10000
 				});
-				ga_id && ga('send', 'event', 'Comment', 'Reply', null, article_id);
-				return false;
-			});
+			}
 		}
-	};
+	});
 
 	$comment_order_asc.click(function() {
 		$comment_order_asc.addClass('selected');
@@ -250,7 +253,7 @@ $(function() {
 				'dataType': 'json',
 				'type': 'POST',
 				'error': function(){
-					msgbbox('遇到不明状况，评论删除失败了');
+					$.msgbox('遇到不明状况，评论删除失败了');
 				},
 				'success': function(json){
 					if (json.status == 204) {
@@ -259,7 +262,7 @@ $(function() {
 							$comment_li.remove();
 						});
 					} else {
-						msgbbox(json.content);
+						$.msgbox(json.content);
 					}
 				},
 				'timeout': 10000

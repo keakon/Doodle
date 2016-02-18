@@ -15,10 +15,10 @@
 <script src="#{{CONFIG.BLOG_HOME_RELATIVE_PATH}}static/theme/null/js/loadpage.js?2"></script>
 <?py elif page == 'article': ?>
 <script src="#{{CONFIG.BLOG_HOME_RELATIVE_PATH}}static/js/highlight.js"></script>
-<script src="#{{CONFIG.BLOG_HOME_RELATIVE_PATH}}static/theme/null/js/comment.js?1"></script>
+<script src="#{{CONFIG.BLOG_HOME_RELATIVE_PATH}}static/theme/null/js/comment.js?2"></script>
 <?py elif page == 'profile': ?>
-<script src="#{{CONFIG.BLOG_HOME_RELATIVE_PATH}}static/theme/null/js/msgbox.js"></script>
-<script src="#{{CONFIG.BLOG_HOME_RELATIVE_PATH}}static/theme/null/js/profile.js"></script>
+<script src="#{{CONFIG.BLOG_HOME_RELATIVE_PATH}}static/theme/null/js/msgbox.js?2"></script>
+<script src="#{{CONFIG.BLOG_HOME_RELATIVE_PATH}}static/theme/null/js/profile.js?2"></script>
 <?py #endif ?>
 <?py if page not in ('404', '500', 'profile'): ?>
 <script src="#{{CONFIG.BLOG_HOME_RELATIVE_PATH}}static/js/scroll.js"></script>
@@ -27,6 +27,6 @@
 var page = '#{page}';
 var ga_id = '#{CONFIG.GOOGLE_ANALYTICS_ID}';
 </script>
-<script src="#{{CONFIG.BLOG_HOME_RELATIVE_PATH}}static/theme/null/js/append.js"></script>
+<script src="#{{CONFIG.BLOG_HOME_RELATIVE_PATH}}static/theme/null/js/append.js?2"></script>
 </body>
 </html>

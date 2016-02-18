@@ -9,10 +9,10 @@
 			'type': 'POST',
 			'error': function(){
 				submitting = false;
-				msgbbox('抱歉，遇到不明状况，保存失败了');
+				$.msgbox('抱歉，遇到不明状况，保存失败了');
 			},
 			'success': function(text){
-				msgbbox(text);
+				$.msgbox(text);
 				submitting = false;
 			},
 			'timeout': 10000
