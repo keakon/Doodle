@@ -55,12 +55,13 @@
 					script.onreadystatechange = on_js_ready_state_change;
 					document.body.appendChild(script);
 				}
-			} else {
-				$.show_comment_form('', '', '', '', data.login_url);
 			}
 			if (page == 'article') {
 				if (data.is_admin) {
 					$('.post-data').append('<span id="post-operation"><a href="' + data.edit_url_prefix + article_id + '/edit">[编辑]</a></span>');
+				}
+				if (!data.append_js_urls) {
+					$.show_comment_form('', '', '', '', data.login_url);
 				}
 			}
 		},
