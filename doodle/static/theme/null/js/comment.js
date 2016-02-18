@@ -135,7 +135,7 @@ $(function() {
 			} else {
 				$respond.append(
 '<form action="' + action_url + '" method="post" id="commentform">\
-	<p>您当前登录的用户为：' + user_name + '，您可<a href="' + '">修改用户资料</a>，或<a href="' + logout_url + '">登出</a>以更换用户。</p>\
+	<p>您当前登录的用户为：' + user_name + '，您可<a href="' + profile_url + '">修改用户资料</a>，或<a href="' + logout_url + '">登出</a>以更换用户。</p>\
 	<p><textarea name="comment" id="comment" cols="58" rows="10" tabindex="1"></textarea></p>\
 	<p><input name="bbcode" type="checkbox" id="bbcode" tabindex="2" checked="checked"/> <label for="bbcode">启用BBCode</label></p>\
 	<p><small>小提示：回复某条回帖时，可以点击其右侧的“回复”按钮，这样该帖的作者会收到邮件通知。</small></p>\
