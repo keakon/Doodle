@@ -48,6 +48,7 @@ class PageAppendHandler(UserHandler):
                     CONFIG.BLOG_HOME_RELATIVE_PATH + 'static/theme/null/js/msgbox.js'
                 ]
                 output['comment_url_prefix'] = CONFIG.BLOG_HOME_RELATIVE_PATH + 'comment/'
+                output['profile_url'] = CONFIG.BLOG_HOME_RELATIVE_PATH + 'profile'
                 output['user_name'] = escape(self.current_user.name)
                 if self.is_admin():
                     output['edit_url_prefix'] = CONFIG.BLOG_ADMIN_RELATIVE_PATH + 'article/'
