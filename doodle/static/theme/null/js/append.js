@@ -55,6 +55,8 @@
 					script.onreadystatechange = on_js_ready_state_change;
 					document.body.appendChild(script);
 				}
+			} else {
+				$.show_comment_form('', '', '', '', data.login_url);
 			}
 			if (page == 'article') {
 				if (data.is_admin) {

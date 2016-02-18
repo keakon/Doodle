@@ -23,44 +23,23 @@ $(function() {
 		html += '?s=48&amp;d=monsterid" class="avatar" height="48" width="48"/><cite><a id="comment-id-';
 		html += comment.id;
 		if (comment.url) {
-			html += '" href="';
-			html += comment.url;
+			html += '" href="' + comment.url;
 		}
-		html += '">';
-		html += comment.user_name;
-		html += '</a></cite>';
+		html += '">' + comment.user_name + '</a></cite>';
 		var uas = comment.ua;
 		if (uas) {
 			html += '<span class="ua">';
 			for (var i = 0, ua; i < uas.length; ++ i) {
 				ua = comment.ua[i];
-				html += '<img src="/static/img/ua/';
-				html += ua.replace(/ /g, '-');
-				html += '.png" alt="';
-				html += ua;
-				html += '" title="';
-				html += ua;
-				html += '"/>';
+				html += '<img src="/static/img/ua/' + ua.replace(/ /g, '-') + '.png" alt="' + ua + '" title="' + ua + '"/>';
 			}
 			html += '</span>';
 		}
-		html += '<br/><small><strong>';
-		html += comment.time;
-		html += '</strong>';
+		html += '<br/><small><strong>' + comment.time + '</strong>';
 		if (is_admin) {
-			html += ' <span class="edit-user"><a href="';
-			html += user_edit_url;
-			html += comment.id;
-			html += '/">[用户设定]</a></span> <span class="edit-comment"><a href="';
-			html += comment_edit_url;
-			html += comment.id;
-			html += '/">[编辑]</a></span> <span class="del-comment">[删除]</span>';
+			html += ' <span class="edit-user"><a href="' + user_edit_url + comment.id + '/">[用户设定]</a></span> <span class="edit-comment"><a href="' + comment_edit_url + comment.id + '/">[编辑]</a></span> <span class="del-comment">[删除]</span>';
 		}
-		html += '</small></p><div class="commententry" id="commententry-';
-		html += comment.id;
-		html += '"><div>';
-		html += comment.content;
-		html += '</div></div><a class="comment-reply-link" href="#respond">回复</a></li>';
+		html += '</small></p><div class="commententry" id="commententry-' + comment.id + '"><div>' + comment.content + '</div></div><a class="comment-reply-link" href="#respond">回复</a></li>';
 		return html;
 	}
 
