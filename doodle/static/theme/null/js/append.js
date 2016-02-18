@@ -29,6 +29,7 @@
 			}
 			$('#nav').append(append_links);
 			if (data.append_js_urls) {
+				// 用 jQuery 的话会变成 ajax 请求，并且 HTTP/2 的请求会降级成 HTTP/1.x
 				var js_urls = data.append_js_urls;
 				var js_count = js_urls.length;
 				var loaded_js = 0;
@@ -39,6 +40,7 @@
 							$.show_comment_form(data.user_name, data.comment_url_prefix ? data.comment_url_prefix + article_id : '', data.logout_url, data.profile_url, data.login_url);
 						}
 					}
+					this.onload = this.onreadystatechange = null;
 				};
 				var on_js_ready_state_change = function() {
 					if (this.readyState === "complete") {
