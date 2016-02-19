@@ -73,7 +73,7 @@ for _ in cache_as('sidebar', CONFIG.SIDEBAR_BAR_CACHE_TIME):
 	<section id="tags" class="widget">
 		<h4>标签</h4>
 <?py
-		for tag, count in tag_counts.iteritems():
+		for tag, count in sorted(tag_counts.iteritems()):
 			if count > 0:
 				tag_name = escape(tag)
 ?>
