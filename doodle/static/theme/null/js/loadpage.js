@@ -35,7 +35,7 @@ $(function() {
 	}
 
 	function load_more() {
-		if (!loading && ($window.scrollTop() + $window.height() - top - $content.outerHeight() > 80)) {
+		if (!loading && ($window.scrollTop() + $window.height() - top - $content.outerHeight() > 60)) {
 			loading = true;
 			load();
 		}
