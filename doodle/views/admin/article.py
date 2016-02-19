@@ -26,7 +26,7 @@ class CreateArticleHandler(AdminHandler):
             'title': '发表新文章',
             'page': 'create_article',
             'categories': categories,
-            'tags': tags
+            'tags': sorted(tags)
         })
 
     def post(self):
@@ -131,7 +131,7 @@ class EditArticleHandler(AdminHandler):
             'page': 'edit_article',
             'article': article,
             'categories': categories,
-            'tags': tags
+            'tags': sorted(tags)
         })
 
     def post(self, article_id):
