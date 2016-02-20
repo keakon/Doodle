@@ -12,6 +12,7 @@
 <script src="#{{CONFIG.BLOG_HOME_RELATIVE_PATH}}static/js/jquery-#{{CONFIG.JQUERY_VERSION}}.js"></script>
 <?py #endif ?>
 <?py if page in ('home', 'tag_articles', 'category_articles'): ?>
+<script src="#{{CONFIG.BLOG_HOME_RELATIVE_PATH}}static/js/highlight.js"></script>
 <script src="#{{CONFIG.BLOG_HOME_RELATIVE_PATH}}static/theme/null/js/loadpage.js?2"></script>
 <?py elif page == 'article': ?>
 <script src="#{{CONFIG.BLOG_HOME_RELATIVE_PATH}}static/js/highlight.js"></script>
