@@ -222,7 +222,6 @@ $(function() {
 		get_comment();
 	});
 
-
 	if (is_admin) {
 		$del_comment_button.click(function() {
 			var $parent = $del_comment_button.parent();
