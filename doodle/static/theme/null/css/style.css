@@ -36,7 +36,7 @@ em, i {
 	letter-spacing: .02em;
 }
 ul, ol {
-	margin: 1em 0 1em 24px;
+	margin: 0 0 0 20px;
 	padding: 0;
 	line-height: 120%;
 }
