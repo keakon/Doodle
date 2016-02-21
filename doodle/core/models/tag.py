@@ -3,7 +3,7 @@
 from itertools import izip
 
 from doodle.config import CONFIG
-from doodle.core.property import *
+from doodle.core.property import IntegerProperty, StringProperty
 
 from .base_model import JSONModel, SimpleModel
 

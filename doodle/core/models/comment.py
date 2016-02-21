@@ -3,7 +3,7 @@
 import re
 
 from doodle.common.content_format import format_content
-from doodle.core.property import *
+from doodle.core.property import DateTimeProperty, IntegerProperty, ListProperty, StringProperty
 from doodle.config import CONFIG
 
 from .article import Article

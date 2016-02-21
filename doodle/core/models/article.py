@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
 
-from cgi import escape
 from difflib import get_close_matches
 
-from doodle.core.property import *
+from doodle.core.property import BooleanProperty, DateTimeProperty, IntegerProperty, ListProperty, StringProperty
 from doodle.config import CONFIG
 from doodle.common.content_format import format_content
 from doodle.common.errors import IntegrityError
