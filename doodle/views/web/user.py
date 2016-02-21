@@ -27,9 +27,12 @@ class LoginHandler(UserHandler, GoogleOAuth2Mixin):
             state = self.get_argument('state')
             if len(state) != CONFIG.AUTH_STATE_LENGTH:
                 raise HTTPError(400)
+            if self.get_cookie('state') != state:
+                raise HTTPError(403)
             next_url = Auth.get(state)
             if next_url is None:
                 raise HTTPError(403)
+            self.clear_cookie('state')
 
             try:
                 token_info = yield self.get_authenticated_user(
@@ -61,11 +64,11 @@ class LoginHandler(UserHandler, GoogleOAuth2Mixin):
                         return
             except AuthError:
                 pass
-            raise HTTPError(400)
+            raise HTTPError(403)
         else:
             next_url = self.get_next_url()
             state = Auth.generate(next_url or '')
-            self.set_cookie('state', state, expires=CONFIG.AUTH_EXPIRE_TIME, httponly=True, secure=self.is_https())
+            self.set_cookie('state', state, expires=int(time.time()) + CONFIG.AUTH_EXPIRE_TIME, httponly=True, secure=self.is_https())
             yield self.authorize_redirect(
                 redirect_uri=CONFIG.GOOGLE_OAUTH2_REDIRECT_URI,
                 client_id=CONFIG.GOOGLE_OAUTH2_CLIENT_ID,
