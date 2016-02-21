@@ -2,7 +2,6 @@
 
 import re
 from urllib import urlencode
-from urlparse import urlsplit
 
 import tenjin
 from tenjin.helpers import escape, to_str, _decode_params, fragment_cache
@@ -11,6 +10,7 @@ from tornado.util import bytes_type, unicode_type
 import ujson
 
 from doodle.common.property import CachedProperty
+from doodle.common.url import URL_PATTERN
 from doodle.config import CONFIG
 from doodle.core.models.fragment_cache import FragmentCache
 from doodle.core.models.user import User
@@ -299,9 +299,12 @@ class UserHandler(BaseHandler):
         next_url = self.get_argument('next', None)
         if not next_url:
             referer = self.referer()
-            if referer and urlsplit(referer).netloc == self.request.host:
-                next_url = referer
-        return next_url
+            if referer:
+                match = URL_PATTERN.match(referer)
+                if match and match.group('host') == self.request.host:
+                    next_url = match.group('path')
+        if next_url and next_url != '/':
+            return next_url
 
 
 class AdminHandler(UserHandler):
@@ -313,7 +316,8 @@ class AdminHandler(UserHandler):
                 if request.method in ('GET', 'HEAD'):
                     url = self.get_login_url()
                     if '?' not in url:
-                        if urlsplit(url).scheme:
+                        match = URL_PATTERN.match(url)
+                        if match and not match.group('host'):
                             next_url = request.full_url()
                         else:
                             next_url = request.uri
@@ -349,7 +353,8 @@ def authorized(admin_only=False):
                 if not self.current_user_id:
                     url = self.get_login_url()
                     if '?' not in url:
-                        if urlsplit(url).scheme:
+                        match = URL_PATTERN.match(url)
+                        if match and not match.group('host'):
                             next_url = request.full_url()
                         else:
                             next_url = request.uri

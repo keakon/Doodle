@@ -11,12 +11,12 @@
 <?py if page not in ('404', '500'): ?>
 <script src="#{{CONFIG.BLOG_HOME_RELATIVE_PATH}}static/js/jquery-#{{CONFIG.JQUERY_VERSION}}.js"></script>
 <?py #endif ?>
-<?py if page in ('home', 'tag_articles', 'category_articles'): ?>
-<script src="#{{CONFIG.BLOG_HOME_RELATIVE_PATH}}static/js/highlight.js"></script>
-<script src="#{{CONFIG.BLOG_HOME_RELATIVE_PATH}}static/theme/null/js/loadpage.js?2"></script>
-<?py elif page == 'article': ?>
+<?py if page == 'article': ?>
 <script src="#{{CONFIG.BLOG_HOME_RELATIVE_PATH}}static/js/highlight.js"></script>
 <script src="#{{CONFIG.BLOG_HOME_RELATIVE_PATH}}static/theme/null/js/comment.js?3"></script>
+<?py elif page in ('home', 'tag_articles', 'category_articles', 'search'): ?>
+<script src="#{{CONFIG.BLOG_HOME_RELATIVE_PATH}}static/js/highlight.js"></script>
+<script src="#{{CONFIG.BLOG_HOME_RELATIVE_PATH}}static/theme/null/js/loadpage.js?2"></script>
 <?py elif page == 'profile': ?>
 <script src="#{{CONFIG.BLOG_HOME_RELATIVE_PATH}}static/theme/null/js/msgbox.js?2"></script>
 <script src="#{{CONFIG.BLOG_HOME_RELATIVE_PATH}}static/theme/null/js/profile.js?2"></script>

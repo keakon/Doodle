@@ -76,6 +76,9 @@ class Config(object):
     ADMIN_EMAIL = ''  # 管理员邮件地址
 
     # auth config
+    AUTH_RANDOM_BYTES = 10  # 登录时使用的随机数位数，建议加 2 后能被 3 整除
+    AUTH_STATE_LENGTH = 24  # == (10 + 8) / 3 * 4，base 64 编码后的长度，8 是 double 类型的时间戳长度
+    AUTH_EXPIRE_TIME = 300  # 登录验证的有效时间
     GOOGLE_OAUTH2_CLIENT_ID = ''  # Google OAuth 2 Client ID，# 可在 https://console.developers.google.com/ 申请
     GOOGLE_OAUTH2_CLIENT_SECRET = ''  # Google OAuth 2 Client secret
     GOOGLE_OAUTH2_REDIRECT_URI = MAJOR_HOST_URL + LOGIN_URL  # Google OAuth 2 Redirect URI

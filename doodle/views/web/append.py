@@ -27,11 +27,12 @@ class PageAppendHandler(UserHandler):
         match = URL_PATTERN.match(referer)
         if not match:
             raise HTTPError(403)
+        referer_host = match.group('host')
+        if not referer_host:
+            raise HTTPError(403)
 
         host = headers.get('Host')
-        if not host:
-            raise HTTPError(403)
-        if host != match.group(2):
+        if host != referer_host:
             raise HTTPError(403)
 
         output = {}

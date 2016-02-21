@@ -9,6 +9,7 @@ from tornado.httpclient import HTTPError as HTTPClientError
 import ujson
 
 from doodle.config import CONFIG
+from doodle.core.models.auth import Auth
 from doodle.core.models.user import User
 
 from ..base_handler import authorized, UserHandler
@@ -23,6 +24,13 @@ class LoginHandler(UserHandler, GoogleOAuth2Mixin):
 
         code = self.get_argument('code', None)
         if code:
+            state = self.get_argument('state')
+            if len(state) != CONFIG.AUTH_STATE_LENGTH:
+                raise HTTPError(400)
+            next_url = Auth.get(state)
+            if next_url is None:
+                raise HTTPError(403)
+
             try:
                 token_info = yield self.get_authenticated_user(
                     redirect_uri=CONFIG.GOOGLE_OAUTH2_REDIRECT_URI,
@@ -49,23 +57,21 @@ class LoginHandler(UserHandler, GoogleOAuth2Mixin):
 
                         self.set_secure_cookie('user_id', str(user.id))
                         self.set_cookie('session_time', str(int(time.time())), expires_days=30)
-                        next_url = self.get_argument('state', None)
                         self.redirect(next_url or '/')
                         return
             except AuthError:
                 pass
             raise HTTPError(400)
         else:
-            extra_params={'approval_prompt': 'auto'}
             next_url = self.get_next_url()
-            if next_url:
-                extra_params['state'] = next_url
+            state = Auth.generate(next_url or '')
+            self.set_cookie('state', state, expires=CONFIG.AUTH_EXPIRE_TIME, httponly=True, secure=self.is_https())
             yield self.authorize_redirect(
                 redirect_uri=CONFIG.GOOGLE_OAUTH2_REDIRECT_URI,
                 client_id=CONFIG.GOOGLE_OAUTH2_CLIENT_ID,
                 scope=['profile', 'email'],
                 response_type='code',
-                extra_params=extra_params)
+                extra_params={'approval_prompt': 'auto', 'state': state})
 
 
 class LogoutHandler(UserHandler):
