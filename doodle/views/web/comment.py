@@ -24,7 +24,7 @@ class ArticleCommentsHandler(UserHandler):
             raise HTTPError(404)
 
         article = Article.get_by_id(article_id)
-        if not (article and (article.public or self.is_admin())):
+        if not (article and (article.public or self.is_admin)):
             raise HTTPError(404)
 
         page = int(page)
@@ -38,7 +38,6 @@ class ArticleCommentsHandler(UserHandler):
                 user_dict = {user.id: user for user in users}
             else:
                 user_dict = {}
-            is_https = self.is_https()
             for comment in comments:
                 user = user_dict.get(comment.user_id)
                 if user:
@@ -50,7 +49,7 @@ class ArticleCommentsHandler(UserHandler):
                 comments_list.append({
                     'user_name': user_name,
                     'url': user_site,
-                    'img': user.get_avatar(is_https),
+                    'img': user.get_avatar(),
                     'ua': comment.ua,
                     'time': formatted_time(timestamp_to_datetime(comment.time)),
                     'id': comment.id,
@@ -128,7 +127,7 @@ class CreateCommentHandler(UserHandler):
             'comment': {
                 'user_name': current_user.name,
                 'url': current_user.site,
-                'img': current_user.get_avatar(self.is_https()),
+                'img': current_user.get_avatar(),
                 'ua': comment.ua,
                 'time': formatted_time(timestamp_to_datetime(comment.time)),
                 'id': comment.id,
@@ -141,7 +140,7 @@ class CreateCommentHandler(UserHandler):
         if CONFIG.MAILGUN_API_KEY:
             url = html_content = html_body = title = ''
 
-            if CONFIG.ADMIN_EMAIL and not self.is_admin():
+            if CONFIG.ADMIN_EMAIL and not self.is_admin:
                 url = u'%s%s' % (CONFIG.BLOG_HOME_FULL_URL, article.quoted_url())
                 html_content = comment.html_content_with_full_url(url)
                 html_body = u'%s 在 <a href="%s">%s</a> 评论道:<br/>%s' % (escape(current_user.name), url, article.title, html_content)

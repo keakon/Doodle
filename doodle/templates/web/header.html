@@ -17,7 +17,7 @@ var _gaq = [];
 	<link rel="stylesheet" href="#{{CONFIG.BLOG_HOME_RELATIVE_PATH}}static/theme/null/css/style.css"/>
 <?py
 if page == 'article':
-	if self.is_spider():
+	if self.is_spider:
 		from doodle.common.content_format import strip_html
 ?>
 	<meta name="description" content="${strip_html(article.html_summary(), 200)}"/>

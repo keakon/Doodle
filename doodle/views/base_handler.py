@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import re
-from urllib import urlencode
+import time
 
 import tenjin
 from tenjin.helpers import escape, to_str, _decode_params, fragment_cache
@@ -13,6 +13,7 @@ from doodle.common.property import CachedProperty
 from doodle.common.url import URL_PATTERN
 from doodle.config import CONFIG
 from doodle.core.models.fragment_cache import FragmentCache
+from doodle.core.models.auth import Auth
 from doodle.core.models.user import User
 
 
@@ -74,23 +75,27 @@ class BaseHandler(RequestHandler):
         if parts:
             self.set_header('Cache-Control', ', '.join(parts))
 
+    @CachedProperty
     def referer(self):
         return self.request.headers.get('Referer') or ''
 
+    @CachedProperty
     def user_agent(self):
         return self.request.headers.get('User-Agent') or ''
 
+    @CachedProperty
     def is_https(self):
         return self.request.protocol == 'https'
 
+    @CachedProperty
     def is_xhr(self):
         requested_with = self.request.headers.get('X-Requested-With', '')
         return requested_with.lower() == 'xmlhttprequest'
 
+    @CachedProperty
     def is_spider(self):
-        user_agent = self.user_agent()
-        if user_agent:
-            return self._SPIDER_PATTERN.search(user_agent) is not None
+        if self.user_agent:
+            return self._SPIDER_PATTERN.search(self.user_agent) is not None
         return False
 
     @CachedProperty
@@ -99,7 +104,7 @@ class BaseHandler(RequestHandler):
         if 'x-wap-profile' in headers or 'Profile' in headers or 'X-OperaMini-Features' in headers:
             return True
 
-        user_agent = self.user_agent()
+        user_agent = self.user_agent
         if user_agent:
             user_agent_lower = user_agent.lower()
             if 'phone' in user_agent_lower or 'mobi' in user_agent_lower or 'wap' in user_agent_lower:
@@ -125,7 +130,7 @@ class BaseHandler(RequestHandler):
 
         browser, platform, os, os_version, vendor组成的元组
         """
-        user_agent = self.user_agent()
+        user_agent = self.user_agent
         os = ''
         os_version = ''
         browser = ''
@@ -292,37 +297,29 @@ class UserHandler(BaseHandler):
         if user_id:
             return User.get_by_id(user_id)
 
+    @CachedProperty
     def is_admin(self):
         return self.current_user_id == CONFIG.ADMIN_USER_ID
 
     def get_next_url(self):
-        next_url = self.get_argument('next', None)
-        if not next_url:
-            referer = self.referer()
-            if referer:
-                match = URL_PATTERN.match(referer)
-                if match and match.group('host') == self.request.host:
-                    next_url = match.group('path')
-        if next_url and next_url != '/':
-            return next_url
+        if self.referer:
+            match = URL_PATTERN.match(self.referer)
+            if match and match.group('host') == self.request.host:  # todo: check scheme?
+                next_url = match.group('path')
+                if next_url and next_url != '/':
+                    return next_url
 
 
 class AdminHandler(UserHandler):
     def prepare(self):
         super(AdminHandler, self).prepare()
-        if not self.is_admin():
+        if not self.is_admin:
             if not self.current_user_id:
                 request = self.request
                 if request.method in ('GET', 'HEAD'):
-                    url = self.get_login_url()
-                    if '?' not in url:
-                        match = URL_PATTERN.match(url)
-                        if match and not match.group('host'):
-                            next_url = request.full_url()
-                        else:
-                            next_url = request.uri
-                        url += '?' + urlencode({'next': next_url})
-                    self.redirect(url, status=303)
+                    state = Auth.generate(request.uri)  # todo: full url?
+                    self.set_cookie('state', state, expires=int(time.time()) + CONFIG.AUTH_EXPIRE_TIME, httponly=True, secure=self.is_https)  # todo: check whether login url is https
+                    self.redirect(self.get_login_url(), status=303)
                     return
             raise HTTPError(403)
 
@@ -351,20 +348,14 @@ def authorized(admin_only=False):
             request = self.request
             if request.method == 'GET':
                 if not self.current_user_id:
-                    url = self.get_login_url()
-                    if '?' not in url:
-                        match = URL_PATTERN.match(url)
-                        if match and not match.group('host'):
-                            next_url = request.full_url()
-                        else:
-                            next_url = request.uri
-                        url += '?' + urlencode({'next': next_url})
-                    self.redirect(url, status=303)
-                elif admin_only and not self.is_admin():
+                    state = Auth.generate(request.uri)  # todo: full url?
+                    self.set_cookie('state', state, expires=int(time.time()) + CONFIG.AUTH_EXPIRE_TIME, httponly=True, secure=self.is_https)  # todo: check whether login url is https
+                    self.redirect(self.get_login_url(), status=303)
+                elif admin_only and not self.is_admin:
                     raise HTTPError(403)
                 else:
                     handler(self, *args, **kwargs)
-            elif not self.current_user_id or (admin_only and not self.is_admin()):
+            elif not self.current_user_id or (admin_only and not self.is_admin):
                 raise HTTPError(403)
             else:
                 handler(self, *args, **kwargs)

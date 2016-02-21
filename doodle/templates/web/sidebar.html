@@ -14,7 +14,6 @@ for _ in cache_as('sidebar', CONFIG.SIDEBAR_BAR_CACHE_TIME):
 	from doodle.core.models.comment import Comment
 	from doodle.core.models.tag import Tag
 
-	is_https = self.is_https()
 	latest_comments, article_dict, user_dict = Comment.get_latest_comments()
 	if latest_comments:
 ?>
@@ -28,7 +27,7 @@ for _ in cache_as('sidebar', CONFIG.SIDEBAR_BAR_CACHE_TIME):
 				user = user_dict.get(comment.user_id)
 				if user:
 ?>
-			<li><img src="#{user.get_avatar(is_https)}?s=30&amp;d=monsterid" class="avatar" height="30" width="30" alt="${user.name}"/><span class="comment-header"><strong>${user.name}</strong> <small>(${time_from_now(comment.time)})</small></span><p class="comment-quote"><a href="#{{CONFIG.BLOG_HOME_RELATIVE_PATH}}#{article.quoted_url()}">#{comment.striped_html_content()}</a></p></li>
+			<li><img src="#{user.get_avatar()}?s=30&amp;d=monsterid" class="avatar" height="30" width="30" alt="${user.name}"/><span class="comment-header"><strong>${user.name}</strong> <small>(${time_from_now(comment.time)})</small></span><p class="comment-quote"><a href="#{{CONFIG.BLOG_HOME_RELATIVE_PATH}}#{article.quoted_url()}">#{comment.striped_html_content()}</a></p></li>
 <?py
 				#endif
 			#endif

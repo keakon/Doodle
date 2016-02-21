@@ -39,7 +39,7 @@ class PageAppendHandler(UserHandler):
         if self.current_user:
             output['user_id'] = self.current_user_id
             output['logout_url'] = CONFIG.BLOG_HOME_RELATIVE_PATH + 'logout'
-            if self.is_admin():
+            if self.is_admin:
                 output['is_admin'] = 1
                 output['admin_url'] = CONFIG.BLOG_ADMIN_RELATIVE_PATH
             if page == 'article':
@@ -51,7 +51,7 @@ class PageAppendHandler(UserHandler):
                 output['comment_url_prefix'] = CONFIG.BLOG_HOME_RELATIVE_PATH + 'comment/'
                 output['profile_url'] = CONFIG.BLOG_HOME_RELATIVE_PATH + 'profile'
                 output['user_name'] = escape(self.current_user.name)
-                if self.is_admin():
+                if self.is_admin:
                     output['edit_url_prefix'] = CONFIG.BLOG_ADMIN_RELATIVE_PATH + 'article/'
         else:
             output['login_url'] = CONFIG.LOGIN_URL

@@ -57,3 +57,7 @@ class Auth(SimpleModel):
                 return
             else:
                 return next_url
+
+    @classmethod
+    def is_existing(cls, state):
+        return cls.redis_client.exists(cls.KEY % state)
