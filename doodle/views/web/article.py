@@ -20,11 +20,11 @@ class ArticleHandler(UserHandler):
             else:
                 raise HTTPError(404)
 
-        if not (article.public or self.is_admin()):
+        if not (article.public or self.is_admin):
             raise HTTPError(404)
 
         previous_article, next_article = article.get_nearby_articles()
-        if _from_head or self.request.headers.get('If-None-Match') or self.is_spider():
+        if _from_head or self.request.headers.get('If-None-Match') or self.is_spider:
             hit_count = ArticleHitCount.get(article.id)
         else:
             hit_count = ArticleHitCount.increase(article.id)
@@ -53,7 +53,7 @@ class ArticleIDHandler(UserHandler):
 
         article = Article.get_by_id(article_id)
         if article:
-            if not (article.public or self.is_admin()):
+            if not (article.public or self.is_admin):
                 raise HTTPError(404)
             self.redirect(CONFIG.BLOG_HOME_RELATIVE_PATH + article.url, permanent=True)
         else:

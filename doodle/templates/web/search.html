@@ -1,8 +1,8 @@
 <?py
 from doodle.common.content_format import tagattr
 
-not_ajax = not self.is_xhr()
-if not_ajax:
+output_full_html = self.get_argument('section', None) != 'content'
+if output_full_html:
 	include('web/header.html')
 #endif
 ?>
@@ -10,14 +10,14 @@ if not_ajax:
 <?py
 if articles:
 	include('web/articles.html')
-elif not_ajax:
+elif output_full_html:
 ?>
 	<h2>囧，没有找到相关的文章…</h2>
 	<p>试试更改搜索条件吧。</p>
 <?py #endif ?>
 </section>
 <?py
-if not_ajax:
+if output_full_html:
 	if CONFIG.GOOGLE_CSE_ID:
 		include('web/google_search.html')
 	#endif

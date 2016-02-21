@@ -39,13 +39,8 @@ class User(IDModel):
                 return {user.id: user for user in users}
         return {}
 
-    def get_avatar(self, https=False):
-        # if https:
-        #     avatar_url = 'https://secure.gravatar.com/avatar/'
-        # else:
-        #     avatar_url = 'http://gravatar.com/avatar/'
-        avatar_url = '//gravatar.com/avatar/'
-        return avatar_url + md5(self.email).hexdigest()
+    def get_avatar(self):
+        return '//gravatar.com/avatar/' + md5(self.email).hexdigest()
 
     def is_admin(self):
         return self.id == CONFIG.ADMIN_USER_ID

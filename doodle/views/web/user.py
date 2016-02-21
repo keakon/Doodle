@@ -8,6 +8,7 @@ from tornado.web import HTTPError
 from tornado.httpclient import HTTPError as HTTPClientError
 import ujson
 
+from doodle.common.url import URL_PATTERN
 from doodle.config import CONFIG
 from doodle.core.models.auth import Auth
 from doodle.core.models.user import User
@@ -18,6 +19,8 @@ from ..base_handler import authorized, UserHandler
 class LoginHandler(UserHandler, GoogleOAuth2Mixin):
     @coroutine
     def get(self):
+        self.set_cache(0, is_public=False)
+
         if self.current_user_id:
             self.redirect(self.get_next_url() or '/')
             return
@@ -66,9 +69,10 @@ class LoginHandler(UserHandler, GoogleOAuth2Mixin):
                 pass
             raise HTTPError(403)
         else:
-            next_url = self.get_next_url()
-            state = Auth.generate(next_url or '')
-            self.set_cookie('state', state, expires=int(time.time()) + CONFIG.AUTH_EXPIRE_TIME, httponly=True, secure=self.is_https())
+            state = self.get_cookie('state')
+            if not (state and Auth.is_existing(state)):  # invalid state
+                state = Auth.generate(self.get_next_url() or '')
+                self.set_cookie('state', state, expires=int(time.time()) + CONFIG.AUTH_EXPIRE_TIME, httponly=True, secure=self.is_https)
             yield self.authorize_redirect(
                 redirect_uri=CONFIG.GOOGLE_OAUTH2_REDIRECT_URI,
                 client_id=CONFIG.GOOGLE_OAUTH2_CLIENT_ID,
@@ -79,10 +83,18 @@ class LoginHandler(UserHandler, GoogleOAuth2Mixin):
 
 class LogoutHandler(UserHandler):
     def get(self):
-        if self.current_user_id:
-            self.clear_cookie('user_id')
-            self.set_cookie('session_time', str(int(time.time())), expires_days=30)
-        self.redirect(self.get_next_url() or '/')
+        self.set_cache(0, is_public=False)
+        if self.referer:
+            match = URL_PATTERN.match(self.referer)
+            if match:
+                request = self.request
+                if match.group('host') == request.host and match.group('scheme') == request.protocol:
+                    if self.current_user_id:
+                        self.clear_cookie('user_id')
+                        self.set_cookie('session_time', str(int(time.time())), expires_days=30)
+                    self.redirect(match.group('path'))
+                    return
+        self.redirect('/')
 
 
 class ProfileHandler(UserHandler):
