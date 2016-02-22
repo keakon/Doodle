@@ -15,44 +15,36 @@ class PageAppendHandler(UserHandler):
     def get(self):
         self.set_cache(CONFIG.DEFAULT_CACHE_TIME, is_public=False)
 
-        page = self.get_argument('page')
-        if page not in ('home', 'article', 'category_articles', 'tag_articles', 'search', 'profile'):
-            raise HTTPError(404)
-
-        headers = self.request.headers
-
-        referer = headers.get('Referer')
-        if not referer:
+        if not self.referer:
             raise HTTPError(403)
-        match = URL_PATTERN.match(referer)
+        match = URL_PATTERN.match(self.referer)
         if not match:
             raise HTTPError(403)
         referer_host = match.group('host')
         if not referer_host:
             raise HTTPError(403)
 
-        host = headers.get('Host')
+        host = self.request.headers.get('Host')
         if host != referer_host:
             raise HTTPError(403)
 
         output = {}
         if self.current_user:
-            output['user_id'] = self.current_user_id
+            output['has_logged_in'] = 1
+            output['user_name'] = self.current_user.name
             output['logout_url'] = CONFIG.BLOG_HOME_RELATIVE_PATH + 'logout'
+            output['profile_url'] = CONFIG.BLOG_HOME_RELATIVE_PATH + 'profile'
+            output['comment_url_prefix'] = CONFIG.BLOG_HOME_RELATIVE_PATH + 'comment/'
+            extension = '.js' if CONFIG.DEBUG_MODE else '.min.js'
+            output['article_js_urls'] = [
+                CONFIG.BLOG_HOME_RELATIVE_PATH + 'static/markitup/jquery.markitup' + extension,
+                CONFIG.BLOG_HOME_RELATIVE_PATH + 'static/markitup/sets/bbcode/set' + extension,
+                CONFIG.BLOG_HOME_RELATIVE_PATH + 'static/theme/null/js/msgbox' + extension
+            ]
             if self.is_admin:
                 output['is_admin'] = 1
                 output['admin_url'] = CONFIG.BLOG_ADMIN_RELATIVE_PATH
-            if page == 'article':
-                output['append_js_urls'] = [
-                    CONFIG.BLOG_HOME_RELATIVE_PATH + 'static/markitup/jquery.markitup.js',
-                    CONFIG.BLOG_HOME_RELATIVE_PATH + 'static/markitup/sets/bbcode/set.js',
-                    CONFIG.BLOG_HOME_RELATIVE_PATH + 'static/theme/null/js/msgbox.js'
-                ]
-                output['comment_url_prefix'] = CONFIG.BLOG_HOME_RELATIVE_PATH + 'comment/'
-                output['profile_url'] = CONFIG.BLOG_HOME_RELATIVE_PATH + 'profile'
-                output['user_name'] = escape(self.current_user.name)
-                if self.is_admin:
-                    output['edit_url_prefix'] = CONFIG.BLOG_ADMIN_RELATIVE_PATH + 'article/'
+                output['edit_url_prefix'] = CONFIG.BLOG_ADMIN_RELATIVE_PATH + 'article/'
         else:
             output['login_url'] = CONFIG.LOGIN_URL
 

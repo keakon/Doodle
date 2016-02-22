@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+from functools import wraps
 import re
 import time
 
@@ -309,6 +310,12 @@ class UserHandler(BaseHandler):
                 if next_url and next_url != '/':
                     return next_url
 
+    def set_state_cookie(self, state):
+        self.set_cookie('state', state, expires=int(time.time()) + CONFIG.AUTH_EXPIRE_TIME, httponly=True, secure=self.is_https)  # todo: check whether login url is https
+
+    def set_session_time_cookie(self):
+        self.set_cookie('session_time', str(int(time.time())), expires_days=30)
+
 
 class AdminHandler(UserHandler):
     def prepare(self):
@@ -343,21 +350,22 @@ class StaticFileHandler(StaticFileHandler):
 
 
 def authorized(admin_only=False):
-    def wrap(handler):
+    def wrap(user_handler):
+        @wraps(user_handler)
         def authorized_handler(self, *args, **kwargs):
             request = self.request
             if request.method == 'GET':
                 if not self.current_user_id:
                     state = Auth.generate(request.uri)  # todo: full url?
-                    self.set_cookie('state', state, expires=int(time.time()) + CONFIG.AUTH_EXPIRE_TIME, httponly=True, secure=self.is_https)  # todo: check whether login url is https
+                    self.set_state_cookie(state)
                     self.redirect(self.get_login_url(), status=303)
                 elif admin_only and not self.is_admin:
                     raise HTTPError(403)
                 else:
-                    handler(self, *args, **kwargs)
+                    user_handler(self, *args, **kwargs)
             elif not self.current_user_id or (admin_only and not self.is_admin):
                 raise HTTPError(403)
             else:
-                handler(self, *args, **kwargs)
+                user_handler(self, *args, **kwargs)
         return authorized_handler
     return wrap

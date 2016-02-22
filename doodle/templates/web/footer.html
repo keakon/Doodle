@@ -13,21 +13,20 @@
 <?py #endif ?>
 <?py if page == 'article': ?>
 <script src="#{{CONFIG.BLOG_HOME_RELATIVE_PATH}}static/js/highlight.js"></script>
-<script src="#{{CONFIG.BLOG_HOME_RELATIVE_PATH}}static/theme/null/js/comment.js?3"></script>
+<script src="#{{CONFIG.BLOG_HOME_RELATIVE_PATH}}static/theme/null/js/comment#{{'' if CONFIG.DEBUG_MODE else '.min'}}.js"></script>
 <?py elif page in ('home', 'tag_articles', 'category_articles', 'search'): ?>
 <script src="#{{CONFIG.BLOG_HOME_RELATIVE_PATH}}static/js/highlight.js"></script>
-<script src="#{{CONFIG.BLOG_HOME_RELATIVE_PATH}}static/theme/null/js/loadpage.js?2"></script>
+<script src="#{{CONFIG.BLOG_HOME_RELATIVE_PATH}}static/theme/null/js/loadpage#{{'' if CONFIG.DEBUG_MODE else '.min'}}.js"></script>
 <?py elif page == 'profile': ?>
-<script src="#{{CONFIG.BLOG_HOME_RELATIVE_PATH}}static/theme/null/js/msgbox.js?2"></script>
-<script src="#{{CONFIG.BLOG_HOME_RELATIVE_PATH}}static/theme/null/js/profile.js?2"></script>
+<script src="#{{CONFIG.BLOG_HOME_RELATIVE_PATH}}static/theme/null/js/msgbox#{{'' if CONFIG.DEBUG_MODE else '.min'}}.js"></script>
+<script src="#{{CONFIG.BLOG_HOME_RELATIVE_PATH}}static/theme/null/js/profile#{{'' if CONFIG.DEBUG_MODE else '.min'}}.js"></script>
 <?py #endif ?>
 <?py if page not in ('404', '500', 'profile'): ?>
-<script src="#{{CONFIG.BLOG_HOME_RELATIVE_PATH}}static/js/scroll.js"></script>
+<script src="#{{CONFIG.BLOG_HOME_RELATIVE_PATH}}static/js/scroll#{{'' if CONFIG.DEBUG_MODE else '.min'}}.js"></script>
 <?py #endif ?>
 <script>
-var page = '#{page}';
 var ga_id = '#{CONFIG.GOOGLE_ANALYTICS_ID}';
 </script>
-<script src="#{{CONFIG.BLOG_HOME_RELATIVE_PATH}}static/theme/null/js/append.js?3"></script>
+<script src="#{{CONFIG.BLOG_HOME_RELATIVE_PATH}}static/theme/null/js/append#{{'' if CONFIG.DEBUG_MODE else '.min'}}.js"></script>
 </body>
 </html>

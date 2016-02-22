@@ -22,6 +22,7 @@ class LoginHandler(UserHandler, GoogleOAuth2Mixin):
         self.set_cache(0, is_public=False)
 
         if self.current_user_id:
+            self.set_session_time_cookie()
             self.redirect(self.get_next_url() or '/')
             return
 
@@ -61,8 +62,8 @@ class LoginHandler(UserHandler, GoogleOAuth2Mixin):
                                 user.site = url
                             user.save(inserting=True)
 
-                        self.set_secure_cookie('user_id', str(user.id))
-                        self.set_cookie('session_time', str(int(time.time())), expires_days=30)
+                        self.set_secure_cookie('user_id', str(user.id), httponly=True, secure=self.is_https)  # todo: check whether login url is https
+                        self.set_session_time_cookie()
                         self.redirect(next_url or '/')
                         return
             except AuthError:
@@ -72,7 +73,7 @@ class LoginHandler(UserHandler, GoogleOAuth2Mixin):
             state = self.get_cookie('state')
             if not (state and Auth.is_existing(state)):  # invalid state
                 state = Auth.generate(self.get_next_url() or '')
-                self.set_cookie('state', state, expires=int(time.time()) + CONFIG.AUTH_EXPIRE_TIME, httponly=True, secure=self.is_https)
+                self.set_state_cookie(state)
             yield self.authorize_redirect(
                 redirect_uri=CONFIG.GOOGLE_OAUTH2_REDIRECT_URI,
                 client_id=CONFIG.GOOGLE_OAUTH2_CLIENT_ID,
@@ -84,6 +85,7 @@ class LoginHandler(UserHandler, GoogleOAuth2Mixin):
 class LogoutHandler(UserHandler):
     def get(self):
         self.set_cache(0, is_public=False)
+        self.set_session_time_cookie()
         if self.referer:
             match = URL_PATTERN.match(self.referer)
             if match:
@@ -91,7 +93,6 @@ class LogoutHandler(UserHandler):
                 if match.group('host') == request.host and match.group('scheme') == request.protocol:
                     if self.current_user_id:
                         self.clear_cookie('user_id')
-                        self.set_cookie('session_time', str(int(time.time())), expires_days=30)
                     self.redirect(match.group('path'))
                     return
         self.redirect('/')
@@ -109,8 +110,9 @@ class ProfileHandler(UserHandler):
     def post(self):
         current_user = self.current_user
         name = self.get_argument('name')
-        if name and len(name) < 15:
+        if name and len(name) <= 15 and current_user.name != name:
             current_user.name = name
+            self.set_session_time_cookie()
 
         site = self.get_argument('site')
         if site:
@@ -121,6 +123,3 @@ class ProfileHandler(UserHandler):
             current_user.site = None
         current_user.save()
         self.finish('您的资料保存成功了')
-
-    def compute_etag(self):
-        return
