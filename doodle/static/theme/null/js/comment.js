@@ -108,10 +108,10 @@ $(function() {
 					$temp.children().unwrap().hide().appendTo($commentlist).slideDown(1000);
 				}
 				loading = false;
+				ga_id && ga('send', 'event', 'Comment', 'Load', null, article_id);
 			},
 			'timeout': 10000
 		});
-		ga_id && ga('send', 'event', 'Comment', 'Load', null, article_id);
 	}
 
 	get_comment();
@@ -186,10 +186,10 @@ $(function() {
 								$.msgbox(json.content);
 							}
 							submitting = false;
+							ga_id && ga('send', 'event', 'Comment', 'Reply', null, article_id);
 						},
 						'timeout': 10000
 					});
-					ga_id && ga('send', 'event', 'Comment', 'Reply', null, article_id);
 					return false;
 				});
 			}
