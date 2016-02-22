@@ -11,11 +11,24 @@ $(function() {
 	var comment_order = true;
 	var $comment_order_asc = $('#comment-order-asc');
 	var $comment_order_desc = $('#comment-order-desc');
-	var is_admin = typeof(comment_delete_url) != 'undefined'; // todo: fix
-	var $del_comment_button = $('<span id="del-comment-button">确认删除</span>');
 	var comment_fetch_url = home_path + 'article/'+ article_id + '/comments/';
 	var $more_hint = $('#more-hint');
 	var $respond = $('#respond');
+
+	var escape_map = {
+		'&': '&amp;',
+		'<': '&lt;',
+		'>': '&gt;',
+		'"': '&quot;',
+		"'": '&#x27;',
+		'`': '&#x60;'
+	};
+	function replacer(char) {
+		return escape_map[char];
+	}
+	function escape_html(string) {
+		return string.replace(/[&<>"'`]/g, replacer);
+	}
 
 	function generate_comment(comment) {
 		var html = '<li><p class="comment-author"><img src="';
@@ -23,9 +36,9 @@ $(function() {
 		html += '?s=48&amp;d=monsterid" class="avatar" height="48" width="48"/><cite><a id="comment-id-';
 		html += comment.id;
 		if (comment.url) {
-			html += '" href="' + comment.url;
+			html += '" href="' + encodeURIComponent(comment.url);
 		}
-		html += '">' + comment.user_name + '</a></cite>';
+		html += '">' + escape_html(comment.user_name) + '</a></cite>';
 		var uas = comment.ua;
 		if (uas) {
 			html += '<span class="ua">';
@@ -35,11 +48,7 @@ $(function() {
 			}
 			html += '</span>';
 		}
-		html += '<br/><small><strong>' + comment.time + '</strong>';
-		if (is_admin) {
-			html += ' <span class="edit-user"><a href="' + user_edit_url + comment.id + '/">[用户设定]</a></span> <span class="edit-comment"><a href="' + comment_edit_url + comment.id + '/">[编辑]</a></span> <span class="del-comment">[删除]</span>';
-		}
-		html += '</small></p><div class="commententry" id="commententry-' + comment.id + '"><div>' + comment.content + '</div></div><a class="comment-reply-link" href="#respond">回复</a></li>';
+		html += '<br/><small><strong>' + comment.time + '</strong></small></p><div class="commententry" id="commententry-' + comment.id + '"><div>' + comment.content + '</div></div><a class="comment-reply-link" href="#respond">回复</a></li>';
 		return html;
 	}
 
@@ -60,13 +69,6 @@ $(function() {
 			$comment_float_list.hide().empty();
 		});
 		$html.find('pre>code').each(function(i, e) {hljs.highlightBlock(e)});
-		if (is_admin) {
-			$html.find('span.del-comment').data('id', id).hover(function(){
-				$(this).append($del_comment_button);
-			}, function(){
-				$del_comment_button.detach();
-			});
-		}
 	}
 
 	function get_comment() {
@@ -135,7 +137,7 @@ $(function() {
 			} else {
 				$respond.append(
 '<form action="' + action_url + '" method="post" id="commentform">\
-	<p>您当前登录的用户为：' + user_name + '，您可<a href="' + profile_url + '">修改用户资料</a>，或<a href="' + logout_url + '">登出</a>以更换用户。</p>\
+	<p>您当前登录的用户为：' + escape_html(user_name) + '，您可<a href="' + profile_url + '">修改用户资料</a>，或<a href="' + logout_url + '">登出</a>以更换用户。</p>\
 	<p><textarea name="comment" id="comment" cols="58" rows="10" tabindex="1"></textarea></p>\
 	<p><input name="bbcode" type="checkbox" id="bbcode" tabindex="2" checked="checked"/> <label for="bbcode">启用BBCode</label></p>\
 	<p><small>小提示：回复某条回帖时，可以点击其右侧的“回复”按钮，这样该帖的作者会收到邮件通知。</small></p>\
@@ -221,32 +223,6 @@ $(function() {
 		page = 1;
 		get_comment();
 	});
-
-	if (is_admin) {
-		$del_comment_button.click(function() {
-			var $parent = $del_comment_button.parent();
-			var $comment_li = $parent.parent().parent().parent();
-			$.ajax({
-				'url': comment_delete_url + $parent.data('id') + '/',
-				'dataType': 'json',
-				'type': 'POST',
-				'error': function(){
-					$.msgbox('遇到不明状况，评论删除失败了');
-				},
-				'success': function(json){
-					if (json.status == 204) {
-						$comment_li.slideUp('2000', function(){
-							$del_comment_button.detach();
-							$comment_li.remove();
-						});
-					} else {
-						$.msgbox(json.content);
-					}
-				},
-				'timeout': 10000
-			});
-		});
-	}
 
 	$more_hint.find('a').click(function () {
 		complete = true;

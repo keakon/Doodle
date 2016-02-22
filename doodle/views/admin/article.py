@@ -2,6 +2,7 @@
 
 from datetime import datetime
 import logging
+import time
 
 from tornado.web import HTTPError
 
@@ -151,20 +152,20 @@ class EditArticleHandler(AdminHandler):
         pub_time = self.get_argument('pub_time', None)
         if pub_time:
             pub_time = parse_time(pub_time)
-        if not pub_time:
+        if pub_time:
+            pub_timestamp = datetime_to_timestamp(pub_time)
+        else:
             pub_time = datetime.utcnow()
             pub_timestamp = now = datetime_to_timestamp(pub_time)
-        else:
-            pub_timestamp = datetime_to_timestamp(pub_time)
         article.pub_time = pub_timestamp
 
         mod_time = self.get_argument('mod_time', None)
         if mod_time:
             mod_time = parse_time(mod_time)
-        if not mod_time:
-            mod_timestamp = now
-        else:
+        if mod_time:
             mod_timestamp = datetime_to_timestamp(mod_time)
+        else:
+            mod_timestamp = now
         article.mod_time = mod_timestamp
 
         url = self.get_argument('url', None)
@@ -216,4 +217,5 @@ class EditArticleHandler(AdminHandler):
             self.finish('编辑失败')
         else:
             quoted_url = article.quoted_url()
-            self.finish('编辑成功，查看<a href="%s%s">更新后的文章</a>' % (CONFIG.BLOG_HOME_RELATIVE_PATH, quoted_url))
+            # 增加时间戳，已避免缓存造成影响，打开后会被 history.replaceState 去掉 query 部分
+            self.finish('编辑成功，查看<a href="%s%s?t=%d">更新后的文章</a>' % (CONFIG.BLOG_HOME_RELATIVE_PATH, quoted_url, int(time.time())))
