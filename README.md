@@ -28,7 +28,7 @@ Doodle requires Python 2.7 and Redis. It has been tested in OS X 10.8 ~ 10.11 an
 ## Usage
 ```bash
 $ redis-server &
-$ bin/web
+$ bin/doodle
 ```
 Then you can open [http://0.0.0.0:8080](http://0.0.0.0:8080) to check it.
 
