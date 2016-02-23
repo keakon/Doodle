@@ -20,14 +20,13 @@ $(function() {
 		'<': '&lt;',
 		'>': '&gt;',
 		'"': '&quot;',
-		"'": '&#x27;',
-		'`': '&#x60;'
+		"'": '&apos;'
 	};
 	function replacer(char) {
 		return escape_map[char];
 	}
 	function escape_html(string) {
-		return string.replace(/[&<>"'`]/g, replacer);
+		return string.replace(/[&<>"']/g, replacer);
 	}
 
 	function generate_comment(comment) {
@@ -36,7 +35,7 @@ $(function() {
 		html += '?s=48&amp;d=monsterid" class="avatar" height="48" width="48"/><cite><a id="comment-id-';
 		html += comment.id;
 		if (comment.url) {
-			html += '" href="' + encodeURIComponent(comment.url);
+			html += '" href="' + escape_html(comment.url);
 		}
 		html += '">' + escape_html(comment.user_name) + '</a></cite>';
 		var uas = comment.ua;
