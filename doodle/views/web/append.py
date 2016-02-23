@@ -1,8 +1,5 @@
 # -*- coding: utf-8 -*-
 
-import logging
-from cgi import escape
-
 from tornado.web import HTTPError
 
 from doodle.common.url import URL_PATTERN
@@ -23,7 +20,6 @@ class PageAppendHandler(UserHandler):
         referer_host = match.group('host')
         if not referer_host:
             raise HTTPError(403)
-
         host = self.request.headers.get('Host')
         if host != referer_host:
             raise HTTPError(403)
@@ -37,9 +33,12 @@ class PageAppendHandler(UserHandler):
             output['comment_url_prefix'] = CONFIG.BLOG_HOME_RELATIVE_PATH + 'comment/'
             extension = '.js' if CONFIG.DEBUG_MODE else '.min.js'
             output['article_js_urls'] = [
-                CONFIG.BLOG_HOME_RELATIVE_PATH + 'static/markitup/jquery.markitup' + extension,
-                CONFIG.BLOG_HOME_RELATIVE_PATH + 'static/markitup/sets/bbcode/set' + extension,
-                CONFIG.BLOG_HOME_RELATIVE_PATH + 'static/theme/null/js/msgbox' + extension
+                '%s%s%s' % (CONFIG.BLOG_HOME_RELATIVE_PATH, js_path, extension)
+                for js_path in (
+                    'static/markitup/jquery.markitup',
+                    'static/markitup/sets/bbcode/set',
+                    'static/theme/null/js/msgbox'
+                )
             ]
             if self.is_admin:
                 output['is_admin'] = 1
