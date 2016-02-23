@@ -31,3 +31,6 @@ $ redis-server &
 $ bin/web
 ```
 Then you can open [http://0.0.0.0:8080](http://0.0.0.0:8080) to check it.
+
+## License
+Doodle is released under the MIT License. See the [LICENSE](https://raw.githubusercontent.com/keakon/Doodle/master/LICENSE) file for more details.
