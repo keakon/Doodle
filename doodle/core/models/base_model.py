@@ -74,7 +74,7 @@ class JSONModel(PropertiedModel):
                 logging.warning('Cannot decode the JSON content: %s', json_content, exc_info=True)
 
     def save(self, redis_client=None, inserting=False, relative=False, transactional=False):
-        """
+        u"""
         :param redis_client: Redis 连接或 pipeline 对象
         :param inserting: 是否为即将插入的对象
         :param relative: 是否保存相关的对象
@@ -165,7 +165,7 @@ class IDModel(JSONModel):
 
     @classmethod
     def get_by_id(cls, entity_id):
-        json_content = cls.redis_client.lindex(cls.KEY, int(entity_id) - 1) # todo: check id > 0
+        json_content = cls.redis_client.lindex(cls.KEY, int(entity_id) - 1)  # todo: check id > 0
         if json_content:
             return cls.from_json(json_content)
 
