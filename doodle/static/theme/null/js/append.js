@@ -21,7 +21,7 @@ $(function() {
 		is_article_page = false;
 	}
 
-	if (!localStorage.session_time || parseInt(localStorage.session_time).isNaN()) {
+	if (!localStorage.session_time || isNaN(localStorage.session_time)) {
 		localStorage.clear();
 	}
 	var fetch = !localStorage.session_time;
