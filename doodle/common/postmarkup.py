@@ -8,7 +8,7 @@ Author: Will McGugan (http://www.willmcgugan.com)
 __version__ = "1.1.4"
 
 from cgi import escape
-from urllib import quote, unquote, urlencode
+from urllib import quote
 import re
 
 
@@ -432,19 +432,10 @@ class CodeTag(TagBase):
 		contents = _escape_no_breaks(self.get_contents(parser))
 		style = self.params.strip().lower()
 		if style.isalpha():
-			if style == 'py':
-				style = 'python'
-			elif style == 'js':
-				style = 'javascript'
-			elif style == 'c':
-				style = 'cpp'
-			elif style == 'objc':
-				style = 'objectivec'
+			if style == 'inline':
+				self.skip_contents(parser)
+				return '<code>%s</code>' % contents
 			style = ' class="%s"' % style
-		elif style == 'c++':
-			style = ' class="cpp"'
-		elif style == 'no-highlight':
-			style = ' class="no-highlight"'
 		else:
 			style = ''
 		self.skip_contents(parser)
