@@ -21,6 +21,9 @@ $(function() {
 		is_article_page = false;
 	}
 
+	if (!localStorage.session_time || parseInt(localStorage.session_time).isNaN()) {
+		localStorage.clear();
+	}
 	var fetch = !localStorage.session_time;
 	var url = '/page-append';
 	var match = document.cookie.match(/(^|; ?)session_time=([^;]*)(;|$)/);
