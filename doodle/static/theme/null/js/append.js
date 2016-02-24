@@ -47,7 +47,7 @@ $(function() {
 	}
 
 	function save_config(config) {
-		localStorage.session_time = session_time;
+		localStorage.session_time = session_time || 0;
 		for (var key in config) {
 			var value = config[key];
 			if (typeof value != 'string') {
