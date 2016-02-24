@@ -118,7 +118,8 @@ def create(include=None, exclude=None, **kwargs):
 	add_tag(AlignTag, u'align')
 	add_tag(FloatTag, u'float')
 
-	add_tag(CodeTag, u'code', **kwargs)
+	add_tag(SimpleTag, 'c', 'code')
+	add_tag(CodeTag, 'code', **kwargs)
 	add_tag(BlockquoteTag, 'quote')
 	add_tag(QuoteTag, 'q')
 	add_tag(ParagraphTag, u"p")
@@ -428,16 +429,9 @@ class CodeTag(TagBase):
 		TagBase.__init__(self, name, enclosed=True, strip_first_newline=True)
 
 	def render_open(self, parser, node_index):
-
 		contents = _escape_no_breaks(self.get_contents(parser))
 		style = self.params.strip().lower()
-		if style.isalpha():
-			if style == 'inline':
-				self.skip_contents(parser)
-				return '<code>%s</code>' % contents
-			style = ' class="%s"' % style
-		else:
-			style = ''
+		style = ' class="%s"' % style if style.isalpha() else ''
 		self.skip_contents(parser)
 		return '<pre><code%s>%s</code></pre>' % (style, contents)
 

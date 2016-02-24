@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 
-import time
-
 from tornado.auth import AuthError, GoogleOAuth2Mixin
 from tornado.gen import coroutine
 from tornado.web import HTTPError
@@ -116,9 +114,17 @@ class ProfileHandler(UserHandler):
 
         site = self.get_argument('site')
         if site:
-            if site[:4] == 'www.':
-                site = 'http://' + site
-            current_user.site = site
+            match = URL_PATTERN.match(site)
+            if match:
+                if not match.group('host'):
+                    self.finish('抱歉，您填的网址不正确')
+                    return
+                if not match.group('scheme'):
+                    site = 'http://' + site
+                current_user.site = site
+            else:
+                self.finish('抱歉，您填的网址不正确')
+                return
         else:
             current_user.site = None
         current_user.save()
