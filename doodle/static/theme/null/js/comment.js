@@ -20,7 +20,7 @@ $(function() {
 		'<': '&lt;',
 		'>': '&gt;',
 		'"': '&quot;',
-		"'": '&apos;'
+		"'": '&#x27;'
 	};
 	function replacer(char) {
 		return escape_map[char];
