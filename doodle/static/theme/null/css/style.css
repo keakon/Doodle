@@ -69,8 +69,7 @@ pre {
 }
 code {
 	padding: .2em .4em;
-	color: #ccc;
-	background-color: #002b36;
+	background-color: #ccc;
 	border-radius: 3px;
 }
 pre>code {
