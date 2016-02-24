@@ -64,6 +64,9 @@ pre, code {
 	word-wrap: break-word;
 	white-space: pre-wrap;
 }
+pre {
+	margin: .5em 0;
+}
 code {
 	padding: .2em .4em;
 	color: #ccc;
