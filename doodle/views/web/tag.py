@@ -7,10 +7,10 @@ from doodle.core.models.article import ArticleHitCount
 from doodle.core.models.tag import Tag, TagArticle
 from doodle.core.models.comment import ArticleComments
 
-from ..base_handler import UserHandler
+from ..base_handler import BaseHandler
 
 
-class TagArticlesHandler(UserHandler):
+class TagArticlesHandler(BaseHandler):
     def get(self, tag_name):
         if not Tag.exists(tag_name):
             raise HTTPError(404)

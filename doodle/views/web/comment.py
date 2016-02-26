@@ -24,8 +24,12 @@ class ArticleCommentsHandler(UserHandler):
             raise HTTPError(404)
 
         article = Article.get_by_id(article_id)
-        if not (article and (article.public or self.is_admin)):
+        if not article:
             raise HTTPError(404)
+        if not article.public:
+            self.set_cache(is_public=False)
+            if not self.is_admin:
+                raise HTTPError(404)
 
         page = int(page)
 

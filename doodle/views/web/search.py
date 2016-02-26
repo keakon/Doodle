@@ -7,10 +7,10 @@ from doodle.core.models.article import Article, ArticleHitCount
 from doodle.core.models.keyword import KeywordArticle
 from doodle.core.models.comment import ArticleComments
 
-from ..base_handler import UserHandler
+from ..base_handler import BaseHandler
 
 
-class SearchHandler(UserHandler):
+class SearchHandler(BaseHandler):
     def get(self):
         keywords = self.get_argument('keywords', None)
         if keywords:

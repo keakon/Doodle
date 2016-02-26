@@ -10,7 +10,7 @@ from ..base_handler import UserHandler
 
 class PageAppendHandler(UserHandler):
     def get(self):
-        self.set_cache(CONFIG.DEFAULT_CACHE_TIME, is_public=False)
+        self.set_cache(is_public=False)
 
         if not self.referer:
             raise HTTPError(403)
@@ -23,6 +23,9 @@ class PageAppendHandler(UserHandler):
         host = self.request.headers.get('Host')
         if host != referer_host:
             raise HTTPError(403)
+
+        if self.get_cookie('session_time'):
+            self.clear_cookie('session_time')  # session_time 的作用是让用户重新访问这个接口，既然已经在访问了，也就可以清除掉了
 
         output = {}
         if self.current_user:

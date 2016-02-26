@@ -320,6 +320,7 @@ class UserHandler(BaseHandler):
 class AdminHandler(UserHandler):
     def prepare(self):
         super(AdminHandler, self).prepare()
+        self.set_cache(is_public=False)
         if not self.is_admin:
             if not self.current_user_id:
                 request = self.request
@@ -333,7 +334,7 @@ class AdminHandler(UserHandler):
 
 class NotFoundHandler(BaseHandler):
     def get(self, *args, **kwargs):
-        self.set_cache(600, True)
+        self.set_cache(CONFIG.DEFAULT_CACHE_TIME, True)
         self.send_error(404)
 
 
@@ -353,6 +354,7 @@ def authorized(admin_only=False):
     def wrap(user_handler):
         @wraps(user_handler)
         def authorized_handler(self, *args, **kwargs):
+            self.set_cache(is_public=False)
             request = self.request
             if request.method == 'GET':
                 if not self.current_user_id:
