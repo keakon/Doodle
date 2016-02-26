@@ -58,9 +58,9 @@ class Article(PublicModel):
         if inserting:
             relative_keys.append(ArticleURL.KEY)
             if self.category:
-                relative_keys.extend([Category.KEY, CategoryArticle.KEY])
+                relative_keys.extend([Category.KEY, CategoryArticle.KEY % self.category])
             if self.tags:
-                relative_keys.append(TagArticle.KEY)
+                relative_keys.extend([TagArticle.KEY % tag for tag in self.tags])
             if self.keywords:
                 relative_keys.append(KeywordArticle.KEY)
         else:
@@ -70,13 +70,17 @@ class Article(PublicModel):
             if old_url and old_url != self.url:
                 relative_keys.append(ArticleURL.KEY)
 
-            old_category = origin_data.get('category')
+            old_category = origin_data.get('category') or ''
             if old_category != self.category:
-                relative_keys.extend([Category.KEY, CategoryArticle.KEY])
+                relative_keys.append(Category.KEY)
+                if old_category:
+                    relative_keys.append(CategoryArticle.KEY % old_category)
+                if self.category:
+                    relative_keys.append(CategoryArticle.KEY % self.category)
 
-            old_tags = origin_data.get('tags')
+            old_tags = origin_data.get('tags') or []
             if old_tags != self.tags:
-                relative_keys.append(TagArticle.KEY)
+                relative_keys.extend([TagArticle.KEY % tag for tag in set(self.tags + old_tags)])
 
             old_keywords = origin_data.get('keywords')
             if old_keywords != self.keywords:

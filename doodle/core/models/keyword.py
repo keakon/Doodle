@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+import logging
+
 from doodle.config import CONFIG
 from doodle.core.property import IntegerProperty, StringProperty
 from doodle.core.redis_client import redis_cache_client
@@ -24,8 +26,8 @@ class KeywordArticle(JSONModel):
 
     @classmethod
     def query_by_keyword(cls, keyword, result_limit=CONFIG.SEARCH_PAGE_SIZE, search_limit=CONFIG.MAX_SEARCH_COUNT):
-        key = 'KeywordArticles:' + keyword
-        cached_result = redis_cache_client.get(key)
+        cache_key = 'KeywordArticles:' + keyword
+        cached_result = redis_cache_client.get(cache_key)
         if cached_result is not None:
             if not cached_result:
                 return []
@@ -33,7 +35,8 @@ class KeywordArticle(JSONModel):
                 article_ids = cached_result.split(',')
                 return [int(article_id) for article_id in article_ids]
             except ValueError:
-                pass
+                logging.warning('Key "%s" contains wrong value: %s', cache_key, cached_result)
+                redis_cache_client.delete(cache_key)
 
         pattern = '*%s*:*' % keyword.lower()
         cursor, members = cls.redis_client.sscan(cls.KEY, match=pattern, count=search_limit)
@@ -43,6 +46,6 @@ class KeywordArticle(JSONModel):
         else:
             article_ids = result = []
 
-        redis_cache_client.set(key, ','.join(article_ids), ex=CONFIG.DEFAULT_CACHE_TIME)
+        redis_cache_client.set(cache_key, ','.join(article_ids), ex=CONFIG.DEFAULT_CACHE_TIME)
 
         return result
