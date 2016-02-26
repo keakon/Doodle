@@ -4,10 +4,10 @@ from doodle.config import CONFIG
 from doodle.core.models.article import Article, ArticleHitCount
 from doodle.core.models.comment import ArticleComments
 
-from ..base_handler import UserHandler
+from ..base_handler import BaseHandler
 
 
-class HomeHandler(UserHandler):
+class HomeHandler(BaseHandler):
     def get(self):
         articles, next_cursor = Article.get_articles_for_homepage(self.cursor)
         if articles:

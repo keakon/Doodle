@@ -53,8 +53,10 @@ class ArticleIDHandler(UserHandler):
 
         article = Article.get_by_id(article_id)
         if article:
-            if not (article.public or self.is_admin):
-                raise HTTPError(404)
+            if not article.public:
+                self.set_cache(is_public=False)
+                if not self.is_admin:
+                    raise HTTPError(404)
             self.redirect(CONFIG.BLOG_HOME_RELATIVE_PATH + article.url, permanent=True)
         else:
             raise HTTPError(404)

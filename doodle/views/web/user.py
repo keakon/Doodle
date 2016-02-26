@@ -20,7 +20,7 @@ class LoginHandler(UserHandler, GoogleOAuth2Mixin):
         self.set_cache(0, is_public=False)
 
         if self.current_user_id:
-            self.set_session_time_cookie()
+            self.set_session_time_cookie()  # 强制修改 session_time，使用户可以重新访问 PageAppendHandler，以更新配置信息
             self.redirect(self.get_next_url() or '/')
             return
 
@@ -61,7 +61,7 @@ class LoginHandler(UserHandler, GoogleOAuth2Mixin):
                             user.save(inserting=True)
 
                         self.set_secure_cookie('user_id', str(user.id), httponly=True, secure=self.is_https)  # todo: check whether login url is https
-                        self.set_session_time_cookie()
+                        self.set_session_time_cookie()  # 使用户重新访问 PageAppendHandler，以更新配置信息
                         self.redirect(next_url or '/')
                         return
             except AuthError:
@@ -83,7 +83,7 @@ class LoginHandler(UserHandler, GoogleOAuth2Mixin):
 class LogoutHandler(UserHandler):
     def get(self):
         self.set_cache(0, is_public=False)
-        self.set_session_time_cookie()
+        self.set_session_time_cookie()  # 强制修改 session_time，使用户可以重新访问 PageAppendHandler，以更新配置信息
         if self.referer:
             match = URL_PATTERN.match(self.referer)
             if match:

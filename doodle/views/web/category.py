@@ -7,10 +7,10 @@ from doodle.core.models.article import ArticleHitCount
 from doodle.core.models.category import Category, CategoryArticles
 from doodle.core.models.comment import ArticleComments
 
-from ..base_handler import UserHandler
+from ..base_handler import BaseHandler
 
 
-class CategoryArticlesHandler(UserHandler):
+class CategoryArticlesHandler(BaseHandler):
     def get(self, category_name):
         if not Category.exists(category_name):
             raise HTTPError(404)

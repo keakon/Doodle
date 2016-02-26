@@ -3,10 +3,10 @@
 from doodle.common.time_format import iso_time_format, iso_time_now, timestamp_to_datetime
 from doodle.core.models.article import Article
 
-from ..base_handler import UserHandler
+from ..base_handler import BaseHandler
 
 
-class FeedHandler(UserHandler):
+class FeedHandler(BaseHandler):
     def get(self):
         self.set_content_type('atom')
         # todo: handler subscribers
