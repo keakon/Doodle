@@ -49,7 +49,7 @@ class Category(SimpleModel):
         if categories:
             pattern = re.compile(r'^(.+:)?%s(:.+)?$' % re.escape(name))
             for category_name, category_parent_path in categories.iteritems():
-                if category_parent_path and pattern.match(category_parent_path):
+                if category_parent_path and pattern.match(unicode(category_parent_path, 'utf-8')):
                     category_names.append(category_name)
         return category_names
 
@@ -104,14 +104,14 @@ class CategoryArticle(JSONModel):
             redis_client.zrem(key, self.article_id)
 
 
-class CategoryArticles(JSONModel):
+class CategoryArticles(JSONModel):  # 聚合子类的文章并缓存
     KEY = 'CategoryArticles:%s'
 
     @classmethod
     def get_article_ids(cls, category_name, cursor=None, limit=CONFIG.ARTICLES_PER_PAGE):
         redis_client = cls.redis_client
         key = cls.KEY % category_name
-        if not redis_client.exists(key):
+        if not redis_client.exists(key):  # todo: use redis_cache_client
             sub_category_names = Category.get_sub_category_names(category_name)
             category_names = [category_name] + sub_category_names
             keys = [CategoryArticle.KEY % name for name in category_names]
