@@ -169,21 +169,17 @@ $(function() {
 						'data': data,
 						'dataType': 'json',
 						'type': 'POST',
-						'error': function(){
+						'error': function(xhr) {
 							submitting = false;
-							$.msgbox('抱歉，遇到不明状况，发送失败了');
+							$.msgbox(xhr.status == 403 ? '抱歉，您需要登录才能发表评论' : '抱歉，遇到不明状况，发送失败了');
 						},
-						'success': function(json){
-							if (json.status == 200) {
-								var comment = json.comment;
-								var $html = $(generate_comment(comment));
-								bind_events_for_comment($html, comment.id, comment.user_name);
-								$html.hide().appendTo($commentlist).slideDown(1000);
-								$comment.val('');
-								$.msgbox('评论成功');
-							} else {
-								$.msgbox(json.content);
-							}
+						'success': function(json) {
+							var comment = json.comment;
+							var $html = $(generate_comment(comment));
+							bind_events_for_comment($html, comment.id, comment.user_name);
+							$html.hide().appendTo($commentlist).slideDown(1000);
+							$comment.val('');
+							$.msgbox('评论成功');
 							submitting = false;
 							ga_id && ga('send', 'event', 'Comment', 'Reply', null, article_id);
 						},

@@ -75,7 +75,7 @@ class CreateCommentHandler(UserHandler):
             raise HTTPError(404)
 
         article = Article.get_by_id(article_id)
-        if not (article and article.public):
+        if not (article and (article.public or self.is_admin)):
             raise HTTPError(404)
 
         content = self.get_argument('comment', None)
@@ -127,7 +127,6 @@ class CreateCommentHandler(UserHandler):
 
         current_user = self.current_user
         self.write_json({
-            'status': 200,
             'comment': {
                 'user_name': current_user.name,
                 'url': current_user.site,

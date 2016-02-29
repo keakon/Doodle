@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+import logging
+
 from tornado.auth import AuthError, GoogleOAuth2Mixin
 from tornado.gen import coroutine
 from tornado.web import HTTPError
@@ -46,6 +48,7 @@ class LoginHandler(UserHandler, GoogleOAuth2Mixin):
                         try:
                             response = yield self.get_auth_http_client().fetch('https://www.googleapis.com/oauth2/v1/userinfo?access_token=' + access_token)
                         except HTTPClientError:
+                            logging.exception('failed to get user info')
                             raise HTTPError(500)
 
                         user_info = ujson.loads(response.body)
@@ -65,7 +68,7 @@ class LoginHandler(UserHandler, GoogleOAuth2Mixin):
                         self.redirect(next_url or '/')
                         return
             except AuthError:
-                pass
+                logging.warning('failed to login', exc_info=True)
             raise HTTPError(403)
         else:
             state = self.get_cookie('state')
