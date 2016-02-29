@@ -25,16 +25,18 @@ def link_config():
         print('Cannot find private dir, you can link your config files manually.')
         return
 
-    conf_dir = os.path.abspath(os.path.join(HERE, '..', 'conf'))
     private_conf_dir = os.path.join(private_dir, 'conf')
-    for conf_name in os.listdir(private_conf_dir):
-        force_symlink(os.path.join('../private/conf', conf_name), os.path.join(conf_dir, conf_name))
+    if os.path.isdir(private_conf_dir):
+        conf_dir = os.path.abspath(os.path.join(HERE, '..', 'conf'))
+        for conf_name in os.listdir(private_conf_dir):
+            force_symlink(os.path.join('../private/conf', conf_name), os.path.join(conf_dir, conf_name))
 
-    config_dir = os.path.abspath(os.path.join(HERE, '..', 'doodle', 'config'))
     private_config_dir = os.path.join(private_dir, 'config')
-    for config_name in os.listdir(private_config_dir):
-        if config_name.endswith('.py') and config_name != '__init__.py':
-            force_symlink(os.path.join('../../private/config', config_name), os.path.join(config_dir, config_name))
+    if private_config_dir:
+        config_dir = os.path.abspath(os.path.join(HERE, '..', 'doodle', 'config'))
+        for config_name in os.listdir(private_config_dir):
+            if config_name.endswith('.py') and config_name != '__init__.py':
+                force_symlink(os.path.join('../../private/config', config_name), os.path.join(config_dir, config_name))
 
 
 def mkdir(path, recursive=False):
