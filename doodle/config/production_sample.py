@@ -6,7 +6,8 @@ from .default import Config
 class ProductionConfig(Config):
     # application config
     DEBUG_MODE = False
-    GZIP = False  # 应该用 nginx 来压缩
+    GZIP = False
+    XHEADERS = True
 
     # redis config
     REDIS_MAIN_DB = {'unix_socket_path': '/tmp/doodle_redis_main.sock'}
