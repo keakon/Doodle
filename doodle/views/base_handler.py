@@ -46,7 +46,7 @@ MIME_TYPE_ABBREVIATIONS = {
 
 
 class BaseHandler(RequestHandler):
-    _SPIDER_PATTERN = re.compile('(bot|crawl|spider|curl|slurp|sohu-search|lycos|robozilla)', re.I)
+    _SPIDER_PATTERN = re.compile('(bot|crawl|spider|curl|apachebench|slurp|sohu-search|lycos|robozilla)', re.I)
 
     def head(self, *args, **kwargs):
         self.get(*args, **kwargs)
