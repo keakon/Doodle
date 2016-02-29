@@ -329,6 +329,7 @@ class AdminHandler(UserHandler):
                     self.set_cookie('state', state, expires=int(time.time()) + CONFIG.AUTH_EXPIRE_TIME, httponly=True, secure=self.is_https)  # todo: check whether login url is https
                     self.redirect(self.get_login_url(), status=303)
                     return
+                self.set_session_time_cookie()  # force check user status
             raise HTTPError(403)
 
 
@@ -365,7 +366,10 @@ def authorized(admin_only=False):
                     raise HTTPError(403)
                 else:
                     user_handler(self, *args, **kwargs)
-            elif not self.current_user_id or (admin_only and not self.is_admin):
+            elif not self.current_user_id:
+                self.set_session_time_cookie()  # force check user status
+                raise HTTPError(403)
+            elif admin_only and not self.is_admin:
                 raise HTTPError(403)
             else:
                 user_handler(self, *args, **kwargs)
