@@ -2,34 +2,21 @@
 <html lang="#{{CONFIG.LANGUAGE}}">
 <head>
 <title>${title}</title>
-<script>
-if (top !== self) top.location = self.location;
-<?PY if CONFIG.GOOGLE_ANALYTICS_ID: ?>
-var _gaq = [['_setAccount', '#{{CONFIG.GOOGLE_ANALYTICS_ID}}'], ['_trackPageview'], ['_trackPageLoadTime']];
-var _gaq_start = new Date();
-<?PY else: ?>
-var _gaq = [];
+	<meta name="viewport" content="width=800">
+<?PY if CONFIG.ENABLE_HTTPS: ?>
+	<meta name="referrer" content="unsafe-url">
 <?PY #endif ?>
-</script>
-	<meta name="viewport" content="width=800"/>
-	<link href="#{{CONFIG.BLOG_HOME_RELATIVE_PATH}}feed" rel="alternate" title="${{CONFIG.BLOG_TITLE}} - ATOM供稿" type="application/atom+xml"/>
-	<link href="#{{CONFIG.BLOG_HOME_RELATIVE_PATH}}comment-feed" rel="alternate" title="${{CONFIG.BLOG_TITLE}} - 评论供稿" type="application/atom+xml"/>
-	<link rel="stylesheet" href="#{{CONFIG.BLOG_HOME_RELATIVE_PATH}}static/theme/null/css/style.css?0"/>
-<?py
-if page == 'article':
-	if self.is_spider:
-		from doodle.common.content_format import strip_html
-?>
-	<meta name="description" content="${strip_html(article.html_summary(), 200)}"/>
-	<link rel="canonical" href="#{{CONFIG.BLOG_HOME_RELATIVE_PATH}}#{article.quoted_url()}"/>
-<?py 	#endif ?>
-	<link rel="stylesheet" href="#{{CONFIG.BLOG_HOME_RELATIVE_PATH}}static/css/solarized-dark.css"/>
-	<link rel="stylesheet" href="#{{CONFIG.BLOG_HOME_RELATIVE_PATH}}static/markitup/skins/simple/style.css"/>
-	<link rel="stylesheet" href="#{{CONFIG.BLOG_HOME_RELATIVE_PATH}}static/markitup/sets/bbcode/style.css"/>
+	<link href="#{{CONFIG.BLOG_FEED_URL}}" rel="alternate" title="${{CONFIG.BLOG_TITLE}} - ATOM供稿" type="application/atom+xml">
+	<link rel="stylesheet" href="#{{CONFIG.BLOG_HOME_RELATIVE_PATH}}static/theme/null/css/style.css?0">
+<?py if page == 'article': ?>
+	<link rel="canonical" href="#{{CONFIG.BLOG_HOME_RELATIVE_PATH}}#{article.quoted_url()}">
+	<link rel="stylesheet" href="#{{CONFIG.BLOG_HOME_RELATIVE_PATH}}static/css/solarized-dark.css">
+	<link rel="stylesheet" href="#{{CONFIG.BLOG_HOME_RELATIVE_PATH}}static/markitup/skins/simple/style.css">
+	<link rel="stylesheet" href="#{{CONFIG.BLOG_HOME_RELATIVE_PATH}}static/markitup/sets/bbcode/style.css">
 <?py elif page in ('home', 'tag_articles', 'category_articles', 'search'): ?>
-	<link rel="stylesheet" href="#{{CONFIG.BLOG_HOME_RELATIVE_PATH}}static/css/solarized-dark.css"/>
+	<link rel="stylesheet" href="#{{CONFIG.BLOG_HOME_RELATIVE_PATH}}static/css/solarized-dark.css">
 <?py elif page == 'comments': ?>
-	<meta name="robots" content="nofollow"/>
+	<meta name="robots" content="nofollow">
 <?py #endif ?>
 </head>
 <body>
@@ -78,8 +65,8 @@ for nav_link, next_level in izip(CONFIG.NAV_LINKS, next_levels):
 		</ul>
 	</nav>
 	<form method="get" id="searchform" action="#{{CONFIG.BLOG_HOME_RELATIVE_PATH}}search">
-		<input type="text" placeholder="找找有啥好东东…" value="${keywords if 'keywords' in _context else ''}" name="keywords" id="keywords" x-webkit-speech x-webkit-grammar="builtin:search" onwebkitspeechchange="this.parentNode.submit()"/>
-		<input type="submit" value="搜索" id="searchsubmit"/>
+		<input type="text" placeholder="找找有啥好东东…" value="${keywords if 'keywords' in _context else ''}" name="keywords" id="keywords" x-webkit-speech x-webkit-grammar="builtin:search" onwebkitspeechchange="this.parentNode.submit()">
+		<input type="submit" value="搜索" id="searchsubmit">
 	</form>
 </header>
 </div>

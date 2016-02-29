@@ -1,23 +1,4 @@
 User-agent: *
-User-agent: Googlebot
-User-agent: Googlebot-Mobile
-User-agent: Baiduspider-mobile
-Disallow: /_ah/
 Disallow: /admin/
-Disallow: /comment-feed
-Disallow: /feed
-Disallow: /hub/
-Disallow: /lo
+Disallow: /log
 Disallow: /search
-Disallow: /wap/
-
-User-agent: Googlebot
-Allow: /feed
-
-User-agent: Googlebot-Mobile
-Allow: /wap/
-
-User-agent: Baiduspider-mobile
-Allow: /wap/
-
-Sitemap: http://www.keakon.net/sitemap.xml

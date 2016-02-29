@@ -21,6 +21,11 @@ class LoginHandler(UserHandler, GoogleOAuth2Mixin):
     def get(self):
         self.set_cache(0, is_public=False)
 
+        if CONFIG.ENABLE_HTTPS and not self.is_https:
+            request = self.request
+            self.redirect('https://%s%s' % (request.host, request.uri), status=302 if request.version == 'HTTP/1.0' else 303)
+            return
+
         if self.current_user_id:
             self.set_session_time_cookie()  # 强制修改 session_time，使用户可以重新访问 PageAppendHandler，以更新配置信息
             self.redirect(self.get_next_url() or '/')
@@ -63,7 +68,7 @@ class LoginHandler(UserHandler, GoogleOAuth2Mixin):
                                 user.site = url
                             user.save(inserting=True)
 
-                        self.set_secure_cookie('user_id', str(user.id), httponly=True, secure=self.is_https)  # todo: check whether login url is https
+                        self.set_secure_cookie('user_id', str(user.id), httponly=True, secure=self.is_https)
                         self.set_session_time_cookie()  # 使用户重新访问 PageAppendHandler，以更新配置信息
                         self.redirect(next_url or '/')
                         return

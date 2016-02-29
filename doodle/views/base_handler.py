@@ -311,7 +311,7 @@ class UserHandler(BaseHandler):
                     return next_url
 
     def set_state_cookie(self, state):
-        self.set_cookie('state', state, expires=int(time.time()) + CONFIG.AUTH_EXPIRE_TIME, httponly=True, secure=self.is_https)  # todo: check whether login url is https
+        self.set_cookie('state', state, expires=int(time.time()) + CONFIG.AUTH_EXPIRE_TIME, httponly=True, secure=self.is_https)
 
     def set_session_time_cookie(self):
         self.set_cookie('session_time', str(int(time.time())), expires_days=30)
@@ -321,13 +321,25 @@ class AdminHandler(UserHandler):
     def prepare(self):
         super(AdminHandler, self).prepare()
         self.set_cache(is_public=False)
+
+        if CONFIG.ENABLE_HTTPS and not self.is_https:
+            request = self.request
+            if request.version == 'HTTP/1.0':
+                if request.method in ('GET', 'HEAD'):
+                    self.redirect('https://%s%s' % (request.host, request.uri))
+                else:
+                    raise HTTPError(403)
+            else:
+                self.redirect('https://%s%s' % (request.host, request.uri), status=307)
+            return
+
         if not self.is_admin:
             if not self.current_user_id:
                 request = self.request
                 if request.method in ('GET', 'HEAD'):
-                    state = Auth.generate(request.uri)  # todo: full url?
-                    self.set_cookie('state', state, expires=int(time.time()) + CONFIG.AUTH_EXPIRE_TIME, httponly=True, secure=self.is_https)  # todo: check whether login url is https
-                    self.redirect(self.get_login_url(), status=303)
+                    state = Auth.generate(request.uri)
+                    self.set_state_cookie(state)
+                    self.redirect(self.get_login_url(), status=302 if request.version == 'HTTP/1.0' else 303)
                     return
                 self.set_session_time_cookie()  # force check user status
             raise HTTPError(403)
@@ -359,9 +371,9 @@ def authorized(admin_only=False):
             request = self.request
             if request.method == 'GET':
                 if not self.current_user_id:
-                    state = Auth.generate(request.uri)  # todo: full url?
+                    state = Auth.generate(request.uri)
                     self.set_state_cookie(state)
-                    self.redirect(self.get_login_url(), status=303)
+                    self.redirect(self.get_login_url(), status=302 if request.version == 'HTTP/1.0' else 303)
                 elif admin_only and not self.is_admin:
                     raise HTTPError(403)
                 else:

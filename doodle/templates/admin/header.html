@@ -2,7 +2,8 @@
 <html>
 <head>
 	<title>${title}</title>
-	<link rel="stylesheet" href="#{{CONFIG.BLOG_HOME_RELATIVE_PATH}}static/theme/freshpress/css/style.css"/>
+	<meta name="referrer" content="origin">
+	<link rel="stylesheet" href="#{{CONFIG.BLOG_HOME_RELATIVE_PATH}}static/theme/freshpress/css/style.css">
 	<script src="#{{CONFIG.BLOG_HOME_RELATIVE_PATH}}static/js/jquery-#{{CONFIG.JQUERY_VERSION}}.js"></script>
 <?py if page == 'maintain': ?>
 	<script src="#{{CONFIG.BLOG_HOME_RELATIVE_PATH}}static/theme/freshpress/js/maintain.js"></script>
@@ -13,9 +14,9 @@
 <?py 	if page == 'twitter_status': ?>
 	<script src="#{{CONFIG.BLOG_HOME_RELATIVE_PATH}}static/theme/freshpress/js/twitter.js"></script>
 <?py 	elif page in ('create_article', 'edit_article', 'edit_comment'): ?>
-	<link rel="stylesheet" href="#{{CONFIG.BLOG_HOME_RELATIVE_PATH}}static/markitup/skins/simple/style.css"/>
-	<link rel="stylesheet" href="#{{CONFIG.BLOG_HOME_RELATIVE_PATH}}static/markitup/sets/html/style.css"/>
-	<link rel="stylesheet" href="#{{CONFIG.BLOG_HOME_RELATIVE_PATH}}static/markitup/sets/bbcode/admin_style.css"/>
+	<link rel="stylesheet" href="#{{CONFIG.BLOG_HOME_RELATIVE_PATH}}static/markitup/skins/simple/style.css">
+	<link rel="stylesheet" href="#{{CONFIG.BLOG_HOME_RELATIVE_PATH}}static/markitup/sets/html/style.css">
+	<link rel="stylesheet" href="#{{CONFIG.BLOG_HOME_RELATIVE_PATH}}static/markitup/sets/bbcode/admin_style.css">
 	<script src="#{{CONFIG.BLOG_HOME_RELATIVE_PATH}}static/markitup/jquery.markitup.js"></script>
 	<script src="#{{CONFIG.BLOG_HOME_RELATIVE_PATH}}static/markitup/sets/bbcode/admin_set.js"></script>
 	<script src="#{{CONFIG.BLOG_HOME_RELATIVE_PATH}}static/markitup/sets/html/set.js"></script>

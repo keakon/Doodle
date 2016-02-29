@@ -18,15 +18,16 @@ class Config(object):
     __metaclass__ = _FileTimeMeta
 
     # application config
-    DEBUG_MODE = True
-    TEST = False
-    GZIP = True
-    COOKIE_SECRET = ''
-    XSRF_COOKIES = False
-    IPV4_ONLY = True
-    XHEADERS = True
-    PORT = 8080
-    MAX_WAIT_SECONDS_BEFORE_SHUTDOWN = 10
+    DEBUG_MODE = True  # 开发时可设为 True，修改源码后会自动重启
+    TEST = False  # 测试时设为 True，否则不能运行
+    GZIP = True  # 生产环境应该设为 False，让 nginx 去 gzip，否则会丢失 ETag
+    IPV4_ONLY = True  # 是否需要支持 IPv6
+    XHEADERS = False  # 生产环境会在 nginx 传一些 X 开头的 header，此时建议开启
+    ENABLE_HTTPS = False  # 支持 HTTPS，登录时会跳到 HTTPS 的登录界面，登录所用的 cookie 仅在 HTTPS 下可用，管理后台仅在 HTTPS 下可访问
+    PORT = 8080  # 默认运行的端口
+    MAX_WAIT_SECONDS_BEFORE_SHUTDOWN = 10  # 退出时如果还有没处理完的 callbacks，最长会等待多少秒
+    COOKIE_SECRET = ''  # cookie 的密钥，可以用 os.urandom(32) 生成
+    XSRF_COOKIES = False  # POST 请求需要验证 xsrf，暂时不支持
 
     # blog config
     BLOG_TITLE = u''  # 博客标题
@@ -51,14 +52,14 @@ class Config(object):
 
     BLOG_HOME_RELATIVE_PATH = '/'  # 博客首页相对路径，可以改为'/blog/'等子目录
     BLOG_ADMIN_RELATIVE_PATH = BLOG_HOME_RELATIVE_PATH + 'admin/'  # 博客管理相对路径
-    LOGIN_URL = BLOG_HOME_RELATIVE_PATH + 'login'
+    LOGIN_URL = BLOG_HOME_RELATIVE_PATH + 'login'  # 登录地址
 
-    if PORT == 80:
-        MAJOR_HOST_URL = 'http://' + MAJOR_DOMAIN
+    MAJOR_SCHEME = 'https' if ENABLE_HTTPS else 'http'
+    if PORT in (80, 443):  # 生产环境可以直接写死，一般不暴露其他端口
+        MAJOR_HOST_URL = '%s://%s' % (MAJOR_SCHEME, MAJOR_DOMAIN)
     else:
-        MAJOR_HOST_URL = 'http://%s:%d' % (MAJOR_DOMAIN, PORT)
+        MAJOR_HOST_URL = '%s://%s:%d' % (MAJOR_SCHEME, MAJOR_DOMAIN, PORT)
     BLOG_FEED_URL = MAJOR_HOST_URL + '/feed'
-    BLOG_COMMENT_FEED_URL = MAJOR_HOST_URL + '/comment-feed'
     BLOG_HOME_FULL_URL = MAJOR_HOST_URL + BLOG_HOME_RELATIVE_PATH  # 博客首页完整链接
 
     # redis config
@@ -79,9 +80,9 @@ class Config(object):
     AUTH_RANDOM_BYTES = 10  # 登录时使用的随机数位数，建议加 2 后能被 3 整除
     AUTH_STATE_LENGTH = 24  # == (10 + 8) / 3 * 4，base 64 编码后的长度，8 是 double 类型的时间戳长度
     AUTH_EXPIRE_TIME = 300  # 登录验证的有效时间
-    GOOGLE_OAUTH2_CLIENT_ID = ''  # Google OAuth 2 Client ID，# 可在 https://console.developers.google.com/ 申请
+    GOOGLE_OAUTH2_CLIENT_ID = ''  # Google OAuth 2 Client ID，可在 https://console.developers.google.com/ 申请
     GOOGLE_OAUTH2_CLIENT_SECRET = ''  # Google OAuth 2 Client secret
-    GOOGLE_OAUTH2_REDIRECT_URI = MAJOR_HOST_URL + LOGIN_URL  # Google OAuth 2 Redirect URI
+    GOOGLE_OAUTH2_REDIRECT_URI = MAJOR_HOST_URL + LOGIN_URL  # Google OAuth 2 Redirect URI，如果启用了 HTTPS，应该设置成 HTTPS 的登录地址
 
     # paging config
     DEFAULT_PAGE_SIZE = 10
