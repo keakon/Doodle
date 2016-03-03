@@ -14,6 +14,8 @@ $(function() {
 	var comment_fetch_url = home_path + 'article/'+ article_id + '/comments/';
 	var $more_hint = $('#more-hint');
 	var $respond = $('#respond');
+	var url_hash = location.hash;
+	var now = new Date();
 
 	var escape_map = {
 		'&': '&amp;',
@@ -105,6 +107,14 @@ $(function() {
 						bind_events_for_comment($html, comment.id, comment.user_name);
 					}
 					$temp.children().unwrap().hide().appendTo($commentlist).slideDown(1000);
+					if (url_hash) {
+						if (new Date() - now < 5000) { // 载入 5 秒内，自动定位
+							if (!_scrolling_status) { // stopped
+								$(url_hash).scrollTo();
+							}
+						}
+						url_hash = null; // prevent scroll twice
+					}
 				}
 				loading = false;
 				ga_id && ga('send', 'event', 'Comment', 'Load', null, article_id);

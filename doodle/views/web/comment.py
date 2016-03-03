@@ -144,7 +144,7 @@ class CreateCommentHandler(UserHandler):
             url = html_content = html_body = title = ''
 
             if CONFIG.ADMIN_EMAIL and not self.is_admin:
-                url = u'%s%s' % (CONFIG.BLOG_HOME_FULL_URL, article.quoted_url())
+                url = u'%s%s#comment-id-%d' % (CONFIG.BLOG_HOME_FULL_URL, article.quoted_url(), comment.id)
                 html_content = comment.html_content_with_full_url(url)
                 html_body = u'%s 在 <a href="%s">%s</a> 评论道:<br/>%s' % (escape(current_user.name), url, article.title, html_content)
                 title = u'Re: ' + article.title
@@ -152,7 +152,7 @@ class CreateCommentHandler(UserHandler):
 
             if format != ContentFormatFlag.PLAIN:
                 if not html_content:
-                    url = u'%s%s' % (CONFIG.BLOG_HOME_FULL_URL, article.quoted_url())
+                    url = u'%s%s#comment-id-%d' % (CONFIG.BLOG_HOME_FULL_URL, article.quoted_url(), comment.id)
                     html_content = comment.html_content_with_full_url(url)
                 comment_ids = set(int(comment_id) for comment_id in Comment.REPLY_LINK_PATTERN.findall(html_content))
                 if comment_ids:
