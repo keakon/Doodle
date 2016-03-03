@@ -116,7 +116,7 @@ class CategoryArticles(JSONModel):
             category_names = [category_name] + sub_category_names
             keys = [CategoryArticle.KEY % name for name in category_names]
             redis_client.zunionstore(key, keys, aggregate='MAX')
-            redis_client.expire(key, CONFIG.SIDEBAR_BAR_CACHE_TIME)
+            redis_client.expire(key, CONFIG.CATEGORY_ARTICLES_CACHE_TIME)
 
         if cursor is None:
             return redis_client.zrevrange(key, 0, limit - 1, withscores=True, score_cast_func=int)

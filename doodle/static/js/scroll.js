@@ -32,4 +32,10 @@ var _scrolling_status = 0; // 0: stopped; 1: scrolling; 2: stopping
 			ev.preventDefault();
 		}
 	});
+	$.fn.extend({
+		'scrollTo': function() {
+			scrollTo(this.offset().top);
+			return this;
+		}
+	});
 })();
