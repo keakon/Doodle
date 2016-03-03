@@ -10,6 +10,9 @@
 <!--[if lt IE 9]><div id="noie">妈妈说IE必须死！页面错乱是你活该～</div><![endif]-->
 <?py if page not in ('404', '500'): ?>
 <script src="#{{CONFIG.BLOG_HOME_RELATIVE_PATH}}static/js/jquery-#{{CONFIG.JQUERY_VERSION}}.js"></script>
+<?py 	if page != 'profile': ?>
+<script src="#{{CONFIG.BLOG_HOME_RELATIVE_PATH}}static/js/scroll#{{'' if CONFIG.DEBUG_MODE else '.min'}}.js"></script>
+<?py 	#endif ?>
 <?py #endif ?>
 <?py if page == 'article': ?>
 <script src="#{{CONFIG.BLOG_HOME_RELATIVE_PATH}}static/js/highlight.js"></script>
@@ -20,9 +23,6 @@
 <?py elif page == 'profile': ?>
 <script src="#{{CONFIG.BLOG_HOME_RELATIVE_PATH}}static/theme/null/js/msgbox#{{'' if CONFIG.DEBUG_MODE else '.min'}}.js"></script>
 <script src="#{{CONFIG.BLOG_HOME_RELATIVE_PATH}}static/theme/null/js/profile#{{'' if CONFIG.DEBUG_MODE else '.min'}}.js"></script>
-<?py #endif ?>
-<?py if page not in ('404', '500', 'profile'): ?>
-<script src="#{{CONFIG.BLOG_HOME_RELATIVE_PATH}}static/js/scroll#{{'' if CONFIG.DEBUG_MODE else '.min'}}.js"></script>
 <?py #endif ?>
 <script>
 var ga_id = '#{CONFIG.GOOGLE_ANALYTICS_ID}';

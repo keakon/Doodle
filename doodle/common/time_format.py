@@ -90,7 +90,7 @@ def parse_date_for_url(date_string):
 
 
 def formatted_time(dt, display_second=True):
-    return convert_to_local_time(dt).strftime(CONFIG.SECONDE_FORMAT if display_second else CONFIG.MINUTE_FORMAT)
+    return convert_to_local_time(dt).strftime(CONFIG.SECOND_FORMAT if display_second else CONFIG.MINUTE_FORMAT)
 
 
 def formatted_time_for_edit(dt):
