@@ -123,8 +123,6 @@ $(function() {
 		});
 	}
 
-	get_comment();
-
 	function reply(comment_id, comment_user) {
 		if (!allow_comment) {return;}
 		var comment = $comment.val();
@@ -228,6 +226,12 @@ $(function() {
 		page = 1;
 		get_comment();
 	});
+
+	if (url_hash) {
+		$comment_order_desc.click();
+	} else {
+		get_comment();
+	}
 
 	$more_hint.find('a').click(function () {
 		complete = true;
