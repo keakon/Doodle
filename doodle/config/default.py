@@ -111,7 +111,7 @@ class Config(object):
     # time config
     LOCAL_TIME_DELTA = timedelta(hours=8)  # 本地时区偏差
     DATE_FORMAT = '%Y-%m-%d'  # 日期格式
-    SECONDE_FORMAT = '%Y-%m-%d %H:%M:%S'  # 时间格式（精确到秒）
+    SECOND_FORMAT = '%Y-%m-%d %H:%M:%S'  # 时间格式（精确到秒）
     MINUTE_FORMAT = '%Y-%m-%d %H:%M'  # 时间格式（精确到分）
 
     REPLACE_SPECIAL_CHARACTERS_FOR_URL = True  # 在自动生成URL时，是否将空格、引号、尖括号、&、#、%替换成“-”，在写英文标题时可能会需要

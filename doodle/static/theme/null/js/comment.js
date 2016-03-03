@@ -109,7 +109,7 @@ $(function() {
 					$temp.children().unwrap().hide().appendTo($commentlist).slideDown(1000);
 					if (url_hash) {
 						if (new Date() - now < 5000) { // 载入 5 秒内，自动定位
-							if (!_scrolling_status) { // stopped
+							if (!scroller.is_scrolling()) {
 								$(url_hash).scrollTo();
 							}
 						}
@@ -236,11 +236,11 @@ $(function() {
 
 	$window.scroll(function(e){
 		var currentScrollTop = $window.scrollTop();
-		if (!complete && !loading && !_scrolling_status && currentScrollTop > lastScrollTop && ($window.scrollTop() + $window.height() - $respond.offset().top - $respond.outerHeight() > 20)) {
+		if (!complete && !loading && !scroller.is_scrolling() && currentScrollTop > lastScrollTop && ($window.scrollTop() + $window.height() - $respond.offset().top - $respond.outerHeight() > 20)) {
 			loading = true;
 			get_comment();
 		}
 		lastScrollTop = currentScrollTop;
-		if (_scrolling_status == 2) {_scrolling_status = 0;}
+		if (scroller.is_stopping()) {scroller.set_stopped();}
 	});
 });
