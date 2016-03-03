@@ -34,7 +34,9 @@ var scroller = (function() {
 	};
 	$.fn.extend({
 		'scrollTo': function() {
-			scroller.scrollTo(this.offset().top);
+			if (this.length) {
+				scroller.scrollTo(this.offset().top);
+			}
 			return this;
 		}
 	});
