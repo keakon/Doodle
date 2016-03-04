@@ -1,21 +1,22 @@
 # -*- coding: utf-8 -*-
 
 from datetime import timedelta
-import inspect
+import os
 import os.path
 import re
 
 
-class _FileTimeMeta(type):
+class ConfigMeta(type):
     def __init__(cls, name, bases, dct):
-        super(_FileTimeMeta, cls).__init__(name, bases, dct)
-        updated_time = cls._get_update_time()
-        if updated_time > cls._UPDATED_TIME:
-            cls._UPDATED_TIME = updated_time
+        super(ConfigMeta, cls).__init__(name, bases, dct)
+        if bases[0] == object:
+            cls.update_default_config()
+        else:
+            cls.update_sub_config()
 
 
 class Config(object):
-    __metaclass__ = _FileTimeMeta
+    __metaclass__ = ConfigMeta
 
     # application config
     DEBUG_MODE = True
@@ -117,9 +118,22 @@ class Config(object):
     # static file config
     JQUERY_VERSION = '1.8.3'  # todo: upgrade
 
-    _UPDATED_TIME = 0
+    @classmethod
+    def update_default_config(cls):
+        cls.update_from_env()
 
     @classmethod
-    def _get_update_time(cls):
-        filename = inspect.getfile(cls)
-        return os.path.getmtime(filename)
+    def update_sub_config(cls):
+        cls.update_paths()
+
+    @classmethod
+    def update_from_env(cls):
+        REDIS_HOST = os.getenv('REDIS_HOST')
+        if REDIS_HOST:
+            cls.REDIS_MAIN_DB['host'] = cls.REDIS_CACHE_DB['host'] = REDIS_HOST
+
+    @classmethod
+    def update_paths(cls):
+        cls.BLOG_FEED_URL = cls.MAJOR_HOST_URL + '/feed'
+        cls.BLOG_HOME_FULL_URL = cls.MAJOR_HOST_URL + cls.BLOG_HOME_RELATIVE_PATH
+        cls.GOOGLE_OAUTH2_REDIRECT_URI = cls.MAJOR_HOST_URL + cls.LOGIN_URL
