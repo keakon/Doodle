@@ -42,6 +42,12 @@ def update_config(branch='master'):
 
 
 @task
+def build():
+    with cd('/data/doodle'):
+        run('bin/buildout -N')
+
+
+@task
 def restart():
     run('supervisorctl restart doodle:')
 
@@ -61,4 +67,5 @@ def deploy():
     print('deploying %s code branch and %s config branch' % (code_branch, config_branch))
     update_code(code_branch)
     update_config(config_branch)
+    build()
     restart()
