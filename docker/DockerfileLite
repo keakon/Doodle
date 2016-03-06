@@ -16,7 +16,7 @@ RUN if [ ! -f bin/buildout ]; then \
 fi
 RUN bin/buildout -N
 
-RUN apk del git wget gcc python-dev musl-dev curl-dev
+RUN apk del git wget gcc python-dev musl-dev
 RUN rm -rf /var/cache/apk/*
 
 ENTRYPOINT ["bin/doodle"]
