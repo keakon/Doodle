@@ -27,7 +27,7 @@ def quoted_url(url, coding='utf-8'):
 	match = URI_PATTERN.match(url)
 	if match:
 		groups = match.groups()
-		parts = [groups[0] or '', quote_path(groups[2]), quote_path(groups[4]), quote_part(groups[5]), quote_part(groups[7])]
+		parts = [groups[0] or '', quote_path(groups[2]), quote_path(groups[4]), quote_path(groups[5]), quote_path(groups[7])]
 		return u''.join(parts).encode(coding)
 	return quoted_string(url, coding)
 
