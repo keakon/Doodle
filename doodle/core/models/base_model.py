@@ -165,7 +165,10 @@ class IDModel(JSONModel):
 
     @classmethod
     def get_by_id(cls, entity_id):
-        json_content = cls.redis_client.lindex(cls.KEY, int(entity_id) - 1)  # todo: check id > 0
+        entity_id = int(entity_id)
+        if entity_id <= 0 or isinstance(entity_id, long):
+            return
+        json_content = cls.redis_client.lindex(cls.KEY, entity_id - 1)
         if json_content:
             return cls.from_json(json_content)
 

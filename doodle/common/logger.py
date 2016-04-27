@@ -3,7 +3,6 @@
 import logging
 import sys
 
-
 LOGGING_FORMAT = '[%(levelname)1.1s %(asctime)s %(module)s:%(lineno)d] %(message)s'
 DATE_FORMAT = '%y%m%d %H:%M:%S'
 
@@ -22,6 +21,7 @@ stderr_handler.formatter = logging.Formatter(LOGGING_FORMAT, DATE_FORMAT)
 root_logger.addHandler(stderr_handler)
 
 from tornado.log import access_log
+
 
 def log_request(handler):
     try:
