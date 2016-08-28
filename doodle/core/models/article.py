@@ -178,7 +178,7 @@ class Article(PublicModel):
             return cls.get_articles_and_next_cursor(article_ids_with_time, limit=limit)
         return [], None
 
-    @staticmethod
+    @classmethod
     def get_unpublished_articles(cls, page, page_size=CONFIG.ARTICLES_PER_PAGE):
         article_ids = PrivateArticlePublishTime.get_article_ids_for_page(page, page_size)
         if article_ids:

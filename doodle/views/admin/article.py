@@ -6,8 +6,9 @@ import time
 
 from tornado.web import HTTPError
 
-from doodle.core.models.article import Article
+from doodle.core.models.article import Article, ArticleHitCount
 from doodle.core.models.category import Category
+from doodle.core.models.comment import ArticleComments
 from doodle.core.models.tag import Tag
 from doodle.common.errors import IntegrityError
 from doodle.common.time_format import datetime_to_timestamp, formatted_date_for_url, parse_time
@@ -219,3 +220,27 @@ class EditArticleHandler(AdminHandler):
             quoted_url = article.quoted_url()
             # 增加时间戳，已避免缓存造成影响，打开后会被 history.replaceState 去掉 query 部分
             self.finish('编辑成功，查看<a href="%s%s?t=%d">更新后的文章</a>' % (CONFIG.BLOG_HOME_RELATIVE_PATH, quoted_url, int(time.time())))
+
+
+class UnpublishedArticlesHandler(AdminHandler):
+    def get(self, page):
+        if page:
+            page = int(page)
+        else:
+            page = 0
+        articles = Article.get_unpublished_articles(page)
+        if articles:
+            article_ids = [article.id for article in articles]
+            hit_counts = ArticleHitCount.get_by_ids(article_ids)
+            replies_dict = ArticleComments.get_comment_count_of_articles(article_ids)
+        else:
+            hit_counts = replies_dict = {}
+
+        self.render('admin/unpublished_articles.html', {
+            'title': u'未发布的文章',
+            'page': 'unpublished_articles',
+            'articles': articles,
+            'hit_counts': hit_counts,
+            'replies_dict': replies_dict,
+            'next_page': page + 1
+        })

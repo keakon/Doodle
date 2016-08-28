@@ -1,0 +1,30 @@
+<?py
+from doodle.common.content_format import tagattr
+
+output_full_html = self.get_argument('section', None) != 'content'
+if output_full_html:
+	include('web/header.html')
+#endif
+?>
+<section id="content"#{tagattr('class', not articles, 'block')}>
+<?py
+if articles:
+	include('web/articles.html')
+	if next_cursor:
+?>
+	<p class="post-nav"><span class="previous"><a href="#{{CONFIG.BLOG_ADMIN_RELATIVE_PATH}}articles/unpublished/#{next_page}">« 看看还有什么好玩意</a></span></p>
+<?py
+	#endif
+elif output_full_html:
+?>
+	<h2>囧，已经到最后一页了…</h2>
+<?py
+#endif
+?>
+</section>
+<?py
+if output_full_html:
+	include('web/sidebar.html')
+	include('web/footer.html')
+#endif
+?>

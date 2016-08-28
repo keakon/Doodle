@@ -3,7 +3,7 @@
 from doodle.config import CONFIG
 
 from .base_handler import NotFoundHandler, StaticFileHandler
-from .admin.article import CreateArticleHandler, CreateArticleRedirectHandler, EditArticleHandler
+from .admin.article import CreateArticleHandler, CreateArticleRedirectHandler, EditArticleHandler, UnpublishedArticlesHandler
 from .admin.category import CreateCategoryHandler
 from .admin.tag import CreateTagHandler
 from .web.append import PageAppendHandler
@@ -36,6 +36,7 @@ handlers = [
     (BLOG_ADMIN_RELATIVE_PATH, CreateArticleRedirectHandler),
     (BLOG_ADMIN_RELATIVE_PATH + 'article/new', CreateArticleHandler),
     (BLOG_ADMIN_RELATIVE_PATH + r'article/(\d+)/edit', EditArticleHandler),
+    (BLOG_ADMIN_RELATIVE_PATH + r'articles/unpublished/(\d*)', UnpublishedArticlesHandler),
     (BLOG_ADMIN_RELATIVE_PATH + 'category/new', CreateCategoryHandler),
     (BLOG_ADMIN_RELATIVE_PATH + 'tag/new', CreateTagHandler),
 
