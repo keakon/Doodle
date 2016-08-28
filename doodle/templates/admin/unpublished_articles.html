@@ -10,11 +10,9 @@ if output_full_html:
 <?py
 if articles:
 	include('web/articles.html')
-	if next_cursor:
 ?>
 	<p class="post-nav"><span class="previous"><a href="#{{CONFIG.BLOG_ADMIN_RELATIVE_PATH}}articles/unpublished/#{next_page}">« 看看还有什么好玩意</a></span></p>
 <?py
-	#endif
 elif output_full_html:
 ?>
 	<h2>囧，已经到最后一页了…</h2>
