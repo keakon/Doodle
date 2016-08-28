@@ -227,7 +227,7 @@ class UnpublishedArticlesHandler(AdminHandler):
         if page:
             page = int(page)
         else:
-            page = 0
+            page = 1
         articles = Article.get_unpublished_articles(page)
         if articles:
             article_ids = [article.id for article in articles]
