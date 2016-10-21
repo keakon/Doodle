@@ -15,7 +15,7 @@ Doodle requires Python 2.7 and Redis. It has been tested in OS X 10.8 ~ 10.11 an
   
 2. Put your own config files under the **private** directory. (optional)
   ```bash
-  $ cd doodle
+  $ cd Doodle
   $ mkdir private
   ```
 
