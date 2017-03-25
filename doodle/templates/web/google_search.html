@@ -3,6 +3,18 @@
 		<h4>不给力？试试Google搜索↓</h4>
 		<script>
 			(function() {
+				function execute() {
+					google.search.cse.element.getElement('search').execute('#{keywords.replace("\\", r"\\").replace("'", r"\'")}');
+				}
+				window.__gcse = {
+					callback: function() {
+						if (document.readyState == 'complete') {
+							execute();
+						} else {
+							google.setOnLoadCallback(execute, true);
+						}
+					}
+				};
 				var cx = '#{{CONFIG.GOOGLE_CSE_ID}}';
 				var gcse = document.createElement('script');
 				gcse.type = 'text/javascript';
@@ -13,6 +25,5 @@
 			})();
 		</script>
 		<gcse:search id="cse" gname="search"></gcse:search>
-		<script>google.search.cse.element.getElement('search').execute('#{keywords.replace("\\", r"\\").replace("'", r"\'")}');</script>
 	</section>
 </section>
