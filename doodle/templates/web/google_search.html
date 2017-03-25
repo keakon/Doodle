@@ -1,7 +1,6 @@
 <section id="sidebar">
 	<section id="google-search" class="widget">
 		<h4>不给力？试试Google搜索↓</h4>
-		<div id="cse"></div>
 		<script>
 			(function() {
 				var cx = '#{{CONFIG.GOOGLE_CSE_ID}}';
@@ -13,6 +12,7 @@
 				s.parentNode.insertBefore(gcse, s);
 			})();
 		</script>
-		<gcse:search></gcse:search>
+		<gcse:search id="cse" gname="search"></gcse:search>
+		<script>google.search.cse.element.getElement('search').execute('#{keywords.replace("\\", r"\\").replace("'", r"\'")}');</script>
 	</section>
 </section>
