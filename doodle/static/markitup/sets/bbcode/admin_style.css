@@ -52,13 +52,10 @@
 .markItUp .markItUpButton20 a {
 	background-image:url(images/quotes.png);
 }
-.markItUp .markItUpButton21 a {
+.markItUp .markItUpButton21 a, .markItUp .markItUpButton22 a {
 	background-image:url(images/code.png);
 }
-.markItUp .markItUpButton22 a {
-	background-image:url(images/cut.png);
-}
-.markItUp .markItUpButton23 a {
+.markItUp .markItUpButton23 a, .markItUp .markItUpButton24 a {
 	background-image:url(images/cut.png);
 }
 .markItUp .clean a {

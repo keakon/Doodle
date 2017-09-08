@@ -69,6 +69,7 @@ BbcodeSettings = {
 		{separator:'---------------' },
 		{name:'引用', openWith:'[quote]', closeWith:'[/quote]'},
 		{name:'代码', openWith:'[code]', closeWith:'[/code]'},
+		{name:'短代码', openWith:'[c]', closeWith:'[/c]'},
 		{name:'分隔摘要和正文1', openWith:'\n\n[cut1]\n'},
 		{name:'分隔摘要和正文2', openWith:'\n\n[cut2]\n'},
 		{name:'清除样式', className:"clean", replaceWith:function(markitup) { return markitup.selection.replace(/\[(.*?)\]/g, "") } },
