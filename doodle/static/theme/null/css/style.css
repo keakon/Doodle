@@ -24,7 +24,7 @@ a {
 	color: #03a7eb;
 	text-decoration: none;
 }
-a:hover, #comments a:hover, #comment-order-asc:hover, #comment-order-desc:hover {
+a:hover, #comments a:hover, #comment-order-asc:hover, #comment-order-desc:hover, code a {
 	color: #0d96c8;
 }
 small {
