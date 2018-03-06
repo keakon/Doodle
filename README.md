@@ -19,16 +19,19 @@ Doodle requires Python 2.7 and Redis. It has been tested in OS X 10.8 ~ 10.11 an
   $ mkdir private
   ```
 
-3. Run buildout:
+3. Install dependence:
   ```bash
-  $ scripts/buildout.sh
+  $ sudo pip install virtualenv
+  $ virtualenv .
+  $ bin/pip install cython
+  $ bin/pip install -r requirements.txt
   ```
   Use Google to figure out any problem occurs.
 
 ## Usage
 ```bash
 $ redis-server &
-$ bin/doodle
+$ bin/python -m doodle.main
 ```
 Then you can open [http://0.0.0.0:8080](http://0.0.0.0:8080) to check it.
 

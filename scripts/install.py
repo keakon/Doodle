@@ -68,3 +68,7 @@ def create_dirs():
 def install():
     link_config()
     create_dirs()
+
+
+if __name__ == '__main__':
+    install()

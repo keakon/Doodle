@@ -43,13 +43,18 @@ def update_config(branch='master'):
 
 @task
 def build():
+    run('sudo pip install virtualenv')
     with cd('/data/doodle'):
-        run('bin/buildout -N')
+        run('virtualenv .')
+        run('bin/pip install cython')
+        run('bin/pip install -r requirements.txt')
+        run('bin/python scripts/install.py')
 
 
 @task
 def restart():
     run('supervisorctl restart doodle:')
+    run('sudo nginx -s reload')
 
 
 @task(default=True)
