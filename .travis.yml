@@ -1,19 +1,13 @@
 language: python
 sudo: false
-cache:
-  directories:
-    - bin
-    - eggs
 python:
   - 2.7
 services:
   - redis-server
 install:
   - mv doodle/config/test_sample.py doodle/config/test.py
-  - |
-    if [ ! -f bin/buildout ]; then
-      wget https://bootstrap.pypa.io/bootstrap-buildout.py && python bootstrap-buildout.py
-    fi
-  - bin/buildout -N
+  - pip install cython
+  - pip install -r requirements.txt
+  - pip install pytest
 script:
-  - bin/py.test -v doodle/tests
+  - py.test -v doodle/tests

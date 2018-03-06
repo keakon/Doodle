@@ -1,0 +1,7 @@
+hiredis
+pybloof
+pycurl
+redis
+tenjin
+tornado>=4.3
+ujson

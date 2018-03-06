@@ -4,6 +4,7 @@ from functools import wraps
 import re
 import time
 
+import pybloof
 import tenjin
 from tenjin.helpers import escape, to_str, _decode_params, fragment_cache
 from tornado.web import Finish, HTTPError, RequestHandler, StaticFileHandler
@@ -47,6 +48,8 @@ MIME_TYPE_ABBREVIATIONS = {
 
 class BaseHandler(RequestHandler):
     _SPIDER_PATTERN = re.compile('(bot|crawl|spider|curl|apachebench|slurp|sohu-search|lycos|robozilla)', re.I)
+    _CSS_PATTERN = re.compile(r'<link rel="stylesheet" href="(/[\w\-./]+\.css)">')
+    _JS_PATTERN = re.compile(r'<script src="(/[\w\-./]+\.js)"></script>')
 
     def head(self, *args, **kwargs):
         self.get(*args, **kwargs)
@@ -273,7 +276,43 @@ class BaseHandler(RequestHandler):
             globals = TEMPLATE_GLOBALS
         else:
             globals.update(TEMPLATE_GLOBALS)
-        self.finish(engine.render(template_name, context, globals, layout))
+        output = engine.render(template_name, context, globals, layout)
+        self.push_resources(output)
+        self.finish(output)
+
+    def push_resources(self, output):
+        if self.request.headers.get('X-Server-Protocol') != 'HTTP/2.0':
+            return
+
+        css_list = self._CSS_PATTERN.findall(output)
+        js_list = self._JS_PATTERN.findall(output)
+        if css_list or js_list:
+            filter = None
+            filter_was_empty = True
+            resources_cookie = self.get_cookie('resources')
+            if resources_cookie:
+                try:
+                    filter = pybloof.StringBloomFilter.from_base64(resources_cookie)
+                except Exception:
+                    pass
+                else:
+                    filter_was_empty = False
+            if not filter:
+                filter = pybloof.StringBloomFilter(size=120, hashes=3)
+            if filter_was_empty:
+                new_css_list = css_list
+                new_js_list = js_list
+            else:
+                new_css_list = [css for css in css_list if css not in filter]
+                new_js_list = [js for js in js_list if js not in filter]
+                if not (new_css_list or new_js_list):
+                    return
+            for css in new_css_list:
+                filter.add(css)
+            for js in new_js_list:
+                filter.add(js)
+            self.set_cookie('resources', filter.to_base64())
+            self.set_header('Link', ', '.join(['<%s>; as=style; rel=preload' % css for css in new_css_list] + ['<%s>; as=script; rel=preload' % js for js in new_js_list]))
 
     def decode_argument(self, value, name=None):
         if value is None or isinstance(value, unicode_type):
