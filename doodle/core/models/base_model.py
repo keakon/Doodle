@@ -106,6 +106,7 @@ class JSONModel(PropertiedModel):
                 except Exception as e:
                     logging.exception('failed to save')
                     self._fail_on_save(e, pipe, inserting)
+                    raise
 
             if isinstance(redis_client, Pipeline):
                 insert(redis_client)
@@ -122,6 +123,7 @@ class JSONModel(PropertiedModel):
             except Exception as e:
                 logging.exception('failed to save')
                 self._fail_on_save(e, redis_client, inserting)
+                raise
 
     def _check_inserting(self):
         pass
@@ -142,7 +144,7 @@ class JSONModel(PropertiedModel):
         pass
 
     def _fail_on_save(self, exception, redis_client, inserting=False):
-        raise
+        pass
 
 
 class HashModel(JSONModel):
@@ -218,7 +220,6 @@ class IDModel(JSONModel):
     def _fail_on_save(self, exception, pipeline, inserting=False):
         if inserting:
             self.id = None
-        raise
 
 
 class PublicModel(IDModel):

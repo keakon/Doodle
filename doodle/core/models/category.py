@@ -111,11 +111,11 @@ class CategoryArticles(JSONModel):  # 聚合子类的文章并缓存
     def get_article_ids(cls, category_name, cursor=None, limit=CONFIG.ARTICLES_PER_PAGE):
         redis_client = cls.redis_client
         key = cls.KEY % category_name
-        if not redis_client.exists(key):  # todo: use redis_cache_client
+        if not redis_client.exists(key):
             sub_category_names = Category.get_sub_category_names(category_name)
             category_names = [category_name] + sub_category_names
             keys = [CategoryArticle.KEY % name for name in category_names]
-            redis_client.zunionstore(key, keys, aggregate='MAX')
+            redis_client.zunionstore(key, keys, aggregate='MAX')  # 不能跨库执行这个操作，所以不能使用 redis_cache_client
             redis_client.expire(key, CONFIG.CATEGORY_ARTICLES_CACHE_TIME)
 
         if cursor is None:

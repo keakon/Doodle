@@ -19,7 +19,7 @@ Doodle requires Python 2.7 and Redis. It has been tested in OS X 10.8 ~ 10.11 an
   $ mkdir private
   ```
 
-3. Install dependence:
+3. Install dependencies:
   ```bash
   $ sudo pip install virtualenv
   $ virtualenv .

@@ -11,7 +11,7 @@ from doodle.common.time_format import datetime_to_timestamp, parse_date_for_url,
 
 from .base_model import JSONModel, PublicModel
 from .count import Count
-from .category import Category, CategoryArticle
+from .category import Category, CategoryArticle, CategoryArticles
 from .keyword import KeywordArticle
 from .tag import TagArticle
 
@@ -107,10 +107,15 @@ class Article(PublicModel):
 
             old_category = origin_data.get('category')
             if old_category != self.category:
+                cache_keys = []
                 if self.category:
                     CategoryArticle(category=self.category, article_id=self.id, time=self.pub_time).save(redis_client, inserting=True)
+                    cache_keys.append(CategoryArticles.KEY % self.category)
                 if old_category:
                     CategoryArticle(category=old_category, article_id=self.id, time=None).save(redis_client)
+                    cache_keys.append(CategoryArticles.KEY % old_category)
+                if cache_keys:
+                    redis_client.delete(*cache_keys)
 
             old_tags = origin_data.get('tags')
             if old_tags != self.tags:
