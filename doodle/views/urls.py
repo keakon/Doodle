@@ -5,7 +5,9 @@ from doodle.config import CONFIG
 from .base_handler import NotFoundHandler, StaticFileHandler
 from .admin.article import CreateArticleHandler, CreateArticleRedirectHandler, EditArticleHandler, UnpublishedArticlesHandler
 from .admin.category import CreateCategoryHandler
+from .admin.comment import CommentHandler, UserCommentsHandler
 from .admin.tag import CreateTagHandler
+from .admin.user import BanUserHandler
 from .web.append import PageAppendHandler
 from .web.article import ArticleHandler, ArticleIDHandler
 from .web.category import CategoryArticlesHandler
@@ -39,6 +41,9 @@ handlers = [
     (BLOG_ADMIN_RELATIVE_PATH + r'articles/unpublished/(\d*)', UnpublishedArticlesHandler),
     (BLOG_ADMIN_RELATIVE_PATH + 'category/new', CreateCategoryHandler),
     (BLOG_ADMIN_RELATIVE_PATH + 'tag/new', CreateTagHandler),
+    (BLOG_ADMIN_RELATIVE_PATH + r'ban-user/(\d+)', BanUserHandler),
+    (BLOG_ADMIN_RELATIVE_PATH + r'comment/(\d+)', CommentHandler),
+    (BLOG_ADMIN_RELATIVE_PATH + r'user-comments/(\d+)', UserCommentsHandler),
 
     (CONFIG.LOGIN_URL, LoginHandler),
     (BLOG_HOME_RELATIVE_PATH + 'logout', LogoutHandler),

@@ -416,13 +416,13 @@ def authorized(admin_only=False):
                 elif admin_only and not self.is_admin:
                     raise HTTPError(403)
                 else:
-                    user_handler(self, *args, **kwargs)
+                    return user_handler(self, *args, **kwargs)
             elif not self.current_user_id:
                 self.set_session_time_cookie()  # force check user status
                 raise HTTPError(403)
             elif admin_only and not self.is_admin:
                 raise HTTPError(403)
             else:
-                user_handler(self, *args, **kwargs)
+                return user_handler(self, *args, **kwargs)
         return authorized_handler
     return wrap

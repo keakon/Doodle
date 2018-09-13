@@ -111,7 +111,7 @@ class PropertiedClass(type):
         else:
             cls._properties = {}  # stores Property instances
 
-        for attr_name, attr in dct.iteritems():
-            if isinstance(attr, Property):
-                cls._properties[attr_name] = attr
-                attr.name = attr_name
+        for prop_name, prop in dct.iteritems():
+            if isinstance(prop, Property):
+                cls._properties[prop_name] = prop
+                prop.name = prop_name

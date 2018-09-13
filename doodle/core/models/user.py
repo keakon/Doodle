@@ -3,7 +3,7 @@
 from hashlib import md5
 
 from doodle.config import CONFIG
-from doodle.core.property import IntegerProperty, StringProperty
+from doodle.core.property import BooleanProperty, IntegerProperty, StringProperty
 
 from .base_model import JSONModel, IDModel
 
@@ -12,6 +12,7 @@ class User(IDModel):
     email = StringProperty()
     name = StringProperty()
     site = StringProperty()
+    banned = BooleanProperty()
 
     def _save_relative(self, redis_client, inserting=False):
         if inserting:

@@ -3,5 +3,5 @@ pybloof
 pycurl
 redis
 tenjin
-tornado>=4.3
+tornado<6.0
 ujson

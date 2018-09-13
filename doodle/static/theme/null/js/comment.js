@@ -12,6 +12,10 @@ $(function() {
 	var $comment_order_asc = $('#comment-order-asc');
 	var $comment_order_desc = $('#comment-order-desc');
 	var comment_fetch_url = home_path + 'article/'+ article_id + '/comments/';
+	var is_admin = typeof(ban_url) != 'undefined';
+	var $ban_button = $('<span id="ban-button" class="comment-action-button">确认禁言</span>');
+	var $del_comment_button = $('<span id="del-comment-button" class="comment-action-button">确认删除</span>');
+	var $del_user_comments_button = $('<span id="del-user-comments-button" class="comment-action-button">确认删除</span>');
 	var $more_hint = $('#more-hint');
 	var $respond = $('#respond');
 	var url_hash = location.hash;
@@ -49,7 +53,11 @@ $(function() {
 			}
 			html += '</span>';
 		}
-		html += '<br/><small><strong>' + comment.time + '</strong></small></p><div class="commententry" id="commententry-' + comment.id + '"><div>' + comment.content + '</div></div><a class="comment-reply-link" href="#respond">回复</a></li>';
+		html += '<br/><small><strong>' + comment.time + '</strong>';
+		if (is_admin) {
+			html += ' <span class="ban-user comment-action">[禁言]</span> <span class="del-comment comment-action">[删除]</span> <span class="del-user-comments comment-action">[全部删除]</span>'
+		}
+		html += '</small></p><div class="commententry" id="commententry-' + comment.id + '"><div>' + comment.content + '</div></div><a class="comment-reply-link" href="#respond">回复</a></li>';
 		return html;
 	}
 
@@ -70,6 +78,24 @@ $(function() {
 			$comment_float_list.hide().empty();
 		});
 		$html.find('pre>code').each(function(i, e) {hljs.highlightBlock(e)});
+
+		if (is_admin) {
+			$html.find('span.ban-user').data('id', id).hover(function(){
+				$(this).append($ban_button);
+			}, function(){
+				$ban_button.detach();
+			});
+			$html.find('span.del-comment').data('id', id).hover(function(){
+				$(this).append($del_comment_button);
+			}, function(){
+				$del_comment_button.detach();
+			});
+			$html.find('span.del-user-comments').data('id', id).hover(function(){
+				$(this).append($del_user_comments_button);
+			}, function(){
+				$del_user_comments_button.detach();
+			});
+		}
 	}
 
 	function get_comment() {
@@ -237,6 +263,65 @@ $(function() {
 		complete = true;
 		$more_hint.hide();
 	});
+
+	if (is_admin) {
+		$ban_button.click(function() {
+			var $parent = $ban_button.parent();
+			var $comment_li = $parent.parent().parent().parent();
+			$.ajax({
+				'url': ban_url + $parent.data('id'),
+				'dataType': 'json',
+				'type': 'POST',
+				'error': function(){
+					msgbbox('遇到不明状况，禁言失败了');
+				},
+				'success': function(json){
+					$ban_button.detach();
+				},
+				'timeout': 10000
+			});
+		});
+
+		$del_comment_button.click(function() {
+			var $parent = $del_comment_button.parent();
+			var $comment_li = $parent.parent().parent().parent();
+			$.ajax({
+				'url': delete_comment_url + $parent.data('id'),
+				'dataType': 'json',
+				'type': 'DELETE',
+				'error': function(){
+					msgbbox('遇到不明状况，评论删除失败了');
+				},
+				'success': function(json){
+					$comment_li.slideUp('2000', function(){
+						$del_comment_button.detach();
+						$comment_li.remove();
+					});
+				},
+				'timeout': 10000
+			});
+		});
+
+		$del_user_comments_button.click(function() {
+			var $parent = $del_user_comments_button.parent();
+			var $comment_li = $parent.parent().parent().parent();
+			$.ajax({
+				'url': delete_user_comments_url + $parent.data('id'),
+				'dataType': 'json',
+				'type': 'DELETE',
+				'error': function(){
+					msgbbox('遇到不明状况，评论删除失败了');
+				},
+				'success': function(json){
+					$comment_li.slideUp('2000', function(){
+						$del_comment_button.detach();
+						$comment_li.remove();
+					});
+				},
+				'timeout': 10000
+			});
+		});
+	}
 
 	$window.scroll(function(e){
 		var currentScrollTop = $window.scrollTop();

@@ -12,7 +12,7 @@ Doodle requires Python 2.7 and Redis. It has been tested in OS X 10.8 ~ 10.11 an
   ```bash
   $ git clone https://github.com/keakon/Doodle.git
   ```
-  
+
 2. Put your own config files under the **private** directory. (optional)
   ```bash
   $ cd Doodle
@@ -26,7 +26,15 @@ Doodle requires Python 2.7 and Redis. It has been tested in OS X 10.8 ~ 10.11 an
   $ bin/pip install cython
   $ bin/pip install -r requirements.txt
   ```
-  Use Google to figure out any problem occurs.
+
+4. Install pycurl on macOS:
+  ```bash
+  $ brew install openssl
+  $ export LDFLAGS="-L/usr/local/opt/openssl/lib"
+  $ export CPPFLAGS="-I/usr/local/opt/openssl/include"
+  $ export PYCURL_SSL_LIBRARY=openssl
+  $ bin/pip install -r requirements.txt
+  ```
 
 ## Usage
 ```bash

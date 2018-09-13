@@ -630,12 +630,12 @@ article.post:hover .post-data {
 	cursor: default;
 }
 
-.del-comment {
+.comment-action {
 	color: #03a7eb;
 	cursor: pointer;
 }
 
-#del-comment-button {
+.comment-action-button {
 	margin: 0 0 0 20px;
 	padding: 3px;
 	color: #fff;
@@ -644,7 +644,7 @@ article.post:hover .post-data {
 	cursor: pointer;
 }
 
-#del-comment-button:hover {
+.comment-action-button:hover {
 	background: #cc5e33;
 }
 

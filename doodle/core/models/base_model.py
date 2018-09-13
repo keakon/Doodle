@@ -207,7 +207,8 @@ class IDModel(JSONModel):
             raise PropertyError('cannot insert a %s object with id' % self.__class__.__name__)
 
     def _populate_required_attributes(self, pipeline):
-        self.id = pipeline.llen(self.KEY) + 1
+        if self.id is None:
+            self.id = pipeline.llen(self.KEY) + 1
 
     def _save_self(self, pipeline, inserting=False):
         if inserting:

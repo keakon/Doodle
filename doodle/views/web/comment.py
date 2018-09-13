@@ -74,6 +74,10 @@ class CreateCommentHandler(UserHandler):
         if not article_id:
             raise HTTPError(404)
 
+        current_user = self.current_user
+        if self.current_user.banned:
+            raise HTTPError(403)
+
         article = Article.get_by_id(article_id)
         if not (article and (article.public or self.is_admin)):
             raise HTTPError(404)
@@ -125,7 +129,6 @@ class CreateCommentHandler(UserHandler):
         )
         comment.save(inserting=True)
 
-        current_user = self.current_user
         self.write_json({
             'comment': {
                 'user_name': current_user.name,
