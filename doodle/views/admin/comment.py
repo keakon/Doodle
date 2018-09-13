@@ -3,6 +3,7 @@
 from tornado.web import HTTPError
 
 from doodle.core.models.comment import Comment
+from doodle.core.models.fragment_cache import FragmentCache
 from doodle.core.redis_client import redis_main_client
 
 from ..base_handler import AdminHandler
@@ -17,6 +18,7 @@ class CommentHandler(AdminHandler):
         if comment.public:
             comment.public = False
             comment.save(relative=False, transactional=False)
+            FragmentCache.delete('sidebar')
 
 
 class UserCommentsHandler(AdminHandler):
@@ -38,3 +40,4 @@ class UserCommentsHandler(AdminHandler):
                     comment.public = False
                     comment.save(pipe, relative=False, transactional=False)
             pipe.execute()
+            FragmentCache.delete('sidebar')
