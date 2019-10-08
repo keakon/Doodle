@@ -51,7 +51,7 @@ class TagArticle(JSONModel):
     def _save_self(self, redis_client, inserting=False):
         key = self.KEY % self.tag
         if self.time:
-            redis_client.zadd(key, self.time, self.article_id)
+            redis_client.zadd(key, {self.time: self.article_id})
         else:
             redis_client.zrem(key, self.article_id)
 

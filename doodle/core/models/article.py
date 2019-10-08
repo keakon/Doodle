@@ -324,7 +324,7 @@ class ArticleTime(JSONModel):
     def _save_self(self, redis_client, inserting=False):
         if self.article_id:
             if self.time:
-                redis_client.zadd(self.KEY, self.time, self.article_id)
+                redis_client.zadd(self.KEY, {self.time: self.article_id})
             else:
                 redis_client.zrem(self.KEY, self.article_id)
 
