@@ -2,7 +2,7 @@
 
 from unittest import TestCase
 
-import ujson
+import json
 
 from doodle.common.errors import PropertyError
 from doodle.core.models.base_model import HashModel, IDModel, JSONModel, PropertiedModel, PublicModel, SimpleModel
@@ -99,11 +99,11 @@ class JSONModelTestCase(TestCase):
         entity.c = False
         entity.e = True
         json_content = entity.to_json()
-        self.assertDictEqual(ujson.loads(json_content), {'a': 1, 'c': 0, 'e': True})
+        self.assertDictEqual(json.loads(json_content), {'a': 1, 'c': 0, 'e': True})
 
         entity.c = None
         json_content = entity.to_json()
-        self.assertDictEqual(ujson.loads(json_content), {'a': 1, 'e': True})
+        self.assertDictEqual(json.loads(json_content), {'a': 1, 'e': True})
 
     def test_from_json(self):
         self.assertIsNone(JSONTestModel.from_json(None))
@@ -114,7 +114,7 @@ class JSONModelTestCase(TestCase):
         self.assertDictEqual(entity.to_dict(), {'a': None, 'b': '', 'c': None, 'd': [], 'e': None})
 
         data = {'a': 1, 'c': 0, 'e': True, 'f': 2}
-        json_content = ujson.dumps(data)
+        json_content = json.dumps(data)
         entity = JSONTestModel.from_json(json_content)
         self.assertDictEqual(entity.to_dict(), {'a': 1, 'b': '', 'c': False, 'd': [], 'e': True})
 

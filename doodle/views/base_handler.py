@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from functools import wraps
+import json
 import re
 import time
 
@@ -9,7 +10,6 @@ import tenjin
 from tenjin.helpers import escape, to_str, _decode_params, fragment_cache
 from tornado.web import Finish, HTTPError, RequestHandler, StaticFileHandler
 from tornado.util import bytes_type, unicode_type
-import ujson
 
 from doodle.common.property import CachedProperty
 from doodle.common.url import URL_PATTERN
@@ -265,7 +265,7 @@ class BaseHandler(RequestHandler):
         return cursor
 
     def write_json(self, value, ensure_ascii=False):
-        self.finish(ujson.dumps(value, ensure_ascii=ensure_ascii))
+        self.finish(json.dumps(value, ensure_ascii=ensure_ascii))
 
     def render(self, template_name, context=None, globals=None, layout=False):
         if context is None:

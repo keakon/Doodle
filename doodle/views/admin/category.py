@@ -22,6 +22,6 @@ class CreateCategoryHandler(AdminHandler):
         try:
             Category.add(path)
         except IntegrityError as e:
-            self.finish(u'添加失败，分类名“%s”已存在于路径“%s”中' % (e.category_name, e.category_parent_path))
+            self.finish('添加失败，分类名“%s”已存在于路径“%s”中' % (e.category_name, e.category_parent_path))
         else:
             self.finish('添加成功')

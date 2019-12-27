@@ -6,7 +6,7 @@ from tornado.auth import AuthError, GoogleOAuth2Mixin
 from tornado.gen import coroutine
 from tornado.web import HTTPError
 from tornado.httpclient import HTTPError as HTTPClientError
-import ujson
+import json
 
 from doodle.common.url import URL_PATTERN
 from doodle.config import CONFIG
@@ -56,7 +56,7 @@ class LoginHandler(UserHandler, GoogleOAuth2Mixin):
                             logging.exception('failed to get user info')
                             raise HTTPError(500)
 
-                        user_info = ujson.loads(response.body)
+                        user_info = json.loads(response.body)
                         user = User.get_by_email(user_info['email'])
                         if not user:
                             user = User(

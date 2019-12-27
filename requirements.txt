@@ -1,7 +1,6 @@
 hiredis
 pybloof
 pycurl
-redis
+redis>3.0
 tenjin
 tornado<6.0
-ujson
