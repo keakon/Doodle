@@ -7,7 +7,8 @@ services:
 install:
   - mv doodle/config/test_sample.py doodle/config/test.py
   - sudo apt-get install -y libgnutls28-dev
-  - pip install cython -r requirements.txt
+  - pip install cython
+  - pip install -r requirements.txt
   - pip install pytest
 script:
   - py.test -v doodle/tests
