@@ -6,6 +6,7 @@ services:
   - redis-server
 install:
   - mv doodle/config/test_sample.py doodle/config/test.py
+  - apt-get install -y libgnutls28-dev
   - pip install cython
   - pip install -r requirements.txt
   - pip install pytest
