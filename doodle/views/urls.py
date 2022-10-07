@@ -26,7 +26,7 @@ STATIC_PATH = CONFIG.STATIC_PATH
 handlers = [
     (BLOG_HOME_RELATIVE_PATH, HomeHandler),
     (BLOG_HOME_RELATIVE_PATH + 'page-append', PageAppendHandler),
-	(BLOG_HOME_RELATIVE_PATH + r'((\d{4}/\d{2}/\d{2}/).+)', ArticleHandler),
+    (BLOG_HOME_RELATIVE_PATH + r'((\d{4}/\d{2}/\d{2}/).+)', ArticleHandler),
     (BLOG_HOME_RELATIVE_PATH + r'article/(\d+)', ArticleIDHandler),
     (BLOG_HOME_RELATIVE_PATH + r'comment/(\d+)', CreateCommentHandler),
     (BLOG_HOME_RELATIVE_PATH + r'article/(\d+)/comments/(asc|desc)/(\d+)', ArticleCommentsHandler),

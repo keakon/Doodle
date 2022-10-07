@@ -44,8 +44,14 @@ class LoginHandler(UserHandler, GoogleOAuth2Mixin):
             self.clear_cookie('state')
 
             try:
+                request = self.request
+                host = request.host
+                if host == CONFIG.MAJOR_DOMAIN:
+                    redirect_uri = CONFIG.GOOGLE_OAUTH2_REDIRECT_URI
+                else:
+                    redirect_uri = '%s://%s%s' % (request.protocol, host, CONFIG.LOGIN_URL)
                 token_info = yield self.get_authenticated_user(
-                    redirect_uri=CONFIG.GOOGLE_OAUTH2_REDIRECT_URI,
+                    redirect_uri=redirect_uri,
                     code=code)
                 if token_info:
                     access_token = token_info.get('access_token')
@@ -80,8 +86,14 @@ class LoginHandler(UserHandler, GoogleOAuth2Mixin):
             if not (state and Auth.is_existing(state)):  # invalid state
                 state = Auth.generate(self.get_next_url() or '')
                 self.set_state_cookie(state)
+            request = self.request
+            host = request.host
+            if host == CONFIG.MAJOR_DOMAIN:
+                redirect_uri = CONFIG.GOOGLE_OAUTH2_REDIRECT_URI
+            else:
+                redirect_uri = '%s://%s%s' % (request.protocol, host, CONFIG.LOGIN_URL)
             yield self.authorize_redirect(
-                redirect_uri=CONFIG.GOOGLE_OAUTH2_REDIRECT_URI,
+                redirect_uri=redirect_uri,
                 client_id=CONFIG.GOOGLE_OAUTH2_CLIENT_ID,
                 scope=['profile', 'email'],
                 response_type='code',
