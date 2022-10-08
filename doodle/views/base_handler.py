@@ -5,7 +5,6 @@ import json
 import re
 import time
 
-import pybloof
 import tenjin
 from tenjin.helpers import escape, to_str, _decode_params, fragment_cache
 from tornado.web import Finish, HTTPError, RequestHandler, StaticFileHandler
