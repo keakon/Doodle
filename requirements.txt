@@ -1,5 +1,4 @@
 hiredis
-pybloof
 pycurl
 redis>3.0
 tenjin
