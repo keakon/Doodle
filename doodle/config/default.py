@@ -25,6 +25,7 @@ class Config(object):
     IPV4_ONLY = True  # 是否需要支持 IPv6
     XHEADERS = False  # 生产环境会在 nginx 传一些 X 开头的 header，此时建议开启
     ENABLE_HTTPS = False  # 支持 HTTPS，登录时会跳到 HTTPS 的登录界面，登录所用的 cookie 仅在 HTTPS 下可用，管理后台仅在 HTTPS 下可访问
+    HOST = '127.0.0.1'  # 监听的 IP，0.0.0.0 或 :: 表示本机所有 IPv4 或 IPv6 的 IP
     PORT = 8080  # 默认运行的端口
     MAX_WAIT_SECONDS_BEFORE_SHUTDOWN = 10  # 退出时如果还有没处理完的 callbacks，最长会等待多少秒
     COOKIE_SECRET = ''  # cookie 的密钥，可以用 os.urandom(32) 生成

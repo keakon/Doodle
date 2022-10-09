@@ -56,12 +56,7 @@ def main():
     else:
         family = socket.AF_UNSPEC
 
-    if CONFIG.DEBUG_MODE:
-        address = None
-    else:
-        address = 'localhost'
-
-    sockets = tornado.netutil.bind_sockets(port, address, family=family)
+    sockets = tornado.netutil.bind_sockets(port, CONFIG.HOST, family=family)
     server = HTTPServer(application, xheaders=CONFIG.XHEADERS)
     server.add_sockets(sockets)
     server.listen_exit_signal(CONFIG.MAX_WAIT_SECONDS_BEFORE_SHUTDOWN)
