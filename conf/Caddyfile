@@ -1,0 +1,22 @@
+keakon.net, www.keakon.net, lnnl.ml {
+	handle_path /static/* {
+		root * /proc/1/root/root/Doodle/doodle/static
+		file_server {
+			precompressed gzip
+		}
+	}
+	rewrite /favicon.ico /static/favicon.ico
+	rewrite /robots.txt /static/robots.txt
+
+	reverse_proxy doodle:8080
+
+	encode gzip
+
+	header -Server
+	header /static/* Cache-Control "public, max-age=86400"
+	header /favicon.ico Cache-Control "public, max-age=86400"
+
+	tls {
+		ciphers TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256 TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256 TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384 TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384 TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256 TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256
+	}
+}

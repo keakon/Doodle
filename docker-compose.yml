@@ -1,0 +1,56 @@
+version: '3'
+
+services:
+  doodle:
+    image: keakon/doodle
+    command: python -m doodle.main
+    environment:
+      - DOODLE_ENV=PRODUCTION
+    container_name: doodle
+    networks:
+      - doodle
+    depends_on:
+      - redis_main
+      - redis_cache
+    # 可将自己的配置放到 ./config/production.py，然后取消下面注释
+    # volumes:
+    #   - ./config/production.py:/root/Doodle/doodle/config/production.py:ro
+    restart: unless-stopped
+
+  redis_main:
+    image: redis
+    command: redis-server
+    networks:
+      - doodle
+    volumes:
+      - ./data/redis_main:/data
+    restart: unless-stopped
+
+  redis_cache:
+    image: redis
+    command: redis-server
+    networks:
+      - doodle
+    volumes:
+      - ./data/redis_cache:/data
+    restart: unless-stopped
+
+  caddy:
+    image: caddy
+    networks:
+      - doodle
+    depends_on:
+      - doodle
+    pid: container:doodle
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    volumes:
+      - ./conf/Caddyfile:/etc/caddy/Caddyfile
+      - ./data:/data
+    restart: unless-stopped
+
+networks:
+  doodle:
+    driver: bridge
