@@ -1,38 +1,17 @@
-# Doodle ![Travis CI test result](https://travis-ci.org/keakon/Doodle.svg?branch=master)
+# Doodle 2
 A blog system based on Python 2.7 and Redis. It's a *nix port from Google App Engine of [Doodle 1.x](https://bitbucket.org/keakon/doodle/).
 
-## Progress
-It's under heavy development currently.  
-Don't use it in production environment right now since it might be changed frequently.
-
 ## Installation
-Doodle requires Python 2.7 and Redis. It has been tested in OS X 10.8 ~ 10.11 and Ubuntu 15.10.
+Doodle 2 requires Python 2.7 and Redis. It has been tested on Ubuntu 18.04.
 
-1. Clone or download code:
+1. Clone or download the source code:
   ```bash
   $ git clone https://github.com/keakon/Doodle.git
   ```
-
-2. Put your own config files under the **private** directory. (optional)
-  ```bash
-  $ cd Doodle
-  $ mkdir private
-  ```
-
-3. Install dependencies:
+2. Install dependencies:
   ```bash
   $ sudo pip install virtualenv
   $ virtualenv .
-  $ bin/pip install cython
-  $ bin/pip install -r requirements.txt
-  ```
-
-4. Install pycurl on macOS:
-  ```bash
-  $ brew install openssl
-  $ export LDFLAGS="-L/usr/local/opt/openssl/lib"
-  $ export CPPFLAGS="-I/usr/local/opt/openssl/include"
-  $ export PYCURL_SSL_LIBRARY=openssl
   $ bin/pip install -r requirements.txt
   ```
 
@@ -42,6 +21,25 @@ $ redis-server &
 $ bin/python -m doodle.main
 ```
 Then you can open [http://0.0.0.0:8080](http://0.0.0.0:8080) to check it.
+
+## Run with docker
+
+1. Install Docker
+2. Clone or download the source code:
+  ```bash
+  $ git clone https://github.com/keakon/Doodle.git
+  ```
+3. Copy config files:
+  ```bash
+  $ mkdir doodle
+  $ cp Doodle/docker-compose.yml doodle/docker-compose.yml
+  $ cp -r Doodle/conf doodle/conf
+  ```
+4. Start docker compose:
+  ```bash
+  $ cd doodle
+  $ docker compose up -d
+  ```
 
 ## License
 Doodle is released under the MIT License. See the [LICENSE](https://raw.githubusercontent.com/keakon/Doodle/master/LICENSE) file for more details.
