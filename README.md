@@ -35,7 +35,8 @@ Then you can open [http://0.0.0.0:8080](http://0.0.0.0:8080) to check it.
   $ cp Doodle/docker-compose.yml doodle/docker-compose.yml
   $ cp -r Doodle/conf doodle/conf
   ```
-4. Start docker compose:
+4. Replace "localhost" into your own domain in conf/Caddyfile.
+5. Start docker compose:
   ```bash
   $ cd doodle
   $ docker compose up -d

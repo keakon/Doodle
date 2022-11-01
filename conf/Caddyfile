@@ -1,4 +1,4 @@
-keakon.net, www.keakon.net, lnnl.ml {
+localhost {
 	handle_path /static/* {
 		root * /proc/1/root/root/Doodle/doodle/static
 		file_server {
