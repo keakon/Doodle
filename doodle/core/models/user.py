@@ -41,7 +41,7 @@ class User(IDModel):
         return {}
 
     def get_avatar(self):
-        return '//gravatar.com/avatar/' + md5(self.email).hexdigest()
+        return '//gravatar.cn/avatar/' + md5(self.email).hexdigest()
 
     def is_admin(self):
         return self.id == CONFIG.ADMIN_USER_ID
