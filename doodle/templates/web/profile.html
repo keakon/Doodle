@@ -7,7 +7,7 @@ user = self.current_user
 <section id="content" class="block">
 	<form action="" method="post" id="profileform">
 		<p>账号邮箱：#{user.email}</p>
-		<p>头像（可在 <a href="http://www.gravatar.cn/">gravatar</a> 设置）：<img src="#{user.get_avatar()}?s=24&amp;d=monsterid" alt="avatar"/></p>
+		<p>头像（可在 <a href="http://www.gravatar.com/">gravatar</a> 设置）：<img src="#{user.get_avatar()}?s=24&amp;d=monsterid" alt="avatar"/></p>
 		<p>
 			<label for="name">用户名<small>（必填）</small></label><br/>
 			<input type="text" name="name" id="name" value="${user.name}" size="50" maxlength="15" tabindex="1"/>
