@@ -8,6 +8,10 @@ localhost {
 	rewrite /favicon.ico /static/favicon.ico
 	rewrite /robots.txt /static/robots.txt
 
+	handle_path /avatar/ {
+		reverse_proxy https://gravatar.com/avatar/
+	}
+
 	reverse_proxy doodle:8080
 
 	encode gzip
